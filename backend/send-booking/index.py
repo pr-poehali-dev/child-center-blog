@@ -3,10 +3,11 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import psycopg2
 
 
 def handler(event: dict, context) -> dict:
-    """Отправляет заявку на запись в детский центр на почту ribkadolli@mail.ru"""
+    """Сохраняет заявку в БД и отправляет письмо на почту детского центра"""
 
     if event.get('httpMethod') == 'OPTIONS':
         return {
@@ -25,6 +26,17 @@ def handler(event: dict, context) -> dict:
     phone = body.get('phone', '')
     child = body.get('child', '')
     cls = body.get('cls', '')
+
+    # Сохраняем в БД
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO bookings (name, phone, child, cls) VALUES (%s, %s, %s, %s)",
+        (name, phone, child, cls)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
 
     smtp_password = os.environ['SMTP_PASSWORD']
     from_email = 'ribkadolli@mail.ru'

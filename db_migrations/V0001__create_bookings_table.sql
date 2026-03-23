@@ -1,0 +1,9 @@
+CREATE TABLE bookings (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  child TEXT NOT NULL,
+  cls TEXT,
+  status TEXT NOT NULL DEFAULT 'new',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
