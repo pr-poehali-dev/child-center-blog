@@ -347,6 +347,12 @@ export default function Index() {
         <div className="text-2xl mb-2">🌟</div>
         <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Солнышко</div>
         <div className="text-sm opacity-60">© 2026 Детский центр «Солнышко». Все права защищены.</div>
+        <a
+          href="/admin"
+          className="mt-4 inline-block text-xs text-gray-600 hover:text-gray-400 transition-colors"
+        >
+          Вход для администратора
+        </a>
       </footer>
 
       {/* BOOKING MODAL */}
