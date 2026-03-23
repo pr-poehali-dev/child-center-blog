@@ -188,6 +188,17 @@ export default function Index() {
             </div>
           </div>
 
+          <div className="flex items-center justify-center">
+            <video
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2da463f8-6556-4277-b728-089f61a0e4b0.mp4"
+              className="rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+          </div>
+
         </div>
       </section>
 
