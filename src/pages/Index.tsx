@@ -173,7 +173,7 @@ export default function Index() {
             </div>
           </div>
           <div className="relative">
-            <div className="absolute -top-4 -left-4 w-full h-full bg-orange-100 rounded-[3rem] rotate-3" />
+
             <video
               src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/8393d0ab-cc73-4e76-b85c-c3a4cf0b36dc.mp4"
               className="relative rounded-[3rem] shadow-2xl w-full object-contain"
