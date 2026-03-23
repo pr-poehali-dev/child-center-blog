@@ -49,6 +49,8 @@ export default function Index() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", child: "", cls: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
 
   const scrollTo = (id: string) => {
     setActiveSection(id);
@@ -61,11 +63,26 @@ export default function Index() {
     setForm((f) => ({ ...f, cls }));
     setBookingOpen(true);
     setSubmitted(false);
+    setSendError("");
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSending(true);
+    setSendError("");
+    try {
+      const res = await fetch("https://functions.poehali.dev/a38028da-1fda-42f8-8c38-6c5bc5522662", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+    } catch {
+      setSendError("Не удалось отправить заявку. Попробуйте ещё раз.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -364,8 +381,11 @@ export default function Index() {
                       {CLASSES.map((c) => <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>)}
                     </select>
                   </div>
-                  <button type="submit" className="w-full bg-orange-400 hover:bg-orange-500 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
-                    Отправить заявку
+                  {sendError && (
+                    <p className="text-red-500 text-sm text-center">{sendError}</p>
+                  )}
+                  <button type="submit" disabled={sending} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
+                    {sending ? "Отправляем..." : "Отправить заявку"}
                   </button>
                 </form>
               </>
