@@ -317,21 +317,28 @@ export default function Index() {
               <h3 className="font-black text-xl text-gray-800 mb-6">Как нас найти</h3>
               <div className="space-y-5">
                 {[
-                  { icon: "MapPin", label: "Адрес", value: "г. Москва, ул. Солнечная, 12" },
-                  { icon: "Phone", label: "Телефон", value: "+7 (999) 123-45-67" },
-                  { icon: "Mail", label: "Email", value: "hello@solnyshko.ru" },
-                  { icon: "Clock", label: "Режим работы", value: "Пн–Пт: 8:00–20:00, Сб–Вс: 9:00–18:00" },
+                  { icon: "Phone", label: "Телефон", value: "+7 (988) 152-16-98" },
+                  { icon: "Phone", label: "Телефон", value: "+7 (978) 712-03-53" },
                 ].map((c) => (
-                  <div key={c.label} className="flex gap-4 items-start">
+                  <div key={c.value} className="flex gap-4 items-start">
                     <div className="bg-orange-100 rounded-xl p-2.5 shrink-0">
                       <Icon name={c.icon} size={18} className="text-orange-500" />
                     </div>
                     <div>
                       <div className="text-xs text-gray-400 font-semibold">{c.label}</div>
-                      <div className="text-gray-700 font-semibold text-sm">{c.value}</div>
+                      <a href={`tel:${c.value.replace(/\D/g, '+')}`} className="text-gray-700 font-semibold text-sm hover:text-orange-500 transition-colors">{c.value}</a>
                     </div>
                   </div>
                 ))}
+                <div className="flex gap-4 items-start">
+                  <div className="bg-orange-100 rounded-xl p-2.5 shrink-0">
+                    <Icon name="Users" size={18} className="text-orange-500" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-400 font-semibold">ВКонтакте</div>
+                    <a href="https://vk.com/rybka_dolli" target="_blank" rel="noopener noreferrer" className="text-gray-700 font-semibold text-sm hover:text-orange-500 transition-colors">vk.com/rybka_dolli</a>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="bg-gradient-to-br from-orange-400 to-rose-400 rounded-3xl p-8 text-white flex flex-col justify-center text-center">
