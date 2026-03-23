@@ -332,6 +332,15 @@ export default function Index() {
                 ))}
                 <div className="flex gap-4 items-start">
                   <div className="bg-orange-100 rounded-xl p-2.5 shrink-0">
+                    <Icon name="MapPin" size={18} className="text-orange-500" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-400 font-semibold">Адрес</div>
+                    <a href="https://yandex.ru/maps/?text=г.+Керчь,+ул.+Циолковского,+12" target="_blank" rel="noopener noreferrer" className="text-gray-700 font-semibold text-sm hover:text-orange-500 transition-colors">г. Керчь, ул. Циолковского, 12</a>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="bg-orange-100 rounded-xl p-2.5 shrink-0">
                     <Icon name="Users" size={18} className="text-orange-500" />
                   </div>
                   <div>
