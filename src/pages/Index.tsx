@@ -138,7 +138,7 @@ export default function Index() {
         </div>
         <div className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-start relative z-10">
           <div>
-            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-sm font-bold px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
               <span>✨</span> Детский центр «Рыбка Долли»
             </div>
             <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
