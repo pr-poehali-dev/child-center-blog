@@ -161,6 +161,22 @@ export default function Index() {
               >
                 Читать блог
               </button>
+              <a
+                href="https://vk.com/app6379730_-179759189#l=6"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
+              >
+                Подробнее о садике
+              </a>
+              <a
+                href="https://vk.com/app6379730_-179759189#l=8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
+              >
+                Подробнее о летнем клубе
+              </a>
             </div>
             <div className="flex gap-8 mt-10">
               {[["", "Счастливые дети"], ["", "Квалифицированные педагоги"], ["8 лет", "работаем"]].map(([num, label]) => (
