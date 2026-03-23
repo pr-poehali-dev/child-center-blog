@@ -86,10 +86,10 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito text-gray-700">
+    <div className="min-h-screen bg-[#f0f9ff] font-nunito text-gray-700">
 
       {/* NAVBAR */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm border-b border-orange-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm border-b border-sky-100">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <button onClick={() => scrollTo("home")} className="flex items-center gap-2">
             <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png" alt="Рыбка Долли" className="h-10 w-auto" />
@@ -99,14 +99,14 @@ export default function Index() {
               <button
                 key={l.id}
                 onClick={() => scrollTo(l.id)}
-                className={`text-sm font-semibold transition-colors hover:text-orange-500 ${activeSection === l.id ? "text-orange-500" : "text-gray-600"}`}
+                className={`text-sm font-semibold transition-colors hover:text-sky-500 ${activeSection === l.id ? "text-sky-500" : "text-gray-600"}`}
               >
                 {l.label}
               </button>
             ))}
             <button
               onClick={() => openBooking()}
-              className="bg-orange-400 hover:bg-orange-500 text-white text-sm font-bold px-5 py-2 rounded-full transition-all hover:shadow-md"
+              className="bg-sky-400 hover:bg-sky-500 text-white text-sm font-bold px-5 py-2 rounded-full transition-all hover:shadow-md"
             >
               Записаться
             </button>
@@ -116,13 +116,13 @@ export default function Index() {
           </button>
         </div>
         {menuOpen && (
-          <div className="md:hidden bg-white border-t border-orange-100 px-4 py-3 flex flex-col gap-3">
+          <div className="md:hidden bg-white border-t border-sky-100 px-4 py-3 flex flex-col gap-3">
             {NAV_LINKS.map((l) => (
-              <button key={l.id} onClick={() => scrollTo(l.id)} className="text-left text-sm font-semibold text-gray-600 hover:text-orange-500 py-1">
+              <button key={l.id} onClick={() => scrollTo(l.id)} className="text-left text-sm font-semibold text-gray-600 hover:text-sky-500 py-1">
                 {l.label}
               </button>
             ))}
-            <button onClick={() => openBooking()} className="bg-orange-400 text-white text-sm font-bold px-5 py-2 rounded-full w-fit">
+            <button onClick={() => openBooking()} className="bg-sky-400 text-white text-sm font-bold px-5 py-2 rounded-full w-fit">
               Записаться
             </button>
           </div>
@@ -132,18 +132,18 @@ export default function Index() {
       {/* HERO */}
       <section id="home" className="pt-20 min-h-screen flex items-center relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-40 h-40 bg-orange-100 rounded-full opacity-60 blur-2xl" />
-          <div className="absolute bottom-20 right-20 w-56 h-56 bg-yellow-100 rounded-full opacity-60 blur-2xl" />
-          <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-rose-100 rounded-full opacity-30 blur-3xl -translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute top-20 left-10 w-40 h-40 bg-sky-100 rounded-full opacity-60 blur-2xl" />
+          <div className="absolute bottom-20 right-20 w-56 h-56 bg-cyan-100 rounded-full opacity-60 blur-2xl" />
+          <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-blue-100 rounded-full opacity-30 blur-3xl -translate-x-1/2 -translate-y-1/2" />
         </div>
         <div className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-start relative z-10">
           <div>
-            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
+            <div className="inline-flex items-center gap-2 bg-sky-100 text-sky-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
               <span>✨</span> Детский центр «Рыбка Долли»
             </div>
             <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
               Растём вместе
-              <span className="block font-caveat text-orange-400 text-5xl mt-1">с радостью!</span>
+              <span className="block font-caveat text-sky-400 text-5xl mt-1">с радостью!</span>
             </h1>
             <p className="text-gray-500 text-lg mb-8 leading-relaxed">
               Блог для любящих родителей: статьи, советы педагогов, новости центра и запись на занятия онлайн.
@@ -151,13 +151,13 @@ export default function Index() {
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => openBooking()}
-                className="bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
+                className="bg-sky-400 hover:bg-sky-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
               >
                 Записаться на занятие
               </button>
               <button
                 onClick={() => scrollTo("articles")}
-                className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
+                className="bg-white hover:bg-sky-50 text-sky-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-sky-200 transition-all"
               >
                 Читать блог
               </button>
@@ -190,7 +190,7 @@ export default function Index() {
       <section id="about" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">О нас</div>
+            <div className="font-caveat text-sky-400 text-2xl mb-2">О нас</div>
             <h2 className="font-black text-4xl text-gray-800">Место, где дети расцветают</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -199,7 +199,7 @@ export default function Index() {
               { emoji: "🎓", title: "Профессиональный подход", desc: "Программы основаны на современных методиках. Регулярно обновляем материалы и повышаем квалификацию." },
               { emoji: "🌈", title: "Развитие через игру", desc: "Учёба — это весело! Все занятия построены на игровых методах, соответствующих возрасту ребёнка." },
             ].map((item) => (
-              <div key={item.title} className="text-center p-8 bg-gradient-to-b from-orange-50 to-white rounded-3xl border border-orange-100">
+              <div key={item.title} className="text-center p-8 bg-gradient-to-b from-sky-50 to-white rounded-3xl border border-sky-100">
                 <div className="text-5xl mb-4">{item.emoji}</div>
                 <h3 className="font-black text-xl text-gray-800 mb-3">{item.title}</h3>
                 <p className="text-gray-500 leading-relaxed">{item.desc}</p>
@@ -210,22 +210,22 @@ export default function Index() {
       </section>
 
       {/* CLASSES */}
-      <section className="py-24 bg-gradient-to-b from-amber-50 to-orange-50">
+      <section className="py-24 bg-gradient-to-b from-sky-50 to-cyan-50">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Расписание</div>
+            <div className="font-caveat text-sky-400 text-2xl mb-2">Расписание</div>
             <h2 className="font-black text-4xl text-gray-800">Наши занятия</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {CLASSES.map((cls) => (
-              <div key={cls.name} className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 border border-orange-100">
+              <div key={cls.name} className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 border border-sky-100">
                 <div className="text-3xl mb-3">{cls.emoji}</div>
                 <h3 className="font-black text-lg text-gray-800 mb-2">{cls.name}</h3>
                 <div className="flex gap-2 mb-4">
-                  <span className="bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-full">{cls.age}</span>
+                  <span className="bg-sky-100 text-sky-600 text-xs font-bold px-3 py-1 rounded-full">{cls.age}</span>
                   <span className="bg-gray-100 text-gray-500 text-xs font-semibold px-3 py-1 rounded-full">{cls.time}</span>
                 </div>
-                <button onClick={() => openBooking(cls.name)} className="w-full bg-orange-400 hover:bg-orange-500 text-white font-bold py-2.5 rounded-2xl transition-colors text-sm">
+                <button onClick={() => openBooking(cls.name)} className="w-full bg-sky-400 hover:bg-sky-500 text-white font-bold py-2.5 rounded-2xl transition-colors text-sm">
                   Записаться
                 </button>
               </div>
@@ -238,7 +238,7 @@ export default function Index() {
       <section id="articles" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Блог</div>
+            <div className="font-caveat text-sky-400 text-2xl mb-2">Блог</div>
             <h2 className="font-black text-4xl text-gray-800">Полезные статьи</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -250,7 +250,7 @@ export default function Index() {
                 <p className="text-gray-500 text-sm leading-relaxed mb-4">{a.desc}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400">{a.date}</span>
-                  <span className="text-orange-400 font-bold text-sm">Читать →</span>
+                  <span className="text-sky-400 font-bold text-sm">Читать →</span>
                 </div>
               </article>
             ))}
@@ -259,10 +259,10 @@ export default function Index() {
       </section>
 
       {/* TEAM */}
-      <section id="team" className="py-24 bg-gradient-to-b from-rose-50 to-orange-50">
+      <section id="team" className="py-24 bg-gradient-to-b from-sky-50 to-blue-50">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Команда</div>
+            <div className="font-caveat text-sky-400 text-2xl mb-2">Команда</div>
             <h2 className="font-black text-4xl text-gray-800">Наши педагоги</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -270,7 +270,7 @@ export default function Index() {
               <div key={m.name} className="text-center bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
                 <div className={`${m.color} w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4`}>{m.emoji}</div>
                 <h3 className="font-black text-gray-800 mb-1">{m.name}</h3>
-                <div className="text-orange-400 font-semibold text-sm mb-3">{m.role}</div>
+                <div className="text-sky-400 font-semibold text-sm mb-3">{m.role}</div>
                 <p className="text-gray-500 text-sm leading-relaxed">{m.desc}</p>
               </div>
             ))}
@@ -282,7 +282,7 @@ export default function Index() {
       <section id="reviews" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Отзывы</div>
+            <div className="font-caveat text-sky-400 text-2xl mb-2">Отзывы</div>
             <h2 className="font-black text-4xl text-gray-800">Говорят родители</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -293,7 +293,7 @@ export default function Index() {
                 </div>
                 <p className="text-gray-600 leading-relaxed mb-5 italic">«{r.text}»</p>
                 <div className="flex items-center gap-3">
-                  <div className="bg-orange-200 rounded-full w-10 h-10 flex items-center justify-center font-black text-orange-600">{r.name[0]}</div>
+                  <div className="bg-sky-200 rounded-full w-10 h-10 flex items-center justify-center font-black text-sky-600">{r.name[0]}</div>
                   <div>
                     <div className="font-black text-gray-800 text-sm">{r.name}</div>
                     <div className="text-gray-400 text-xs">{r.child}</div>
@@ -306,10 +306,10 @@ export default function Index() {
       </section>
 
       {/* CONTACTS */}
-      <section id="contacts" className="py-24 bg-gradient-to-b from-orange-50 to-amber-50">
+      <section id="contacts" className="py-24 bg-gradient-to-b from-sky-50 to-cyan-50">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Контакты</div>
+            <div className="font-caveat text-sky-400 text-2xl mb-2">Контакты</div>
             <h2 className="font-black text-4xl text-gray-800">Мы всегда на связи</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
@@ -323,8 +323,8 @@ export default function Index() {
                   { icon: "Clock", label: "Режим работы", value: "Пн–Пт: 8:00–20:00, Сб–Вс: 9:00–18:00" },
                 ].map((c) => (
                   <div key={c.label} className="flex gap-4 items-start">
-                    <div className="bg-orange-100 rounded-xl p-2.5 shrink-0">
-                      <Icon name={c.icon} size={18} className="text-orange-500" />
+                    <div className="bg-sky-100 rounded-xl p-2.5 shrink-0">
+                      <Icon name={c.icon} size={18} className="text-sky-500" />
                     </div>
                     <div>
                       <div className="text-xs text-gray-400 font-semibold">{c.label}</div>
@@ -334,11 +334,11 @@ export default function Index() {
                 ))}
               </div>
             </div>
-            <div className="bg-gradient-to-br from-orange-400 to-rose-400 rounded-3xl p-8 text-white flex flex-col justify-center text-center">
-              <div className="text-5xl mb-4">🌟</div>
+            <div className="bg-gradient-to-br from-sky-400 to-cyan-400 rounded-3xl p-8 text-white flex flex-col justify-center text-center">
+              <div className="text-5xl mb-4">🐟</div>
               <h3 className="font-black text-2xl mb-3">Запишитесь сейчас</h3>
               <p className="opacity-90 mb-6 leading-relaxed">Первое занятие — бесплатно! Познакомьтесь с педагогом и оцените атмосферу центра.</p>
-              <button onClick={() => openBooking()} className="bg-white text-orange-500 font-black px-8 py-4 rounded-2xl hover:bg-orange-50 transition-colors text-lg shadow-lg">
+              <button onClick={() => openBooking()} className="bg-white text-sky-500 font-black px-8 py-4 rounded-2xl hover:bg-sky-50 transition-colors text-lg shadow-lg">
                 Записаться бесплатно
               </button>
             </div>
@@ -349,7 +349,7 @@ export default function Index() {
       {/* FOOTER */}
       <footer className="bg-gray-800 text-gray-300 py-10 text-center">
         <div className="text-2xl mb-2">🌟</div>
-        <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Рыбка Долли</div>
+        <div className="font-caveat text-sky-300 text-xl font-bold mb-1">Рыбка Долли</div>
         <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
         <a
           href="/admin"
@@ -374,19 +374,19 @@ export default function Index() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="text-xs font-bold text-gray-500 mb-1 block">Ваше имя</label>
-                    <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Мама / папа" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                    <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100" placeholder="Мама / папа" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
                   </div>
                   <div>
                     <label className="text-xs font-bold text-gray-500 mb-1 block">Телефон</label>
-                    <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="+7 (___) ___-__-__" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                    <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100" placeholder="+7 (___) ___-__-__" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                   </div>
                   <div>
                     <label className="text-xs font-bold text-gray-500 mb-1 block">Имя и возраст ребёнка</label>
-                    <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Маша, 5 лет" value={form.child} onChange={(e) => setForm({ ...form, child: e.target.value })} />
+                    <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100" placeholder="Маша, 5 лет" value={form.child} onChange={(e) => setForm({ ...form, child: e.target.value })} />
                   </div>
                   <div>
                     <label className="text-xs font-bold text-gray-500 mb-1 block">Занятие</label>
-                    <select className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 bg-white" value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })}>
+                    <select className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 bg-white" value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })}>
                       <option value="">Выберите занятие</option>
                       {CLASSES.map((c) => <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>)}
                     </select>
@@ -394,7 +394,7 @@ export default function Index() {
                   {sendError && (
                     <p className="text-red-500 text-sm text-center">{sendError}</p>
                   )}
-                  <button type="submit" disabled={sending} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
+                  <button type="submit" disabled={sending} className="w-full bg-sky-400 hover:bg-sky-500 disabled:opacity-60 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
                     {sending ? "Отправляем..." : "Отправить заявку"}
                   </button>
                 </form>
@@ -404,7 +404,7 @@ export default function Index() {
                 <div className="text-6xl mb-4">🎉</div>
                 <h3 className="font-black text-2xl text-gray-800 mb-3">Заявка принята!</h3>
                 <p className="text-gray-500 leading-relaxed mb-6">Мы свяжемся с вами в ближайшее время. Первое занятие — бесплатно!</p>
-                <button onClick={() => setBookingOpen(false)} className="bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-3 rounded-2xl transition-colors">
+                <button onClick={() => setBookingOpen(false)} className="bg-sky-400 hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition-colors">
                   Отлично, спасибо!
                 </button>
               </div>
