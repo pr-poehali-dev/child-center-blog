@@ -174,7 +174,14 @@ export default function Index() {
           </div>
           <div className="relative">
             <div className="absolute -top-4 -left-4 w-full h-full bg-orange-100 rounded-[3rem] rotate-3" />
-            <img src={HERO_IMG} alt="Дети в центре" className="relative rounded-[3rem] shadow-2xl w-full object-cover aspect-square" />
+            <video
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/8393d0ab-cc73-4e76-b85c-c3a4cf0b36dc.mp4"
+              className="relative rounded-[3rem] shadow-2xl w-full object-cover aspect-square"
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
             <div className="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-lg px-5 py-3 font-caveat text-lg text-orange-500 font-bold">
               Пробное занятие бесплатно! 🎉
             </div>
