@@ -105,6 +105,13 @@ export default function Index() {
                 {l.label}
               </button>
             ))}
+            <a
+              href="/admin"
+              className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-orange-500 transition-colors"
+            >
+              <Icon name="LayoutDashboard" size={15} />
+              Админ
+            </a>
             <button
               onClick={() => openBooking()}
               className="bg-orange-400 hover:bg-orange-500 text-white text-sm font-bold px-5 py-2 rounded-full transition-all hover:shadow-md"
@@ -123,6 +130,10 @@ export default function Index() {
                 {l.label}
               </button>
             ))}
+            <a href="/admin" className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 py-1">
+              <Icon name="LayoutDashboard" size={15} />
+              Панель администратора
+            </a>
             <button onClick={() => openBooking()} className="bg-orange-400 text-white text-sm font-bold px-5 py-2 rounded-full w-fit">
               Записаться
             </button>
