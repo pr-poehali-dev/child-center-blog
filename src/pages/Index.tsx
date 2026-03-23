@@ -270,7 +270,7 @@ export default function Index() {
             <div className="font-caveat text-orange-400 text-2xl mb-2">Команда</div>
             <h2 className="font-black text-4xl text-gray-800">Наши педагоги</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-10 items-center mb-14">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
             <video
               src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/8393d0ab-cc73-4e76-b85c-c3a4cf0b36dc.mp4"
               className="rounded-3xl shadow-2xl w-full object-contain"
@@ -286,17 +286,10 @@ export default function Index() {
               <p className="text-gray-600 text-lg leading-relaxed mt-4">
                 Такое возможно только тогда, когда люди искренне любят свою работу, когда им комфортно на своём рабочем месте, когда это их профессия. Мы гордимся своими кадрами, помогаем им развиваться и легко идти по дороге своей профессии.
               </p>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TEAM.map((m) => (
-              <div key={m.name} className="text-center bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
-                <div className={`${m.color} w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto mb-4`}>{m.emoji}</div>
-                <h3 className="font-black text-gray-800 mb-1">{m.name}</h3>
-                <div className="text-orange-400 font-semibold text-sm mb-3">{m.role}</div>
-                <p className="text-gray-500 text-sm leading-relaxed">{m.desc}</p>
+              <div className="mt-6">
+                <Icon name="Heart" size={36} className="text-red-400" strokeWidth={1.5} />
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
