@@ -92,8 +92,7 @@ export default function Index() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm border-b border-orange-100">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <button onClick={() => scrollTo("home")} className="flex items-center gap-2">
-            <span className="text-2xl">🌟</span>
-            <span className="font-caveat text-xl font-bold text-orange-500">Солнышко</span>
+            <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png" alt="Рыбка Долли" className="h-10 w-auto" />
           </button>
           <div className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map((l) => (
@@ -140,7 +139,7 @@ export default function Index() {
         <div className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-start relative z-10">
           <div>
             <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 text-sm font-bold px-4 py-2 rounded-full mb-6">
-              <span>✨</span> Детский центр «Солнышко»
+              <span>✨</span> Детский центр «Рыбка Долли»
             </div>
             <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
               Растём вместе
@@ -164,7 +163,7 @@ export default function Index() {
               </button>
             </div>
             <div className="flex gap-8 mt-10">
-              {[["200+", "счастливых детей"], ["8", "педагогов"], ["5 лет", "работаем"]].map(([num, label]) => (
+              {[["", "Счастливые дети"], ["", "Квалифицированные педагоги"], ["8 лет", "работаем"]].map(([num, label]) => (
                 <div key={label}>
                   <div className="font-black text-2xl text-gray-800">{num}</div>
                   <div className="text-sm text-gray-400">{label}</div>
@@ -182,9 +181,7 @@ export default function Index() {
               loop
               playsInline
             />
-            <div className="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-lg px-5 py-3 font-caveat text-lg text-orange-500 font-bold">
-              Пробное занятие бесплатно! 🎉
-            </div>
+
           </div>
         </div>
       </section>
@@ -352,8 +349,8 @@ export default function Index() {
       {/* FOOTER */}
       <footer className="bg-gray-800 text-gray-300 py-10 text-center">
         <div className="text-2xl mb-2">🌟</div>
-        <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Солнышко</div>
-        <div className="text-sm opacity-60">© 2026 Детский центр «Солнышко». Все права защищены.</div>
+        <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Рыбка Долли</div>
+        <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
         <a
           href="/admin"
           className="mt-4 inline-block text-xs text-gray-600 hover:text-gray-400 transition-colors"
