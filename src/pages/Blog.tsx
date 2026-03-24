@@ -2,6 +2,60 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
+const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
+const TG_LINK = "https://t.me/irinadolli";
+
+function ContactDropdown({ label, emoji, colorClass }: { label: string; emoji: string; colorClass: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative w-full mb-6">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`flex items-center justify-center gap-2 w-full ${colorClass} text-white font-black px-8 py-4 rounded-2xl text-lg transition-all hover:shadow-lg`}
+      >
+        <span>{emoji}</span>
+        {label}
+        <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-10">
+          <a
+            href={MAX_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700"
+          >
+            <span className="text-xl">💬</span>
+            Написать в MAX
+          </a>
+          <div className="border-t border-gray-100" />
+          <a
+            href={TG_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700"
+          >
+            <span className="text-xl">✈️</span>
+            Написать в Telegram
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-264f6d13e325";
 
 const CATEGORIES = [
@@ -159,26 +213,10 @@ export default function Blog() {
       {/* CONTENT */}
       <div className="max-w-3xl mx-auto px-4 py-8">
         {activeTab === "summer" && (
-          <a
-            href="https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full bg-yellow-400 hover:bg-yellow-500 text-white font-black px-8 py-4 rounded-2xl text-lg transition-all hover:shadow-lg mb-6"
-          >
-            <span>☀️</span>
-            Забронировать смену летнего клуба
-          </a>
+          <ContactDropdown label="Забронировать смену летнего клуба" emoji="☀️" colorClass="bg-yellow-400 hover:bg-yellow-500" />
         )}
         {activeTab === "afterschool" && (
-          <a
-            href="https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full bg-indigo-500 hover:bg-indigo-600 text-white font-black px-8 py-4 rounded-2xl text-lg transition-all hover:shadow-lg mb-6"
-          >
-            <span>📚</span>
-            Записаться в группу
-          </a>
+          <ContactDropdown label="Записаться в группу" emoji="📚" colorClass="bg-indigo-500 hover:bg-indigo-600" />
         )}
         {loading ? (
           <div className="flex items-center justify-center py-24 text-gray-300">
