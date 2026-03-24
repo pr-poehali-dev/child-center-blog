@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
-import { MAX_LINK } from "./constants";
-import { BookingDropdown } from "./BookingDropdowns";
+import { BookingDropdown, ContactDropdown } from "./BookingDropdowns";
 
 interface HomeHeroProps {
   onFormClick: () => void;
@@ -32,14 +31,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
           </p>
           <div className="flex flex-wrap gap-3">
             <BookingDropdown onFormClick={onFormClick} />
-            <a
-              href={MAX_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
-            >
-              Забронировать смену летнего клуба
-            </a>
+            <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" />
             <button
               onClick={() => onScrollTo("articles")}
               className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"

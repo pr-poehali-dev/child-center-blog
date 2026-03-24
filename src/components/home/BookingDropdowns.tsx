@@ -42,6 +42,36 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
   );
 }
 
+export function ContactDropdown({ label, className }: { label: string; className: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`flex items-center gap-2 font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5 ${className}`}
+      >
+        {label}
+        <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-2">
+          <DropdownMenu onClose={() => setOpen(false)} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function NavBookingDropdown({ onFormClick }: { onFormClick: () => void }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
