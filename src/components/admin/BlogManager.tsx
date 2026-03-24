@@ -18,7 +18,7 @@ export default function BlogManager() {
   const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const [teacherName, setTeacherName] = useState<string>("");
-  const [videoLink, setVideoLink] = useState("");
+  const [compressing, setCompressing] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -77,42 +77,100 @@ export default function BlogManager() {
     return data.url;
   };
 
-  const parseVideoEmbed = (url: string): { type: "youtube" | "vk" | "embed"; url: string } | null => {
-    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-    if (ytMatch) return { type: "youtube", url: `https://www.youtube.com/embed/${ytMatch[1]}` };
-    const vkMatch = url.match(/vk\.com\/video(-?\d+)_(\d+)/);
-    if (vkMatch) return { type: "vk", url: `https://vk.com/video_ext.php?oid=${vkMatch[1]}&id=${vkMatch[2]}&hd=2` };
-    if (url.startsWith("http")) return { type: "embed", url };
-    return null;
-  };
+  const compressVideo = (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement("video");
+      video.muted = true;
+      video.playsInline = true;
+      const url = URL.createObjectURL(file);
+      video.src = url;
+      video.onloadedmetadata = () => {
+        const MAX_W = 640;
+        const scale = video.videoWidth > MAX_W ? MAX_W / video.videoWidth : 1;
+        const w = Math.round(video.videoWidth * scale);
+        const h = Math.round(video.videoHeight * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d")!;
 
-  const addVideoLink = () => {
-    const parsed = parseVideoEmbed(videoLink.trim());
-    if (!parsed) { alert("Не удалось распознать ссылку. Вставьте ссылку на YouTube или VK Видео."); return; }
-    setMediaItems(prev => [...prev, { type: "video", url: parsed.url }]);
-    setVideoLink("");
+        const mimeType = MediaRecorder.isTypeSupported("video/webm;codecs=vp8")
+          ? "video/webm;codecs=vp8"
+          : "video/webm";
+        const recorder = new MediaRecorder(canvas.captureStream(15), {
+          mimeType,
+          videoBitsPerSecond: 400_000,
+        });
+        const chunks: BlobPart[] = [];
+        recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+        recorder.onstop = () => {
+          URL.revokeObjectURL(url);
+          resolve(new Blob(chunks, { type: mimeType }));
+        };
+        recorder.onerror = reject;
+
+        video.onplay = () => {
+          recorder.start();
+          const draw = () => {
+            if (video.ended || video.paused) { recorder.stop(); return; }
+            ctx.drawImage(video, 0, 0, w, h);
+            requestAnimationFrame(draw);
+          };
+          requestAnimationFrame(draw);
+        };
+        video.play().catch(reject);
+      };
+      video.onerror = reject;
+    });
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (fileRef.current) fileRef.current.value = "";
     if (!files.length) return;
-    setUploadingMedia(true);
-    let pending = files.length;
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
+
+    files.forEach(async file => {
+      const isVideo = file.type.startsWith("video");
+      if (isVideo) {
+        setCompressing(true);
         try {
-          const dataUrl = ev.target?.result as string;
-          const prepared = await compressImage(dataUrl);
-          const cdnUrl = await uploadToS3(prepared);
-          setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
+          const compressed = await compressVideo(file);
+          const MAX_BYTES = 4 * 1024 * 1024;
+          if (compressed.size > MAX_BYTES) {
+            alert(`Видео слишком длинное даже после сжатия (${(compressed.size / 1024 / 1024).toFixed(1)} МБ). Обрежьте его до ~30 секунд.`);
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = async ev => {
+            try {
+              setUploadingMedia(true);
+              const cdnUrl = await uploadToS3(ev.target?.result as string);
+              setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
+            } finally {
+              setUploadingMedia(false);
+            }
+          };
+          reader.readAsDataURL(compressed);
+        } catch {
+          alert("Не удалось обработать видео. Попробуйте другой файл.");
         } finally {
-          pending--;
-          if (pending === 0) setUploadingMedia(false);
+          setCompressing(false);
         }
-      };
-      reader.readAsDataURL(file);
+      } else {
+        setUploadingMedia(true);
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+          try {
+            const dataUrl = ev.target?.result as string;
+            const prepared = await compressImage(dataUrl);
+            const cdnUrl = await uploadToS3(prepared);
+            setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
+          } finally {
+            setUploadingMedia(false);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
     });
   };
 
@@ -139,7 +197,6 @@ export default function BlogManager() {
       setMediaItems([]);
       setTeacherPhoto("");
       setTeacherName("");
-      setVideoLink("");
       if (activeTab === form.category) {
         loadPosts(activeTab);
       } else {
@@ -299,42 +356,21 @@ export default function BlogManager() {
             {/* MEDIA */}
             <div>
               <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото и видео</label>
-              <div className="flex flex-col gap-2">
-                <button
-                  type="button"
-                  onClick={() => fileRef.current?.click()}
-                  disabled={uploadingMedia}
-                  className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
-                >
-                  <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
-                  {uploadingMedia ? "Загружаем фото..." : "Добавить фото"}
-                </button>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={videoLink}
-                    onChange={e => setVideoLink(e.target.value)}
-                    placeholder="Ссылка на видео YouTube или VK"
-                    className="flex-1 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                    onKeyDown={e => e.key === "Enter" && (e.preventDefault(), addVideoLink())}
-                  />
-                  <button
-                    type="button"
-                    onClick={addVideoLink}
-                    disabled={!videoLink.trim()}
-                    className="flex items-center gap-1.5 bg-orange-50 hover:bg-orange-100 text-orange-500 font-semibold px-4 py-3 rounded-2xl text-sm transition-colors disabled:opacity-40"
-                  >
-                    <Icon name="Plus" size={16} />
-                    Добавить
-                  </button>
-                </div>
-                <p className="text-xs text-gray-400">Видео загружайте на YouTube или VK, затем вставьте ссылку</p>
-              </div>
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                disabled={uploadingMedia || compressing}
+                className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
+              >
+                <Icon name={uploadingMedia || compressing ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia || compressing ? "animate-spin" : ""} />
+                {compressing ? "Сжимаем видео..." : uploadingMedia ? "Загружаем файл..." : "Добавить фото или видео"}
+              </button>
+              {compressing && <p className="text-xs text-gray-400 mt-1.5">Это может занять минуту — видео обрабатывается прямо в браузере</p>}
               <input
                 ref={fileRef}
                 type="file"
                 multiple
-                accept="image/*"
+                accept="image/*,video/*"
                 className="hidden"
                 onChange={handleFileAdd}
               />

@@ -97,7 +97,10 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
           >
             {m.type === "video" ? (
               <div className="w-full h-full flex items-center justify-center bg-gray-900 relative">
-                <Icon name="PlayCircle" size={48} className="text-white opacity-80" />
+                <video src={m.url} className="w-full h-full object-cover" muted playsInline />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Icon name="PlayCircle" size={40} className="text-white opacity-80 drop-shadow" />
+                </div>
               </div>
             ) : (
               <img src={m.url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:[animation:wiggle_0.6s_ease-in-out]" />
@@ -111,14 +114,7 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
             <Icon name="X" size={28} />
           </button>
           {active.type === "video" ? (
-            <div className="w-full max-w-3xl aspect-video" onClick={e => e.stopPropagation()}>
-              <iframe
-                src={active.url}
-                className="w-full h-full rounded-2xl"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-              />
-            </div>
+            <video src={active.url} className="max-w-full max-h-[90vh] rounded-2xl" controls autoPlay onClick={e => e.stopPropagation()} />
           ) : (
             <img src={active.url} alt="" className="max-w-full max-h-[90vh] rounded-2xl object-contain" onClick={e => e.stopPropagation()} />
           )}
