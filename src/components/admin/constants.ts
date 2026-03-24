@@ -1,6 +1,7 @@
 export const API_URL = "https://functions.poehali.dev/1a73d1e8-5437-405c-895e-6835413def1c";
 export const AUTH_URL = "https://functions.poehali.dev/a8c159bd-d63c-431b-a970-462abd7cd949";
 export const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-264f6d13e325";
+export const UPLOAD_API = "https://functions.poehali.dev/a7038ca8-4f9f-4936-abb3-9236e5cf235a";
 export const TOKEN_KEY = "admin_token";
 
 export const STATUS_CONFIG: Record<string, { label: string; color: string; next: string; nextLabel: string }> = {

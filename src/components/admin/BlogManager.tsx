@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -11,6 +11,7 @@ export default function BlogManager() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ category: "tips", title: "", content: "" });
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<number | null>(null);
   const [showEmoji, setShowEmoji] = useState(false);
@@ -65,19 +66,37 @@ export default function BlogManager() {
     });
   };
 
+  const uploadToS3 = async (dataUrl: string): Promise<string> => {
+    const res = await fetch(UPLOAD_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
+      body: JSON.stringify({ data_url: dataUrl }),
+    });
+    const data = await res.json();
+    return data.url;
+  };
+
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    if (fileRef.current) fileRef.current.value = "";
+    setUploadingMedia(true);
+    let pending = files.length;
     files.forEach(file => {
       const reader = new FileReader();
       reader.onload = async (ev) => {
-        const url = ev.target?.result as string;
-        const type = file.type.startsWith("video") ? "video" : "image";
-        const finalUrl = type === "image" ? await compressImage(url) : url;
-        setMediaItems(prev => [...prev, { type, url: finalUrl }]);
+        try {
+          const dataUrl = ev.target?.result as string;
+          const type = file.type.startsWith("video") ? "video" : "image";
+          const prepared = type === "image" ? await compressImage(dataUrl) : dataUrl;
+          const cdnUrl = await uploadToS3(prepared);
+          setMediaItems(prev => [...prev, { type, url: cdnUrl }]);
+        } finally {
+          pending--;
+          if (pending === 0) setUploadingMedia(false);
+        }
       };
       reader.readAsDataURL(file);
     });
-    if (fileRef.current) fileRef.current.value = "";
   };
 
   const removeMedia = (i: number) => {
@@ -250,7 +269,8 @@ export default function BlogManager() {
                     const reader = new FileReader();
                     reader.onload = async ev => {
                       const compressed = await compressImage(ev.target?.result as string, 400);
-                      setTeacherPhoto(compressed);
+                      const cdnUrl = await uploadToS3(compressed);
+                      setTeacherPhoto(cdnUrl);
                     };
                     reader.readAsDataURL(file);
                     if (teacherPhotoRef.current) teacherPhotoRef.current.value = "";
@@ -264,10 +284,11 @@ export default function BlogManager() {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors"
+                disabled={uploadingMedia}
+                className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
               >
-                <Icon name="ImagePlus" size={18} />
-                Добавить фото или видео
+                <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
+                {uploadingMedia ? "Загружаем файл..." : "Добавить фото или видео"}
               </button>
               <input
                 ref={fileRef}
@@ -301,7 +322,7 @@ export default function BlogManager() {
 
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || uploadingMedia}
               className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-3.5 rounded-2xl transition-colors"
             >
               {saving ? "Сохраняем..." : "Опубликовать пост"}
