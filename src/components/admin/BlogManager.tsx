@@ -70,11 +70,15 @@ export default function BlogManager() {
     if (!form.title.trim()) return;
     setSaving(true);
     try {
-      await fetch(BLOG_API, {
+      const res = await fetch(BLOG_API, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
         body: JSON.stringify({ ...form, media: mediaItems, teacher_photo: teacherPhoto, teacher_name: teacherName }),
       });
+      if (!res.ok) {
+        alert("Ошибка при публикации. Попробуйте ещё раз.");
+        return;
+      }
       setShowForm(false);
       setForm({ category: "tips", title: "", content: "" });
       setMediaItems([]);
@@ -85,6 +89,8 @@ export default function BlogManager() {
       } else {
         setActiveTab(form.category);
       }
+    } catch {
+      alert("Не удалось подключиться к серверу. Проверьте интернет и попробуйте снова.");
     } finally {
       setSaving(false);
     }
