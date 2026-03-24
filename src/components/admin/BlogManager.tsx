@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import { BLOG_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
+const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
+
 export default function BlogManager() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,23 @@ export default function BlogManager() {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
   const fileRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+
+  const insertEmoji = (emoji: string) => {
+    const field = emojiTarget;
+    const ref = field === "title" ? titleRef : contentRef;
+    const el = ref.current;
+    if (!el) return;
+    const start = el.selectionStart ?? el.value.length;
+    const end = el.selectionEnd ?? el.value.length;
+    const newVal = el.value.slice(0, start) + emoji + el.value.slice(end);
+    setForm(f => ({ ...f, [field]: newVal }));
+    setTimeout(() => { el.focus(); el.setSelectionRange(start + emoji.length, start + emoji.length); }, 0);
+  };
 
   const loadPosts = async (cat: string) => {
     setLoading(true);
@@ -124,24 +142,41 @@ export default function BlogManager() {
             </div>
             <div>
               <label className="text-xs font-bold text-gray-500 mb-1.5 block">Заголовок</label>
-              <input
-                required
-                className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                placeholder="О чём этот пост?"
-                value={form.title}
-                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              />
+              <div className="relative">
+                <input
+                  ref={titleRef}
+                  required
+                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  placeholder="О чём этот пост?"
+                  value={form.title}
+                  onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                />
+                <button type="button" onClick={() => { setEmojiTarget("title"); setShowEmoji(v => emojiTarget === "title" ? !v : true); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-xl hover:scale-110 transition-transform">😊</button>
+              </div>
             </div>
             <div>
               <label className="text-xs font-bold text-gray-500 mb-1.5 block">Текст (необязательно)</label>
-              <textarea
-                rows={5}
-                className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 resize-none"
-                placeholder="Напишите подробнее..."
-                value={form.content}
-                onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-              />
+              <div className="relative">
+                <textarea
+                  ref={contentRef}
+                  rows={5}
+                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 resize-none"
+                  placeholder="Напишите подробнее..."
+                  value={form.content}
+                  onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+                />
+                <button type="button" onClick={() => { setEmojiTarget("content"); setShowEmoji(v => emojiTarget === "content" ? !v : true); }} className="absolute right-3 top-3 text-xl hover:scale-110 transition-transform">😊</button>
+              </div>
             </div>
+            {showEmoji && (
+              <div className="bg-white border border-gray-200 rounded-2xl p-3 shadow-md">
+                <div className="flex flex-wrap gap-1.5">
+                  {EMOJIS.map(e => (
+                    <button key={e} type="button" onClick={() => insertEmoji(e)} className="text-2xl hover:scale-125 transition-transform leading-none">{e}</button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* MEDIA */}
             <div>
