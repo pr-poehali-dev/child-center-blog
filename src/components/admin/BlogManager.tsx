@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, GET_UPLOAD_URL_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -76,26 +76,53 @@ export default function BlogManager() {
     return data.url;
   };
 
+  const uploadVideoToS3 = async (file: File): Promise<string> => {
+    const token = localStorage.getItem(TOKEN_KEY) || "";
+    const urlRes = await fetch(GET_UPLOAD_URL_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Authorization": token },
+      body: JSON.stringify({ content_type: file.type }),
+    });
+    const { upload_url, cdn_url } = await urlRes.json();
+    await fetch(upload_url, {
+      method: "PUT",
+      headers: { "Content-Type": file.type },
+      body: file,
+    });
+    return cdn_url;
+  };
+
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (fileRef.current) fileRef.current.value = "";
     setUploadingMedia(true);
     let pending = files.length;
     files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
-        try {
-          const dataUrl = ev.target?.result as string;
-          const type = file.type.startsWith("video") ? "video" : "image";
-          const prepared = type === "image" ? await compressImage(dataUrl) : dataUrl;
-          const cdnUrl = await uploadToS3(prepared);
-          setMediaItems(prev => [...prev, { type, url: cdnUrl }]);
-        } finally {
+      const isVideo = file.type.startsWith("video");
+      if (isVideo) {
+        uploadVideoToS3(file).then(cdnUrl => {
+          setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
+        }).catch(() => {
+          alert("Не удалось загрузить видео. Попробуйте ещё раз.");
+        }).finally(() => {
           pending--;
           if (pending === 0) setUploadingMedia(false);
-        }
-      };
-      reader.readAsDataURL(file);
+        });
+      } else {
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+          try {
+            const dataUrl = ev.target?.result as string;
+            const prepared = await compressImage(dataUrl);
+            const cdnUrl = await uploadToS3(prepared);
+            setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
+          } finally {
+            pending--;
+            if (pending === 0) setUploadingMedia(false);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
     });
   };
 
