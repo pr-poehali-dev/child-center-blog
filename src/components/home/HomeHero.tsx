@@ -66,9 +66,11 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
         </div>
 
         <div className="flex items-center justify-center relative group cursor-pointer" onClick={() => setVideoOpen(true)}>
+          <div className="absolute -inset-3 rounded-[2rem] bg-orange-300 opacity-40 blur-2xl" />
+          <div className="absolute -inset-1.5 rounded-[1.75rem] bg-gradient-to-br from-orange-300 via-yellow-200 to-rose-300 opacity-60 blur-lg" />
           <video
             src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
-            className="rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
+            className="relative rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
             autoPlay
             muted
             loop
