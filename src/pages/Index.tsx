@@ -108,7 +108,7 @@ function BookingDropdown({ onFormClick }: { onFormClick: () => void }) {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
       >
-        Записаться на занятие
+        Записаться на экскурсию
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
       </button>
       {open && (
