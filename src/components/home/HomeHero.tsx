@@ -82,11 +82,11 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               Подробнее о летнем клубе
             </a>
           </div>
-          <div className="flex justify-center gap-8 mt-8">
-            {[["", "Счастливые дети"], ["", "Квалифицированные педагоги"], ["8 лет", "работаем"]].map(([num, label]) => (
-              <div key={label}>
-                <div className="font-black text-2xl text-gray-800">{num}</div>
-                <div className="text-sm text-gray-400">{label}</div>
+          <div className="flex flex-wrap justify-center gap-6 mt-8">
+            {[["✨", "Счастливые дети"], ["🎓", "Квалифицированные педагоги"], ["8 лет", "работаем"]].map(([num, label]) => (
+              <div key={label} className="text-center">
+                <div className="font-caveat text-4xl text-orange-400 leading-tight">{num}</div>
+                <div className="font-black text-base text-gray-700 mt-0.5">{label}</div>
               </div>
             ))}
           </div>
