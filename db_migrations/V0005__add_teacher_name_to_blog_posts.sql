@@ -1,0 +1,1 @@
+ALTER TABLE t_p99892216_child_center_blog.blog_posts ADD COLUMN IF NOT EXISTS teacher_name VARCHAR(255) DEFAULT '';

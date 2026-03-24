@@ -63,12 +63,12 @@ def handler(event: dict, context) -> dict:
         category = params.get('category')
         if category and category != 'all':
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo FROM {SCHEMA}.blog_posts WHERE category = %s ORDER BY created_at DESC",
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name FROM {SCHEMA}.blog_posts WHERE category = %s ORDER BY created_at DESC",
                 (category,)
             )
         else:
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
             )
         rows = cur.fetchall()
         cur.close()
@@ -82,6 +82,7 @@ def handler(event: dict, context) -> dict:
                 'media': r[4],
                 'created_at': r[5].isoformat(),
                 'teacher_photo': r[6],
+                'teacher_name': r[7] or '',
             }
             for r in rows
         ]
@@ -97,6 +98,7 @@ def handler(event: dict, context) -> dict:
         content = body.get('content', '')
         media_list = body.get('media', [])
         teacher_photo_data = body.get('teacher_photo', '')
+        teacher_name = body.get('teacher_name', '')
 
         s3 = get_s3()
         uploaded = []
@@ -114,8 +116,8 @@ def handler(event: dict, context) -> dict:
             teacher_photo_url = teacher_photo_data
 
         cur.execute(
-            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo) VALUES (%s, %s, %s, %s, %s) RETURNING id, created_at",
-            (category, title, content, json.dumps(uploaded, ensure_ascii=False), teacher_photo_url)
+            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id, created_at",
+            (category, title, content, json.dumps(uploaded, ensure_ascii=False), teacher_photo_url, teacher_name)
         )
         row = cur.fetchone()
         conn.commit()

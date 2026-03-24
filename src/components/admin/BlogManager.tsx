@@ -16,6 +16,7 @@ export default function BlogManager() {
   const [showEmoji, setShowEmoji] = useState(false);
   const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
+  const [teacherName, setTeacherName] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -72,12 +73,13 @@ export default function BlogManager() {
       await fetch(BLOG_API, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...form, media: mediaItems, teacher_photo: teacherPhoto }),
+        body: JSON.stringify({ ...form, media: mediaItems, teacher_photo: teacherPhoto, teacher_name: teacherName }),
       });
       setShowForm(false);
       setForm({ category: "tips", title: "", content: "" });
       setMediaItems([]);
       setTeacherPhoto("");
+      setTeacherName("");
       if (activeTab === form.category) {
         loadPosts(activeTab);
       } else {
@@ -202,7 +204,16 @@ export default function BlogManager() {
                       <Icon name="UserRound" size={22} />
                     </button>
                   )}
-                  <span className="text-xs text-gray-400">Круглое фото педагога появится перед текстом поста</span>
+                  <div className="flex-1">
+                  <input
+                    type="text"
+                    className="w-full border border-gray-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                    placeholder="Имя педагога (необязательно)"
+                    value={teacherName}
+                    onChange={e => setTeacherName(e.target.value)}
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Появится под фото педагога в посте</p>
+                </div>
                 </div>
                 <input
                   ref={teacherPhotoRef}
