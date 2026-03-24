@@ -47,14 +47,33 @@ export default function BlogManager() {
 
   useEffect(() => { loadPosts(activeTab); }, [activeTab]);
 
+  const compressImage = (dataUrl: string, maxSize = 900): Promise<string> => {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxSize || height > maxSize) {
+          if (width > height) { height = Math.round(height * maxSize / width); width = maxSize; }
+          else { width = Math.round(width * maxSize / height); height = maxSize; }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width; canvas.height = height;
+        canvas.getContext("2d")!.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.75));
+      };
+      img.src = dataUrl;
+    });
+  };
+
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     files.forEach(file => {
       const reader = new FileReader();
-      reader.onload = (ev) => {
+      reader.onload = async (ev) => {
         const url = ev.target?.result as string;
         const type = file.type.startsWith("video") ? "video" : "image";
-        setMediaItems(prev => [...prev, { type, url }]);
+        const finalUrl = type === "image" ? await compressImage(url) : url;
+        setMediaItems(prev => [...prev, { type, url: finalUrl }]);
       };
       reader.readAsDataURL(file);
     });
@@ -225,11 +244,14 @@ export default function BlogManager() {
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={e => {
+                  onChange={async e => {
                     const file = e.target.files?.[0];
                     if (!file) return;
                     const reader = new FileReader();
-                    reader.onload = ev => setTeacherPhoto(ev.target?.result as string);
+                    reader.onload = async ev => {
+                      const compressed = await compressImage(ev.target?.result as string, 400);
+                      setTeacherPhoto(compressed);
+                    };
                     reader.readAsDataURL(file);
                     if (teacherPhotoRef.current) teacherPhotoRef.current.value = "";
                   }}
