@@ -4,6 +4,7 @@ import { API_URL, TOKEN_KEY, Booking } from "@/components/admin/constants";
 import LoginScreen from "@/components/admin/LoginScreen";
 import BlogManager from "@/components/admin/BlogManager";
 import BookingsManager from "@/components/admin/BookingsManager";
+import ReviewsManager from "@/components/admin/ReviewsManager";
 
 export default function Admin() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
@@ -11,7 +12,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [updating, setUpdating] = useState<number | null>(null);
-  const [tab, setTab] = useState<"bookings" | "blog">("bookings");
+  const [tab, setTab] = useState<"bookings" | "blog" | "reviews">("bookings");
 
   const load = async () => {
     setLoading(true);
@@ -77,12 +78,13 @@ export default function Admin() {
       <div className="bg-white border-b border-orange-100">
         <div className="max-w-5xl mx-auto px-4 flex gap-1 pt-2">
           {[
-            { key: "bookings", label: "Заявки", emoji: "📋" },
-            { key: "blog",     label: "Блог",   emoji: "✍️" },
+            { key: "bookings", label: "Заявки",  emoji: "📋" },
+            { key: "blog",     label: "Блог",    emoji: "✍️" },
+            { key: "reviews",  label: "Отзывы",  emoji: "⭐" },
           ].map(t => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key as "bookings" | "blog")}
+              onClick={() => setTab(t.key as "bookings" | "blog" | "reviews")}
               className={`flex items-center gap-1.5 px-5 py-3 text-sm font-bold border-b-2 transition-colors ${
                 tab === t.key
                   ? "border-orange-400 text-orange-500"
@@ -96,7 +98,7 @@ export default function Admin() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-8">
-        {tab === "bookings" ? (
+        {tab === "bookings" && (
           <BookingsManager
             bookings={bookings}
             loading={loading}
@@ -106,9 +108,9 @@ export default function Admin() {
             onRefresh={load}
             onUpdateStatus={updateStatus}
           />
-        ) : (
-          <BlogManager />
         )}
+        {tab === "blog" && <BlogManager />}
+        {tab === "reviews" && <ReviewsManager />}
       </div>
     </div>
   );

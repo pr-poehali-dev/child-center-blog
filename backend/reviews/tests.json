@@ -1,0 +1,17 @@
+{
+  "tests": [
+    {
+      "name": "GET approved reviews",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "POST new review",
+      "method": "POST",
+      "path": "/",
+      "body": {"name": "Тест", "text": "Отличный центр!", "stars": 5},
+      "expectedStatus": 201
+    }
+  ]
+}
