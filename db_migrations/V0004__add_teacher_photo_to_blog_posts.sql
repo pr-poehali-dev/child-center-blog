@@ -1,0 +1,1 @@
+ALTER TABLE t_p99892216_child_center_blog.blog_posts ADD COLUMN teacher_photo text NOT NULL DEFAULT '';

@@ -79,6 +79,7 @@ interface Post {
   content: string;
   media: MediaItem[];
   created_at: string;
+  teacher_photo?: string;
 }
 
 function MediaGallery({ media }: { media: MediaItem[] }) {
@@ -138,9 +139,19 @@ function PostCard({ post }: { post: Post }) {
       <h3 className="font-black text-lg text-gray-800 mb-3 leading-snug">{post.title}</h3>
       {post.content && (
         <div className="text-gray-600 text-sm leading-relaxed">
-          <p className={!expanded && isLong ? "line-clamp-4" : ""}>
-            {post.content}
-          </p>
+          {post.teacher_photo && (
+            <div className="flex items-start gap-3 mb-3">
+              <img
+                src={post.teacher_photo}
+                alt="Педагог"
+                className="w-12 h-12 rounded-full object-cover border-2 border-amber-300 shrink-0 shadow-sm"
+              />
+              <p className={!expanded && isLong ? "line-clamp-4" : ""}>{post.content}</p>
+            </div>
+          )}
+          {!post.teacher_photo && (
+            <p className={!expanded && isLong ? "line-clamp-4" : ""}>{post.content}</p>
+          )}
           {isLong && (
             <button className="text-orange-500 font-semibold text-sm mt-1 hover:underline" onClick={() => setExpanded(!expanded)}>
               {expanded ? "Свернуть" : "Читать полностью"}

@@ -15,7 +15,9 @@ export default function BlogManager() {
   const [deleting, setDeleting] = useState<number | null>(null);
   const [showEmoji, setShowEmoji] = useState(false);
   const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
+  const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const teacherPhotoRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,11 +72,12 @@ export default function BlogManager() {
       await fetch(BLOG_API, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...form, media: mediaItems }),
+        body: JSON.stringify({ ...form, media: mediaItems, teacher_photo: teacherPhoto }),
       });
       setShowForm(false);
       setForm({ category: "tips", title: "", content: "" });
       setMediaItems([]);
+      setTeacherPhoto("");
       if (activeTab === form.category) {
         loadPosts(activeTab);
       } else {
@@ -175,6 +178,46 @@ export default function BlogManager() {
                     <button key={e} type="button" onClick={() => insertEmoji(e)} className="text-2xl hover:scale-125 transition-transform leading-none">{e}</button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* TEACHER PHOTO — only for tips */}
+            {form.category === "tips" && (
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото педагога (необязательно)</label>
+                <div className="flex items-center gap-4">
+                  {teacherPhoto ? (
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-orange-300 shrink-0">
+                      <img src={teacherPhoto} className="w-full h-full object-cover" alt="Педагог" />
+                      <button type="button" onClick={() => setTeacherPhoto("")} className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                        <Icon name="X" size={16} className="text-white" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => teacherPhotoRef.current?.click()}
+                      className="w-16 h-16 rounded-full border-2 border-dashed border-orange-200 hover:border-orange-400 flex items-center justify-center text-orange-300 hover:text-orange-400 transition-colors shrink-0"
+                    >
+                      <Icon name="UserRound" size={22} />
+                    </button>
+                  )}
+                  <span className="text-xs text-gray-400">Круглое фото педагога появится перед текстом поста</span>
+                </div>
+                <input
+                  ref={teacherPhotoRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = ev => setTeacherPhoto(ev.target?.result as string);
+                    reader.readAsDataURL(file);
+                    if (teacherPhotoRef.current) teacherPhotoRef.current.value = "";
+                  }}
+                />
               </div>
             )}
 

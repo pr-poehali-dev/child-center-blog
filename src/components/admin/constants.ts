@@ -40,4 +40,5 @@ export interface Post {
   content: string;
   media: MediaItem[];
   created_at: string;
+  teacher_photo?: string;
 }
