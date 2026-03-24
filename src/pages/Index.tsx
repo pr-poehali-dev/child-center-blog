@@ -1,25 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
-const HERO_IMG = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/71d16c53-1370-4775-941c-4d3a2598f774.jpg";
 
 const NAV_LINKS = [
   { label: "Главная", id: "home" },
   { label: "О центре", id: "about" },
-  { label: "Статьи", id: "articles" },
+  { label: "Блог", id: "blog-link" },
   { label: "Команда", id: "team" },
   { label: "Отзывы", id: "reviews" },
   { label: "Контакты", id: "contacts" },
 ];
 
-const ARTICLES = [
-  { emoji: "🎨", tag: "Творчество", title: "Как рисование развивает мышление ребёнка", desc: "Узнайте, почему регулярные занятия рисованием — мощный инструмент развития.", date: "18 марта 2026", color: "bg-rose-50" },
-  { emoji: "🧩", tag: "Развитие", title: "5 игр для развития логики дошкольников", desc: "Простые и увлекательные игры, которые можно делать дома каждый день.", date: "10 марта 2026", color: "bg-amber-50" },
-  { emoji: "🎭", tag: "Мероприятия", title: "Как прошёл наш весенний спектакль", desc: "Дети готовились целый месяц — и вот настал день премьеры. Делимся эмоциями!", date: "5 марта 2026", color: "bg-violet-50" },
-  { emoji: "🌱", tag: "Советы", title: "Адаптация в детском саду: советы родителям", desc: "Первые дни в новом коллективе — стресс. Рассказываем, как помочь малышу.", date: "28 февраля 2026", color: "bg-teal-50" },
-  { emoji: "🎵", tag: "Музыка", title: "Музыка и эмоциональный интеллект", desc: "Почему дети, занимающиеся музыкой, легче выражают эмоции.", date: "20 февраля 2026", color: "bg-sky-50" },
-  { emoji: "🏃", tag: "Здоровье", title: "Движение — жизнь: физическая активность для детей", desc: "Сколько нужно двигаться ребёнку в день? Мнение наших педагогов.", date: "12 февраля 2026", color: "bg-lime-50" },
-];
+
 
 const TEAM = [
   { name: "Анна Смирнова", role: "Директор центра", emoji: "👩‍🏫", desc: "15 лет в детском образовании. Любит йогу и путешествия.", color: "bg-rose-100" },
@@ -34,16 +27,10 @@ const REVIEWS = [
   { name: "Татьяна К.", text: "Записались через сайт — очень удобно! Первое занятие пробное и бесплатное. Остались навсегда 😊", stars: 5, child: "Сын, 6 лет", color: "bg-violet-50" },
 ];
 
-const CLASSES = [
-  { name: "Рисование и творчество", age: "3–7 лет", time: "Пн, Ср 10:00", emoji: "🎨" },
-  { name: "Логика и математика", age: "5–8 лет", time: "Вт, Чт 11:00", emoji: "🧮" },
-  { name: "Музыка и ритм", age: "3–6 лет", time: "Пн, Пт 09:00", emoji: "🎵" },
-  { name: "Спорт и движение", age: "4–9 лет", time: "Сб 10:00", emoji: "⚽" },
-  { name: "Английский для малышей", age: "5–8 лет", time: "Ср, Пт 15:00", emoji: "🌍" },
-  { name: "Театральная студия", age: "6–12 лет", time: "Сб 12:00", emoji: "🎭" },
-];
+
 
 export default function Index() {
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -53,6 +40,11 @@ export default function Index() {
   const [sendError, setSendError] = useState("");
 
   const scrollTo = (id: string) => {
+    if (id === "blog-link") {
+      setMenuOpen(false);
+      navigate("/blog");
+      return;
+    }
     setActiveSection(id);
     setMenuOpen(false);
     const el = document.getElementById(id);
@@ -225,51 +217,34 @@ export default function Index() {
         </div>
       </section>
 
-      {/* CLASSES */}
-      <section className="py-24 bg-gradient-to-b from-amber-50 to-orange-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Расписание</div>
-            <h2 className="font-black text-4xl text-gray-800">Наши занятия</h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {CLASSES.map((cls) => (
-              <div key={cls.name} className="bg-white rounded-3xl p-6 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 border border-orange-100">
-                <div className="text-3xl mb-3">{cls.emoji}</div>
-                <h3 className="font-black text-lg text-gray-800 mb-2">{cls.name}</h3>
-                <div className="flex gap-2 mb-4">
-                  <span className="bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1 rounded-full">{cls.age}</span>
-                  <span className="bg-gray-100 text-gray-500 text-xs font-semibold px-3 py-1 rounded-full">{cls.time}</span>
-                </div>
-                <button onClick={() => openBooking(cls.name)} className="w-full bg-orange-400 hover:bg-orange-500 text-white font-bold py-2.5 rounded-2xl transition-colors text-sm">
-                  Записаться
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ARTICLES */}
-      <section id="articles" className="py-24 bg-white">
+      {/* BLOG PROMO */}
+      <section id="blog-promo" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
             <div className="font-caveat text-orange-400 text-2xl mb-2">Блог</div>
-            <h2 className="font-black text-4xl text-gray-800">Полезные статьи</h2>
+            <h2 className="font-black text-4xl text-gray-800">Наш блог</h2>
+            <p className="text-gray-500 mt-3 text-lg">Живые истории, советы и важные мысли от педагогов центра</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ARTICLES.map((a) => (
-              <article key={a.title} className={`${a.color} rounded-3xl p-6 hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer border border-white`}>
-                <div className="text-3xl mb-3">{a.emoji}</div>
-                <span className="bg-white text-gray-500 text-xs font-bold px-3 py-1 rounded-full">{a.tag}</span>
-                <h3 className="font-black text-lg text-gray-800 mt-3 mb-2 leading-snug">{a.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-4">{a.desc}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">{a.date}</span>
-                  <span className="text-orange-400 font-bold text-sm">Читать →</span>
-                </div>
-              </article>
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {[
+              { emoji: "🎓", title: "Советы от педагога", desc: "Практические советы и наблюдения от наших специалистов — для родителей и детей.", color: "bg-amber-50", border: "border-amber-100" },
+              { emoji: "🌈", title: "Наша жизнь на ладони", desc: "Фото и видео из жизни центра: занятия, праздники, улыбки и добрые моменты.", color: "bg-rose-50", border: "border-rose-100" },
+              { emoji: "📖", title: "Подробно о важном", desc: "Развёрнутые материалы о воспитании, развитии и важных темах для семьи.", color: "bg-teal-50", border: "border-teal-100" },
+            ].map(item => (
+              <div key={item.title} className={`${item.color} border ${item.border} rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer`} onClick={() => navigate("/blog")}>
+                <div className="text-5xl mb-4">{item.emoji}</div>
+                <h3 className="font-black text-lg text-gray-800 mb-3">{item.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+              </div>
             ))}
+          </div>
+          <div className="text-center">
+            <button
+              onClick={() => navigate("/blog")}
+              className="bg-orange-400 hover:bg-orange-500 text-white font-black px-10 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
+            >
+              Перейти в блог →
+            </button>
           </div>
         </div>
       </section>
@@ -428,11 +403,8 @@ export default function Index() {
                     <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Маша, 5 лет" value={form.child} onChange={(e) => setForm({ ...form, child: e.target.value })} />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-gray-500 mb-1 block">Занятие</label>
-                    <select className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 bg-white" value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })}>
-                      <option value="">Выберите занятие</option>
-                      {CLASSES.map((c) => <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>)}
-                    </select>
+                    <label className="text-xs font-bold text-gray-500 mb-1 block">Что интересует (необязательно)</label>
+                    <input className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Рисование, логика..." value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })} />
                   </div>
                   {sendError && (
                     <p className="text-red-500 text-sm text-center">{sendError}</p>

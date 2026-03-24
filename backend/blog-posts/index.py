@@ -1,0 +1,119 @@
+import json
+import os
+import base64
+import uuid
+import psycopg2
+import boto3
+
+
+SCHEMA = 't_p99892216_child_center_blog'
+CORS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Authorization',
+    'Access-Control-Max-Age': '86400',
+}
+
+
+def get_s3():
+    return boto3.client(
+        's3',
+        endpoint_url='https://bucket.poehali.dev',
+        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+    )
+
+
+def upload_media(s3, data_url: str) -> str:
+    """Загружает base64 media в S3 и возвращает CDN URL"""
+    if data_url.startswith('http'):
+        return data_url
+    header, b64data = data_url.split(',', 1)
+    content_type = header.split(';')[0].split(':')[1]
+    ext = content_type.split('/')[-1]
+    if ext == 'jpeg':
+        ext = 'jpg'
+    key = f'blog/{uuid.uuid4()}.{ext}'
+    raw = base64.b64decode(b64data)
+    s3.put_object(Bucket='files', Key=key, Body=raw, ContentType=content_type)
+    cdn_url = f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
+    return cdn_url
+
+
+def handler(event: dict, context) -> dict:
+    """Управление постами блога: GET — список, POST — создать, DELETE — удалить"""
+
+    if event.get('httpMethod') == 'OPTIONS':
+        return {'statusCode': 200, 'headers': CORS, 'body': ''}
+
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    cur = conn.cursor()
+
+    method = event.get('httpMethod', 'GET')
+
+    if method == 'GET':
+        params = event.get('queryStringParameters') or {}
+        category = params.get('category')
+        if category and category != 'all':
+            cur.execute(
+                f"SELECT id, category, title, content, media, created_at FROM {SCHEMA}.blog_posts WHERE category = %s ORDER BY created_at DESC",
+                (category,)
+            )
+        else:
+            cur.execute(
+                f"SELECT id, category, title, content, media, created_at FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
+            )
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        posts = [
+            {
+                'id': r[0],
+                'category': r[1],
+                'title': r[2],
+                'content': r[3],
+                'media': r[4],
+                'created_at': r[5].isoformat(),
+            }
+            for r in rows
+        ]
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'posts': posts}, ensure_ascii=False)}
+
+    if method == 'POST':
+        body = json.loads(event.get('body') or '{}')
+        category = body.get('category', '')
+        title = body.get('title', '')
+        content = body.get('content', '')
+        media_list = body.get('media', [])
+
+        s3 = get_s3()
+        uploaded = []
+        for item in media_list:
+            url = item.get('url', '')
+            mtype = item.get('type', 'image')
+            if url.startswith('data:'):
+                url = upload_media(s3, url)
+            uploaded.append({'type': mtype, 'url': url})
+
+        cur.execute(
+            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media) VALUES (%s, %s, %s, %s) RETURNING id, created_at",
+            (category, title, content, json.dumps(uploaded, ensure_ascii=False))
+        )
+        row = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat()})}
+
+    if method == 'DELETE':
+        body = json.loads(event.get('body') or '{}')
+        post_id = body.get('id')
+        cur.execute(f"DELETE FROM {SCHEMA}.blog_posts WHERE id = %s", (post_id,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True})}
+
+    cur.close()
+    conn.close()
+    return {'statusCode': 405, 'headers': CORS, 'body': json.dumps({'error': 'Method not allowed'})}
