@@ -17,8 +17,10 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
         <div className="absolute bottom-20 right-20 w-56 h-56 bg-yellow-100 rounded-full opacity-60 blur-2xl" />
         <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-rose-100 rounded-full opacity-30 blur-3xl -translate-x-1/2 -translate-y-1/2" />
       </div>
-      <div className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-start relative z-10">
-        <div>
+      <div className="max-w-6xl mx-auto px-4 py-16 flex flex-col gap-10 relative z-10">
+
+        {/* ТЕКСТ + КНОПКИ */}
+        <div className="text-center max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
             <span>✨</span> Детский центр «Рыбка Долли»
           </div>
@@ -29,12 +31,14 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
           <p className="text-gray-500 text-lg mb-8 leading-relaxed">
             Блог для любящих родителей: статьи, советы педагогов, новости центра и запись на занятия онлайн.
           </p>
-          <div className="flex flex-wrap gap-3">
-            <BookingDropdown onFormClick={onFormClick} />
-            <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" />
+          <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xl mx-auto">
+            <BookingDropdown onFormClick={onFormClick} className="flex-1" />
+            <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" wrapperClassName="flex-1" />
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 mt-3">
             <button
               onClick={() => onScrollTo("articles")}
-              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
+              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-3 rounded-full text-base border-2 border-orange-200 transition-all"
             >
               Читать блог
             </button>
@@ -42,7 +46,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               href="https://vk.com/app6379730_-179759189#l=6"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
+              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-3 rounded-full text-base border-2 border-orange-200 transition-all"
             >
               Подробнее о садике
             </a>
@@ -50,12 +54,12 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               href="https://vk.com/app6379730_-179759189#l=8"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
+              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-3 rounded-full text-base border-2 border-orange-200 transition-all"
             >
               Подробнее о летнем клубе
             </a>
           </div>
-          <div className="flex gap-8 mt-10">
+          <div className="flex justify-center gap-8 mt-10">
             {[["", "Счастливые дети"], ["", "Квалифицированные педагоги"], ["8 лет", "работаем"]].map(([num, label]) => (
               <div key={label}>
                 <div className="font-black text-2xl text-gray-800">{num}</div>
@@ -65,7 +69,8 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-center relative group cursor-pointer" onClick={() => setVideoOpen(true)}>
+        {/* ВИДЕО */}
+        <div className="flex items-center justify-center relative group cursor-pointer max-w-3xl mx-auto w-full" onClick={() => setVideoOpen(true)}>
           <div className="absolute -inset-3 rounded-[2rem] bg-orange-300 opacity-40 blur-2xl" />
           <div className="absolute -inset-1.5 rounded-[1.75rem] bg-gradient-to-br from-orange-300 via-yellow-200 to-rose-300 opacity-60 blur-lg" />
           <video

@@ -42,7 +42,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
   );
 }
 
-export function ContactDropdown({ label, className }: { label: string; className: string }) {
+export function ContactDropdown({ label, className, wrapperClassName }: { label: string; className: string; wrapperClassName?: string }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,10 +55,10 @@ export function ContactDropdown({ label, className }: { label: string; className
   }, []);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={`relative ${wrapperClassName || ""}`}>
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center gap-2 font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5 ${className}`}
+        className={`flex items-center justify-center gap-2 w-full font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5 ${className}`}
       >
         {label}
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
@@ -102,7 +102,7 @@ export function NavBookingDropdown({ onFormClick }: { onFormClick: () => void })
   );
 }
 
-export function BookingDropdown({ onFormClick }: { onFormClick: () => void }) {
+export function BookingDropdown({ onFormClick, className }: { onFormClick: () => void; className?: string }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -115,10 +115,10 @@ export function BookingDropdown({ onFormClick }: { onFormClick: () => void }) {
   }, []);
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className={`relative ${className || ""}`}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
+        className="flex items-center justify-center gap-2 w-full bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
       >
         Записаться на экскурсию
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
