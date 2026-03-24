@@ -34,6 +34,7 @@ export default function Index() {
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [videoOpen, setVideoOpen] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", child: "", cls: "" });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
@@ -188,7 +189,7 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center relative group cursor-pointer" onClick={() => setVideoOpen(true)}>
             <video
               src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/64a006b0-d1da-436d-9e51-7a1f0a85ed09.mp4"
               className="rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
@@ -197,7 +198,27 @@ export default function Index() {
               loop
               playsInline
             />
+            <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="bg-white/90 rounded-full p-4 shadow-lg">
+                <Icon name="Play" size={32} className="text-orange-400 fill-orange-400" />
+              </div>
+            </div>
           </div>
+
+          {videoOpen && (
+            <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setVideoOpen(false)}>
+              <button className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors" onClick={() => setVideoOpen(false)}>
+                <Icon name="X" size={32} />
+              </button>
+              <video
+                src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/64a006b0-d1da-436d-9e51-7a1f0a85ed09.mp4"
+                className="max-w-full max-h-[90vh] rounded-2xl"
+                controls
+                autoPlay
+                onClick={e => e.stopPropagation()}
+              />
+            </div>
+          )}
 
         </div>
       </section>
