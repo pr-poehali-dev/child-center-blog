@@ -14,7 +14,8 @@ export const BLOG_CATEGORIES = [
   { id: "life",   label: "Наша жизнь на ладони",            emoji: "🌈" },
   { id: "detail", label: "Подробно о важном",               emoji: "📖" },
   { id: "summer",      label: "Лето с нами. Новости летнего клуба", emoji: "☀️" },
-  { id: "afterschool", label: "Группа продлённого дня",            emoji: "📚" },
+  { id: "afterschool", label: "Группа продлённого дня",      emoji: "📚" },
+  { id: "english",     label: "Группа английского языка",   emoji: "🇬🇧" },
 ];
 
 export interface Booking {
