@@ -205,7 +205,7 @@ export default function Index() {
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             <div className="bg-amber-50 border border-amber-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog")}>
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-amber-200 shadow">
-                <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2fce6d2a-4ca8-489a-9f1c-9a8da6295238.jpg" alt="Советы от педагога" className="w-full h-full object-cover object-top" />
+                <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/3a01418b-d4c4-4f00-abf1-28dce27a903f.jpg" alt="Советы от педагога" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Советы от педагога</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Практические советы и наблюдения от наших специалистов — для родителей и детей.</p>
