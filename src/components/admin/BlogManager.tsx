@@ -320,12 +320,22 @@ export default function BlogManager() {
                   {post.content && (
                     <div className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-2">{post.content}</div>
                   )}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-wrap">
                     <span className="text-xs text-gray-400">{formatDate(post.created_at)}</span>
                     {post.media?.length > 0 && (
                       <span className="flex items-center gap-1 text-xs text-gray-400">
                         <Icon name="Image" size={12} />
                         {post.media.length}
+                      </span>
+                    )}
+                    {(post.teacher_photo || post.teacher_name) && (
+                      <span className="flex items-center gap-1.5 text-xs text-amber-600 font-semibold">
+                        {post.teacher_photo ? (
+                          <img src={post.teacher_photo} alt="" className="w-4 h-4 rounded-full object-cover" />
+                        ) : (
+                          <Icon name="UserRound" size={12} />
+                        )}
+                        {post.teacher_name || "Автор"}
                       </span>
                     )}
                   </div>
