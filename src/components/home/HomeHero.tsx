@@ -17,7 +17,21 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
         <div className="absolute bottom-20 right-20 w-56 h-56 bg-yellow-100 rounded-full opacity-60 blur-2xl" />
         <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-rose-100 rounded-full opacity-30 blur-3xl -translate-x-1/2 -translate-y-1/2" />
       </div>
-      <div className="max-w-6xl mx-auto px-4 py-16 flex flex-col gap-10 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 py-16 flex flex-col gap-8 relative z-10">
+
+        {/* ЗАГОЛОВОК */}
+        <div className="text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
+            <span>✨</span> Детский центр «Рыбка Долли»
+          </div>
+          <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
+            Растём вместе
+            <span className="block font-caveat text-orange-400 text-5xl mt-1">с радостью!</span>
+          </h1>
+          <p className="text-gray-500 text-lg leading-relaxed">
+            Блог для любящих родителей: статьи, советы педагогов, новости центра и запись на занятия онлайн.
+          </p>
+        </div>
 
         {/* ВИДЕО */}
         <div className="flex items-center justify-center relative group cursor-pointer max-w-3xl mx-auto w-full" onClick={() => setVideoOpen(true)}>
@@ -38,18 +52,8 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
           </div>
         </div>
 
-        {/* ТЕКСТ + КНОПКИ */}
-        <div className="text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
-            <span>✨</span> Детский центр «Рыбка Долли»
-          </div>
-          <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
-            Растём вместе
-            <span className="block font-caveat text-orange-400 text-5xl mt-1">с радостью!</span>
-          </h1>
-          <p className="text-gray-500 text-lg mb-8 leading-relaxed">
-            Блог для любящих родителей: статьи, советы педагогов, новости центра и запись на занятия онлайн.
-          </p>
+        {/* КНОПКИ */}
+        <div className="text-center max-w-2xl mx-auto w-full">
           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xl mx-auto">
             <BookingDropdown onFormClick={onFormClick} className="flex-1" />
             <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" wrapperClassName="flex-1" />
@@ -78,7 +82,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               Подробнее о летнем клубе
             </a>
           </div>
-          <div className="flex justify-center gap-8 mt-10">
+          <div className="flex justify-center gap-8 mt-8">
             {[["", "Счастливые дети"], ["", "Квалифицированные педагоги"], ["8 лет", "работаем"]].map(([num, label]) => (
               <div key={label}>
                 <div className="font-black text-2xl text-gray-800">{num}</div>
