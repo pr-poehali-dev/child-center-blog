@@ -18,7 +18,7 @@ export default function BlogManager() {
   const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const [teacherName, setTeacherName] = useState<string>("");
-  const [compressing, setCompressing] = useState(false);
+
   const fileRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -77,53 +77,6 @@ export default function BlogManager() {
     return data.url;
   };
 
-  const compressVideo = (file: File): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-      const video = document.createElement("video");
-      video.muted = true;
-      video.playsInline = true;
-      const url = URL.createObjectURL(file);
-      video.src = url;
-      video.onloadedmetadata = () => {
-        const MAX_W = 640;
-        const scale = video.videoWidth > MAX_W ? MAX_W / video.videoWidth : 1;
-        const w = Math.round(video.videoWidth * scale);
-        const h = Math.round(video.videoHeight * scale);
-        const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext("2d")!;
-
-        const mimeType = MediaRecorder.isTypeSupported("video/webm;codecs=vp8")
-          ? "video/webm;codecs=vp8"
-          : "video/webm";
-        const recorder = new MediaRecorder(canvas.captureStream(15), {
-          mimeType,
-          videoBitsPerSecond: 400_000,
-        });
-        const chunks: BlobPart[] = [];
-        recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-        recorder.onstop = () => {
-          URL.revokeObjectURL(url);
-          resolve(new Blob(chunks, { type: mimeType }));
-        };
-        recorder.onerror = reject;
-
-        video.onplay = () => {
-          recorder.start();
-          const draw = () => {
-            if (video.ended || video.paused) { recorder.stop(); return; }
-            ctx.drawImage(video, 0, 0, w, h);
-            requestAnimationFrame(draw);
-          };
-          requestAnimationFrame(draw);
-        };
-        video.play().catch(reject);
-      };
-      video.onerror = reject;
-    });
-  };
-
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (fileRef.current) fileRef.current.value = "";
@@ -132,30 +85,22 @@ export default function BlogManager() {
     files.forEach(async file => {
       const isVideo = file.type.startsWith("video");
       if (isVideo) {
-        setCompressing(true);
-        try {
-          const compressed = await compressVideo(file);
-          const MAX_BYTES = 4 * 1024 * 1024;
-          if (compressed.size > MAX_BYTES) {
-            alert(`Видео слишком длинное даже после сжатия (${(compressed.size / 1024 / 1024).toFixed(1)} МБ). Обрежьте его до ~30 секунд.`);
-            return;
-          }
-          const reader = new FileReader();
-          reader.onload = async ev => {
-            try {
-              setUploadingMedia(true);
-              const cdnUrl = await uploadToS3(ev.target?.result as string);
-              setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
-            } finally {
-              setUploadingMedia(false);
-            }
-          };
-          reader.readAsDataURL(compressed);
-        } catch {
-          alert("Не удалось обработать видео. Попробуйте другой файл.");
-        } finally {
-          setCompressing(false);
+        const MAX_BYTES = 4 * 1024 * 1024;
+        if (file.size > MAX_BYTES) {
+          alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 4 МБ. Сожмите видео и попробуйте снова.`);
+          return;
         }
+        setUploadingMedia(true);
+        const reader = new FileReader();
+        reader.onload = async ev => {
+          try {
+            const cdnUrl = await uploadToS3(ev.target?.result as string);
+            setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
+          } finally {
+            setUploadingMedia(false);
+          }
+        };
+        reader.readAsDataURL(file);
       } else {
         setUploadingMedia(true);
         const reader = new FileReader();
@@ -359,13 +304,13 @@ export default function BlogManager() {
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                disabled={uploadingMedia || compressing}
+                disabled={uploadingMedia}
                 className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
               >
-                <Icon name={uploadingMedia || compressing ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia || compressing ? "animate-spin" : ""} />
-                {compressing ? "Сжимаем видео..." : uploadingMedia ? "Загружаем файл..." : "Добавить фото или видео"}
+                <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
+                {uploadingMedia ? "Загружаем файл..." : "Добавить фото или видео"}
               </button>
-              {compressing && <p className="text-xs text-gray-400 mt-1.5">Это может занять минуту — видео обрабатывается прямо в браузере</p>}
+              <p className="text-xs text-gray-400 mt-1.5">Видео — до 4 МБ. Сожмите заранее любым удобным приложением.</p>
               <input
                 ref={fileRef}
                 type="file"
