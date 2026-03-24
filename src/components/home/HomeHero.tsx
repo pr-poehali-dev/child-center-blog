@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { BookingDropdown, ContactDropdown } from "./BookingDropdowns";
 
@@ -9,8 +9,6 @@ interface HomeHeroProps {
 
 export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
   const [videoOpen, setVideoOpen] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   return (
     <section id="home" className="pt-20 min-h-screen flex items-center relative overflow-hidden">
@@ -40,14 +38,12 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
           <div className="absolute -inset-3 rounded-[2rem] bg-orange-300 opacity-40 blur-2xl" />
           <div className="absolute -inset-1.5 rounded-[1.75rem] bg-gradient-to-br from-orange-300 via-yellow-200 to-rose-300 opacity-60 blur-lg" />
           <video
-            ref={videoRef}
-            src={`https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4?v=2`}
+            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
             className="relative rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
             autoPlay
             muted
             loop
             playsInline
-            onError={() => setVideoError(true)}
           />
           <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="bg-white/90 rounded-full p-4 shadow-lg">
