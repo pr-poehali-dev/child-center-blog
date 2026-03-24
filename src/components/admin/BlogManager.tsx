@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, UPLOAD_CHUNK_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -18,6 +18,7 @@ export default function BlogManager() {
   const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const [teacherName, setTeacherName] = useState<string>("");
+  const [videoLink, setVideoLink] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -76,70 +77,42 @@ export default function BlogManager() {
     return data.url;
   };
 
-  const uploadVideoToS3 = async (file: File): Promise<string> => {
-    const token = localStorage.getItem(TOKEN_KEY) || "";
-    const CHUNK_SIZE = 4 * 1024 * 1024;
+  const parseVideoEmbed = (url: string): { type: "youtube" | "vk" | "embed"; url: string } | null => {
+    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if (ytMatch) return { type: "youtube", url: `https://www.youtube.com/embed/${ytMatch[1]}` };
+    const vkMatch = url.match(/vk\.com\/video(-?\d+)_(\d+)/);
+    if (vkMatch) return { type: "vk", url: `https://vk.com/video_ext.php?oid=${vkMatch[1]}&id=${vkMatch[2]}&hd=2` };
+    if (url.startsWith("http")) return { type: "embed", url };
+    return null;
+  };
 
-    const call = (body: object) => fetch(UPLOAD_CHUNK_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Authorization": token },
-      body: JSON.stringify(body),
-    }).then(r => r.json());
-
-    const { upload_id, key } = await call({ action: "init", content_type: file.type });
-
-    const parts: { part_number: number; etag: string }[] = [];
-    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-
-    for (let i = 0; i < totalChunks; i++) {
-      const chunk = file.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
-      const b64 = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const dataUrl = e.target?.result as string;
-          resolve(dataUrl.split(",")[1]);
-        };
-        reader.readAsDataURL(chunk);
-      });
-      const { etag } = await call({ action: "part", key, upload_id, part_number: i + 1, data: b64 });
-      parts.push({ part_number: i + 1, etag });
-    }
-
-    const { url } = await call({ action: "finish", key, upload_id, parts });
-    return url;
+  const addVideoLink = () => {
+    const parsed = parseVideoEmbed(videoLink.trim());
+    if (!parsed) { alert("Не удалось распознать ссылку. Вставьте ссылку на YouTube или VK Видео."); return; }
+    setMediaItems(prev => [...prev, { type: "video", url: parsed.url }]);
+    setVideoLink("");
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (fileRef.current) fileRef.current.value = "";
+    if (!files.length) return;
     setUploadingMedia(true);
     let pending = files.length;
     files.forEach(file => {
-      const isVideo = file.type.startsWith("video");
-      if (isVideo) {
-        uploadVideoToS3(file).then(cdnUrl => {
-          setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
-        }).catch(() => {
-          alert("Не удалось загрузить видео. Попробуйте ещё раз.");
-        }).finally(() => {
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          const dataUrl = ev.target?.result as string;
+          const prepared = await compressImage(dataUrl);
+          const cdnUrl = await uploadToS3(prepared);
+          setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
+        } finally {
           pending--;
           if (pending === 0) setUploadingMedia(false);
-        });
-      } else {
-        const reader = new FileReader();
-        reader.onload = async (ev) => {
-          try {
-            const dataUrl = ev.target?.result as string;
-            const prepared = await compressImage(dataUrl);
-            const cdnUrl = await uploadToS3(prepared);
-            setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
-          } finally {
-            pending--;
-            if (pending === 0) setUploadingMedia(false);
-          }
-        };
-        reader.readAsDataURL(file);
-      }
+        }
+      };
+      reader.readAsDataURL(file);
     });
   };
 
@@ -166,6 +139,7 @@ export default function BlogManager() {
       setMediaItems([]);
       setTeacherPhoto("");
       setTeacherName("");
+      setVideoLink("");
       if (activeTab === form.category) {
         loadPosts(activeTab);
       } else {
@@ -325,20 +299,42 @@ export default function BlogManager() {
             {/* MEDIA */}
             <div>
               <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото и видео</label>
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                disabled={uploadingMedia}
-                className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
-              >
-                <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
-                {uploadingMedia ? "Загружаем файл..." : "Добавить фото или видео"}
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  disabled={uploadingMedia}
+                  className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
+                >
+                  <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
+                  {uploadingMedia ? "Загружаем фото..." : "Добавить фото"}
+                </button>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={videoLink}
+                    onChange={e => setVideoLink(e.target.value)}
+                    placeholder="Ссылка на видео YouTube или VK"
+                    className="flex-1 border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                    onKeyDown={e => e.key === "Enter" && (e.preventDefault(), addVideoLink())}
+                  />
+                  <button
+                    type="button"
+                    onClick={addVideoLink}
+                    disabled={!videoLink.trim()}
+                    className="flex items-center gap-1.5 bg-orange-50 hover:bg-orange-100 text-orange-500 font-semibold px-4 py-3 rounded-2xl text-sm transition-colors disabled:opacity-40"
+                  >
+                    <Icon name="Plus" size={16} />
+                    Добавить
+                  </button>
+                </div>
+                <p className="text-xs text-gray-400">Видео загружайте на YouTube или VK, затем вставьте ссылку</p>
+              </div>
               <input
                 ref={fileRef}
                 type="file"
                 multiple
-                accept="image/*,video/*"
+                accept="image/*"
                 className="hidden"
                 onChange={handleFileAdd}
               />
@@ -347,7 +343,9 @@ export default function BlogManager() {
                   {mediaItems.map((m, i) => (
                     <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 group">
                       {m.type === "video" ? (
-                        <video src={m.url} className="w-full h-full object-cover" muted />
+                        <div className="w-full h-full flex items-center justify-center bg-gray-800">
+                          <Icon name="PlayCircle" size={28} className="text-white" />
+                        </div>
                       ) : (
                         <img src={m.url} alt="" className="w-full h-full object-cover" />
                       )}

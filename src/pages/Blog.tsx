@@ -92,11 +92,13 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
         {media.map((m, i) => (
           <div
             key={i}
-            className="rounded-2xl overflow-hidden cursor-pointer aspect-square bg-gray-100 group"
+            className={`rounded-2xl overflow-hidden bg-gray-100 group ${m.type === "video" ? "aspect-video cursor-pointer" : "aspect-square cursor-pointer"}`}
             onClick={() => setActive(m)}
           >
             {m.type === "video" ? (
-              <video src={m.url} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" muted playsInline />
+              <div className="w-full h-full flex items-center justify-center bg-gray-900 relative">
+                <Icon name="PlayCircle" size={48} className="text-white opacity-80" />
+              </div>
             ) : (
               <img src={m.url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:[animation:wiggle_0.6s_ease-in-out]" />
             )}
@@ -109,7 +111,14 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
             <Icon name="X" size={28} />
           </button>
           {active.type === "video" ? (
-            <video src={active.url} className="max-w-full max-h-[90vh] rounded-2xl" controls autoPlay onClick={e => e.stopPropagation()} />
+            <div className="w-full max-w-3xl aspect-video" onClick={e => e.stopPropagation()}>
+              <iframe
+                src={active.url}
+                className="w-full h-full rounded-2xl"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+              />
+            </div>
           ) : (
             <img src={active.url} alt="" className="max-w-full max-h-[90vh] rounded-2xl object-contain" onClick={e => e.stopPropagation()} />
           )}
