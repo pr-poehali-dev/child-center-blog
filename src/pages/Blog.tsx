@@ -157,6 +157,17 @@ export default function Blog() {
 
       {/* CONTENT */}
       <div className="max-w-3xl mx-auto px-4 py-8">
+        {activeTab === "summer" && (
+          <a
+            href="https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full bg-yellow-400 hover:bg-yellow-500 text-white font-black px-8 py-4 rounded-2xl text-lg transition-all hover:shadow-lg mb-6"
+          >
+            <span>☀️</span>
+            Забронировать смену летнего клуба
+          </a>
+        )}
         {loading ? (
           <div className="flex items-center justify-center py-24 text-gray-300">
             <Icon name="Loader2" size={36} className="animate-spin" />
