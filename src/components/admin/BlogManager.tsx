@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, GET_UPLOAD_URL_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, UPLOAD_CHUNK_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -78,18 +78,35 @@ export default function BlogManager() {
 
   const uploadVideoToS3 = async (file: File): Promise<string> => {
     const token = localStorage.getItem(TOKEN_KEY) || "";
-    const urlRes = await fetch(GET_UPLOAD_URL_API, {
+    const CHUNK_SIZE = 4 * 1024 * 1024;
+
+    const call = (body: object) => fetch(UPLOAD_CHUNK_API, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Authorization": token },
-      body: JSON.stringify({ content_type: file.type }),
-    });
-    const { upload_url, cdn_url } = await urlRes.json();
-    await fetch(upload_url, {
-      method: "PUT",
-      headers: { "Content-Type": file.type },
-      body: file,
-    });
-    return cdn_url;
+      body: JSON.stringify(body),
+    }).then(r => r.json());
+
+    const { upload_id, key } = await call({ action: "init", content_type: file.type });
+
+    const parts: { part_number: number; etag: string }[] = [];
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+    for (let i = 0; i < totalChunks; i++) {
+      const chunk = file.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
+      const b64 = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const dataUrl = e.target?.result as string;
+          resolve(dataUrl.split(",")[1]);
+        };
+        reader.readAsDataURL(chunk);
+      });
+      const { etag } = await call({ action: "part", key, upload_id, part_number: i + 1, data: b64 });
+      parts.push({ part_number: i + 1, etag });
+    }
+
+    const { url } = await call({ action: "finish", key, upload_id, parts });
+    return url;
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
