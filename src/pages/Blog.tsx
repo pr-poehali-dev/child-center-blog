@@ -140,22 +140,27 @@ function PostCard({ post }: { post: Post }) {
       <h3 className="font-black text-lg text-gray-800 mb-3 leading-snug">{post.title}</h3>
       {post.content && (
         <div className="text-gray-600 text-sm leading-relaxed">
-          {post.teacher_photo && (
+          {(post.teacher_photo || post.teacher_name) ? (
             <div className="flex items-start gap-3 mb-3">
               <div className="flex flex-col items-center gap-1 shrink-0">
-                <img
-                  src={post.teacher_photo}
-                  alt="Педагог"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-amber-300 shadow-sm"
-                />
+                {post.teacher_photo ? (
+                  <img
+                    src={post.teacher_photo}
+                    alt="Автор"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-amber-300 shadow-sm"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-amber-100 border-2 border-amber-300 flex items-center justify-center text-amber-500 text-lg font-black">
+                    {post.teacher_name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 {post.teacher_name && (
                   <span className="text-xs font-semibold text-amber-700 text-center leading-tight max-w-[56px]">{post.teacher_name}</span>
                 )}
               </div>
               <p className={!expanded && isLong ? "line-clamp-4" : ""}>{post.content}</p>
             </div>
-          )}
-          {!post.teacher_photo && (
+          ) : (
             <p className={!expanded && isLong ? "line-clamp-4" : ""}>{post.content}</p>
           )}
           {isLong && (

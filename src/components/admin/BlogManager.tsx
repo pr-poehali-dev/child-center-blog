@@ -183,14 +183,13 @@ export default function BlogManager() {
               </div>
             )}
 
-            {/* TEACHER PHOTO — only for tips */}
-            {form.category === "tips" && (
-              <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото педагога (необязательно)</label>
+            {/* AUTHOR */}
+            <div>
+                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Автор (необязательно)</label>
                 <div className="flex items-center gap-4">
                   {teacherPhoto ? (
                     <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-orange-300 shrink-0">
-                      <img src={teacherPhoto} className="w-full h-full object-cover" alt="Педагог" />
+                      <img src={teacherPhoto} className="w-full h-full object-cover" alt="Автор" />
                       <button type="button" onClick={() => setTeacherPhoto("")} className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                         <Icon name="X" size={16} className="text-white" />
                       </button>
@@ -205,15 +204,15 @@ export default function BlogManager() {
                     </button>
                   )}
                   <div className="flex-1">
-                  <input
-                    type="text"
-                    className="w-full border border-gray-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                    placeholder="Имя педагога (необязательно)"
-                    value={teacherName}
-                    onChange={e => setTeacherName(e.target.value)}
-                  />
-                  <p className="text-xs text-gray-400 mt-1">Появится под фото педагога в посте</p>
-                </div>
+                    <input
+                      type="text"
+                      className="w-full border border-gray-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                      placeholder="Имя автора (необязательно)"
+                      value={teacherName}
+                      onChange={e => setTeacherName(e.target.value)}
+                    />
+                    <p className="text-xs text-gray-400 mt-1">Фото и имя появятся рядом с текстом поста</p>
+                  </div>
                 </div>
                 <input
                   ref={teacherPhotoRef}
@@ -229,8 +228,7 @@ export default function BlogManager() {
                     if (teacherPhotoRef.current) teacherPhotoRef.current.value = "";
                   }}
                 />
-              </div>
-            )}
+            </div>
 
             {/* MEDIA */}
             <div>
