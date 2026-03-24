@@ -75,7 +75,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
 
         <div className="flex items-center justify-center relative group cursor-pointer" onClick={() => setVideoOpen(true)}>
           <video
-            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/64a006b0-d1da-436d-9e51-7a1f0a85ed09.mp4"
+            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
             className="rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
             autoPlay
             muted
@@ -95,7 +95,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               <Icon name="X" size={32} />
             </button>
             <video
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/64a006b0-d1da-436d-9e51-7a1f0a85ed09.mp4"
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
               className="max-w-full max-h-[90vh] rounded-2xl"
               controls
               autoPlay
