@@ -8,7 +8,8 @@ const CATEGORIES = [
   { id: "tips", label: "Советы от педагога", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700" },
   { id: "life", label: "Наша жизнь на ладони", emoji: "🌈", color: "bg-rose-50", border: "border-rose-200", tag: "bg-rose-100 text-rose-700" },
   { id: "detail", label: "Подробно о важном", emoji: "📖", color: "bg-teal-50", border: "border-teal-200", tag: "bg-teal-100 text-teal-700" },
-  { id: "summer", label: "Лето с нами. Новости летнего клуба", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700" },
+  { id: "summer",      label: "Лето с нами. Новости летнего клуба", emoji: "☀️", color: "bg-yellow-50",  border: "border-yellow-200",  tag: "bg-yellow-100 text-yellow-700"  },
+  { id: "afterschool", label: "Группа продлённого дня",            emoji: "📚", color: "bg-indigo-50", border: "border-indigo-200", tag: "bg-indigo-100 text-indigo-700" },
 ];
 
 interface MediaItem {
@@ -166,6 +167,17 @@ export default function Blog() {
           >
             <span>☀️</span>
             Забронировать смену летнего клуба
+          </a>
+        )}
+        {activeTab === "afterschool" && (
+          <a
+            href="https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full bg-indigo-500 hover:bg-indigo-600 text-white font-black px-8 py-4 rounded-2xl text-lg transition-all hover:shadow-lg mb-6"
+          >
+            <span>📚</span>
+            Записаться в группу
           </a>
         )}
         {loading ? (
