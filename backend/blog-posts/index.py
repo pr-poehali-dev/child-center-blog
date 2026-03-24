@@ -2,6 +2,7 @@ import json
 import os
 import base64
 import uuid
+import hashlib
 import psycopg2
 import boto3
 
@@ -13,6 +14,12 @@ CORS = {
     'Access-Control-Allow-Headers': 'Content-Type, X-Authorization',
     'Access-Control-Max-Age': '86400',
 }
+
+
+def check_auth(event: dict) -> bool:
+    token = (event.get('headers') or {}).get('X-Authorization', '')
+    expected = hashlib.sha256(f"{os.environ['ADMIN_PASSWORD']}_solnyshko_secret".encode()).hexdigest()
+    return token == expected
 
 
 def get_s3():
@@ -80,6 +87,9 @@ def handler(event: dict, context) -> dict:
         return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'posts': posts}, ensure_ascii=False)}
 
     if method == 'POST':
+        if not check_auth(event):
+            cur.close(); conn.close()
+            return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
         category = body.get('category', '')
         title = body.get('title', '')
@@ -106,6 +116,9 @@ def handler(event: dict, context) -> dict:
         return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat()})}
 
     if method == 'DELETE':
+        if not check_auth(event):
+            cur.close(); conn.close()
+            return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
         post_id = body.get('id')
         cur.execute(f"DELETE FROM {SCHEMA}.blog_posts WHERE id = %s", (post_id,))

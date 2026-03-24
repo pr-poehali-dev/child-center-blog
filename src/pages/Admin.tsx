@@ -174,7 +174,7 @@ function BlogManager() {
     try {
       await fetch(BLOG_API, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": localStorage.getItem(TOKEN_KEY) || "" },
         body: JSON.stringify({ ...form, media: mediaItems }),
       });
       setShowForm(false);
@@ -195,7 +195,7 @@ function BlogManager() {
     setDeleting(id);
     await fetch(BLOG_API, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Authorization": localStorage.getItem(TOKEN_KEY) || "" },
       body: JSON.stringify({ id }),
     });
     setPosts(prev => prev.filter(p => p.id !== id));
