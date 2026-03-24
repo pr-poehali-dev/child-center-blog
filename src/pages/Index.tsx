@@ -147,6 +147,14 @@ export default function Index() {
               >
                 Записаться на занятие
               </button>
+              <a
+                href="https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
+              >
+                Забронировать смену летнего клуба
+              </a>
               <button
                 onClick={() => scrollTo("articles")}
                 className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-4 rounded-full text-lg border-2 border-orange-200 transition-all"
