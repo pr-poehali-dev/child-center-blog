@@ -10,9 +10,10 @@ export const STATUS_CONFIG: Record<string, { label: string; color: string; next:
 };
 
 export const BLOG_CATEGORIES = [
-  { id: "tips",   label: "Советы от педагога",   emoji: "🎓" },
-  { id: "life",   label: "Наша жизнь на ладони", emoji: "🌈" },
-  { id: "detail", label: "Подробно о важном",     emoji: "📖" },
+  { id: "tips",   label: "Советы от педагога",              emoji: "🎓" },
+  { id: "life",   label: "Наша жизнь на ладони",            emoji: "🌈" },
+  { id: "detail", label: "Подробно о важном",               emoji: "📖" },
+  { id: "summer", label: "Лето с нами. Новости летнего клуба", emoji: "☀️" },
 ];
 
 export interface Booking {
