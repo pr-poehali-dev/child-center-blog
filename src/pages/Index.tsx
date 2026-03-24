@@ -203,17 +203,23 @@ export default function Index() {
             <p className="text-gray-500 mt-3 text-lg">Живые истории, советы и важные мысли от педагогов центра</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {[
-              { emoji: "🎓", title: "Советы от педагога", desc: "Практические советы и наблюдения от наших специалистов — для родителей и детей.", color: "bg-amber-50", border: "border-amber-100" },
-              { emoji: "🌈", title: "Наша жизнь на ладони", desc: "Фото и видео из жизни центра: занятия, праздники, улыбки и добрые моменты.", color: "bg-rose-50", border: "border-rose-100" },
-              { emoji: "📖", title: "Подробно о важном", desc: "Развёрнутые материалы о воспитании, развитии и важных темах для семьи.", color: "bg-teal-50", border: "border-teal-100" },
-            ].map(item => (
-              <div key={item.title} className={`${item.color} border ${item.border} rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer`} onClick={() => navigate("/blog")}>
-                <div className="text-5xl mb-4">{item.emoji}</div>
-                <h3 className="font-black text-lg text-gray-800 mb-3">{item.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+            <div className="bg-amber-50 border border-amber-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog")}>
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-amber-200 shadow">
+                <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2fce6d2a-4ca8-489a-9f1c-9a8da6295238.jpg" alt="Советы от педагога" className="w-full h-full object-cover object-top" />
               </div>
-            ))}
+              <h3 className="font-black text-lg text-gray-800 mb-3">Советы от педагога</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Практические советы и наблюдения от наших специалистов — для родителей и детей.</p>
+            </div>
+            <div className="bg-rose-50 border border-rose-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog")}>
+              <div className="text-5xl mb-4">🌈</div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Наша жизнь на ладони</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Фото и видео из жизни центра: занятия, праздники, улыбки и добрые моменты.</p>
+            </div>
+            <div className="bg-teal-50 border border-teal-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog")}>
+              <div className="text-5xl mb-4">📖</div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Подробно о важном</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Развёрнутые материалы о воспитании, развитии и важных темах для семьи.</p>
+            </div>
           </div>
           <div className="text-center">
             <button
