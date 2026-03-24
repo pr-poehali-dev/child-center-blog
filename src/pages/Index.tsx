@@ -368,7 +368,9 @@ export default function Index() {
               <p className="text-gray-500 text-sm leading-relaxed">Всё о летнем клубе: программа, новости, яркие моменты и анонсы.</p>
             </div>
             <div className="bg-indigo-50 border border-indigo-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog")}>
-              <div className="text-5xl mb-4">📚</div>
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-indigo-200 shadow">
+                <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/6e1b8fbb-a82f-46f2-bf6e-293d270f8290.png" alt="Группа продлённого дня" className="w-full h-full object-cover object-center" />
+              </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Группа продлённого дня</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Всё о группе продлённого дня: расписание, новости и полезная информация.</p>
             </div>
