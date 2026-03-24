@@ -47,6 +47,10 @@ def upload_media(s3, data_url: str) -> str:
     return cdn_url
 
 
+def escape(val: str) -> str:
+    return val.replace("'", "''")
+
+
 def handler(event: dict, context) -> dict:
     """Управление постами блога: GET — список, POST — создать, DELETE — удалить"""
 
@@ -62,9 +66,9 @@ def handler(event: dict, context) -> dict:
         params = event.get('queryStringParameters') or {}
         category = params.get('category')
         if category and category != 'all':
+            cat_escaped = escape(category)
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name FROM {SCHEMA}.blog_posts WHERE category = %s ORDER BY created_at DESC",
-                (category,)
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}' ORDER BY created_at DESC"
             )
         else:
             cur.execute(
@@ -93,12 +97,12 @@ def handler(event: dict, context) -> dict:
             cur.close(); conn.close()
             return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
-        category = body.get('category', '')
-        title = body.get('title', '')
-        content = body.get('content', '')
+        category = escape(body.get('category', ''))
+        title = escape(body.get('title', ''))
+        content = escape(body.get('content', ''))
         media_list = body.get('media', [])
         teacher_photo_data = body.get('teacher_photo', '')
-        teacher_name = body.get('teacher_name', '')
+        teacher_name = escape(body.get('teacher_name', ''))
 
         s3 = get_s3()
         uploaded = []
@@ -115,9 +119,11 @@ def handler(event: dict, context) -> dict:
         elif teacher_photo_data.startswith('http'):
             teacher_photo_url = teacher_photo_data
 
+        media_json = escape(json.dumps(uploaded, ensure_ascii=False))
+        teacher_photo_escaped = escape(teacher_photo_url)
+
         cur.execute(
-            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id, created_at",
-            (category, title, content, json.dumps(uploaded, ensure_ascii=False), teacher_photo_url, teacher_name)
+            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}') RETURNING id, created_at"
         )
         row = cur.fetchone()
         conn.commit()
@@ -130,8 +136,8 @@ def handler(event: dict, context) -> dict:
             cur.close(); conn.close()
             return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
-        post_id = body.get('id')
-        cur.execute(f"DELETE FROM {SCHEMA}.blog_posts WHERE id = %s", (post_id,))
+        post_id = int(body.get('id', 0))
+        cur.execute(f"DELETE FROM {SCHEMA}.blog_posts WHERE id = {post_id}")
         conn.commit()
         cur.close()
         conn.close()
