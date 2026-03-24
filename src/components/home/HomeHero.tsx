@@ -19,6 +19,25 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
       </div>
       <div className="max-w-6xl mx-auto px-4 py-16 flex flex-col gap-10 relative z-10">
 
+        {/* ВИДЕО */}
+        <div className="flex items-center justify-center relative group cursor-pointer max-w-3xl mx-auto w-full" onClick={() => setVideoOpen(true)}>
+          <div className="absolute -inset-3 rounded-[2rem] bg-orange-300 opacity-40 blur-2xl" />
+          <div className="absolute -inset-1.5 rounded-[1.75rem] bg-gradient-to-br from-orange-300 via-yellow-200 to-rose-300 opacity-60 blur-lg" />
+          <video
+            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
+            className="relative rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+          <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="bg-white/90 rounded-full p-4 shadow-lg">
+              <Icon name="Play" size={32} className="text-orange-400 fill-orange-400" />
+            </div>
+          </div>
+        </div>
+
         {/* ТЕКСТ + КНОПКИ */}
         <div className="text-center max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
@@ -66,25 +85,6 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
                 <div className="text-sm text-gray-400">{label}</div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* ВИДЕО */}
-        <div className="flex items-center justify-center relative group cursor-pointer max-w-3xl mx-auto w-full" onClick={() => setVideoOpen(true)}>
-          <div className="absolute -inset-3 rounded-[2rem] bg-orange-300 opacity-40 blur-2xl" />
-          <div className="absolute -inset-1.5 rounded-[1.75rem] bg-gradient-to-br from-orange-300 via-yellow-200 to-rose-300 opacity-60 blur-lg" />
-          <video
-            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
-            className="relative rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-          <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="bg-white/90 rounded-full p-4 shadow-lg">
-              <Icon name="Play" size={32} className="text-orange-400 fill-orange-400" />
-            </div>
           </div>
         </div>
 
