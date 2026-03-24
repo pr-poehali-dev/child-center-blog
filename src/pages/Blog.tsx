@@ -92,13 +92,13 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
         {media.map((m, i) => (
           <div
             key={i}
-            className="rounded-2xl overflow-hidden cursor-pointer hover:opacity-90 transition-opacity aspect-square bg-gray-100"
+            className="rounded-2xl overflow-hidden cursor-pointer aspect-square bg-gray-100 group"
             onClick={() => setActive(m)}
           >
             {m.type === "video" ? (
-              <video src={m.url} className="w-full h-full object-cover" muted playsInline />
+              <video src={m.url} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" muted playsInline />
             ) : (
-              <img src={m.url} alt="" className="w-full h-full object-cover" />
+              <img src={m.url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:[animation:wiggle_0.6s_ease-in-out]" />
             )}
           </div>
         ))}
