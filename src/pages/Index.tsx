@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+
+const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
+const TG_LINK = "https://t.me/irinadolli";
 
 
 const NAV_LINKS = [
@@ -28,6 +31,64 @@ const REVIEWS = [
 ];
 
 
+
+function BookingDropdown({ onFormClick }: { onFormClick: () => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
+      >
+        Записаться на занятие
+        <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 min-w-full">
+          <button
+            onClick={() => { onFormClick(); setOpen(false); }}
+            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full text-left whitespace-nowrap"
+          >
+            <span className="text-xl">📋</span>
+            Заполнить форму
+          </button>
+          <div className="border-t border-gray-100" />
+          <a
+            href={MAX_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 whitespace-nowrap"
+          >
+            <span className="text-xl">💬</span>
+            Написать в MAX
+          </a>
+          <div className="border-t border-gray-100" />
+          <a
+            href={TG_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 whitespace-nowrap"
+          >
+            <span className="text-xl">✈️</span>
+            Написать в Telegram
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Index() {
   const navigate = useNavigate();
@@ -142,12 +203,7 @@ export default function Index() {
               Блог для любящих родителей: статьи, советы педагогов, новости центра и запись на занятия онлайн.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => openBooking()}
-                className="bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
-              >
-                Записаться на занятие
-              </button>
+              <BookingDropdown onFormClick={openBooking} />
               <a
                 href="https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY"
                 target="_blank"
