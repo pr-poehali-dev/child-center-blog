@@ -39,24 +39,16 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
         <div className="flex items-center justify-center relative group cursor-pointer max-w-3xl mx-auto w-full" onClick={() => setVideoOpen(true)}>
           <div className="absolute -inset-3 rounded-[2rem] bg-orange-300 opacity-40 blur-2xl" />
           <div className="absolute -inset-1.5 rounded-[1.75rem] bg-gradient-to-br from-orange-300 via-yellow-200 to-rose-300 opacity-60 blur-lg" />
-          {videoError ? (
-            <div className="relative rounded-3xl shadow-2xl w-full h-64 md:h-96 bg-gradient-to-br from-orange-100 via-yellow-50 to-rose-100 flex flex-col items-center justify-center gap-4">
-              <div className="text-6xl">🎬</div>
-              <p className="text-orange-400 font-bold text-lg">Видео временно недоступно</p>
-              <p className="text-gray-400 text-sm">Загрузите видео через настройки сайта</p>
-            </div>
-          ) : (
-            <video
-              ref={videoRef}
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4"
-              className="relative rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              onError={() => setVideoError(true)}
-            />
-          )}
+          <video
+            ref={videoRef}
+            src={`https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/779ce9f8-bba6-46ae-b44c-d6d9359a793d.mp4?v=2`}
+            className="relative rounded-3xl shadow-2xl w-full max-h-[500px] object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            onError={() => setVideoError(true)}
+          />
           <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="bg-white/90 rounded-full p-4 shadow-lg">
               <Icon name="Play" size={32} className="text-orange-400 fill-orange-400" />
