@@ -224,6 +224,11 @@ export default function Index() {
               <h3 className="font-black text-lg text-gray-800 mb-3">Подробно о важном</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Развёрнутые материалы о воспитании, развитии и важных темах для семьи.</p>
             </div>
+            <div className="bg-yellow-50 border border-yellow-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog")}>
+              <div className="text-5xl mb-4">☀️</div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Лето с нами. Новости летнего клуба</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Всё о летнем клубе: программа, новости, яркие моменты и анонсы.</p>
+            </div>
           </div>
           <div className="text-center">
             <button
