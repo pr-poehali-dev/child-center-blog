@@ -158,8 +158,8 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
               <p className="text-gray-500 text-sm leading-relaxed">Новости, материалы и анонсы группы английского языка.</p>
             </div>
             <div className="bg-rose-50 border border-rose-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog/qa")}>
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-300 to-orange-300 flex items-center justify-center mx-auto mb-4 border-4 border-rose-200 shadow text-3xl">
-                💬
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-rose-200 shadow">
+                <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/15744313-9270-4292-bb6b-c44dc00a492a.png" alt="Спрашивали — Отвечаем" className="w-full h-full object-cover object-top" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Спрашивали — Отвечаем</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Задайте вопрос нашим педагогам — отвечаем публично, чтобы помочь всем родителям.</p>
