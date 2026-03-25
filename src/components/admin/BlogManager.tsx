@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, UPLOAD_VIDEO_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, UPLOAD_CHUNK_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -77,25 +77,49 @@ export default function BlogManager() {
     return data.url;
   };
 
+  const toBase64Chunk = (bytes: Uint8Array): string => {
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary);
+  };
+
   const uploadVideoPresigned = async (file: File): Promise<string> => {
     const token = localStorage.getItem(TOKEN_KEY) || "";
+    const headers = { "Content-Type": "application/json", "X-Authorization": token };
+    const post = (body: object) =>
+      fetch(UPLOAD_CHUNK_API, { method: "POST", headers, body: JSON.stringify(body) });
+
+    // 1. Init multipart upload
+    const initRes = await post({ action: "init", content_type: file.type });
+    if (!initRes.ok) throw new Error(`Ошибка инициализации: ${initRes.status}`);
+    const { upload_id, key } = await initRes.json();
+
+    // 2. Upload parts (~500 KB each)
+    const CHUNK = 500 * 1024;
     const arrayBuffer = await file.arrayBuffer();
     const bytes = new Uint8Array(arrayBuffer);
-    let binary = "";
-    const chunkSize = 8192;
-    for (let i = 0; i < bytes.length; i += chunkSize) {
-      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    const parts: { part_number: number; etag: string }[] = [];
+
+    for (let i = 0; i < bytes.length; i += CHUNK) {
+      const chunk = bytes.subarray(i, i + CHUNK);
+      const partNumber = Math.floor(i / CHUNK) + 1;
+      const partRes = await post({
+        action: "part",
+        key,
+        upload_id,
+        part_number: partNumber,
+        data: toBase64Chunk(chunk),
+      });
+      if (!partRes.ok) throw new Error(`Ошибка загрузки части ${partNumber}: ${partRes.status}`);
+      const { etag } = await partRes.json();
+      parts.push({ part_number: partNumber, etag });
     }
-    const base64 = btoa(binary);
-    const res = await fetch(UPLOAD_VIDEO_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Authorization": token },
-      body: JSON.stringify({ file: base64, content_type: file.type }),
-    });
-    if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status}`);
-    const data = await res.json();
-    if (!data.url) throw new Error(`Сервер не вернул ссылку`);
-    return data.url;
+
+    // 3. Finish
+    const finishRes = await post({ action: "finish", key, upload_id, parts });
+    if (!finishRes.ok) throw new Error(`Ошибка завершения: ${finishRes.status}`);
+    const { url } = await finishRes.json();
+    return url;
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
