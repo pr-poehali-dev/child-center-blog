@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, UPLOAD_CHUNK_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -18,6 +18,7 @@ export default function BlogManager() {
   const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const [teacherName, setTeacherName] = useState<string>("");
+  const [videoUrl, setVideoUrl] = useState<string>("");
 
   const fileRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
@@ -77,92 +78,25 @@ export default function BlogManager() {
     return data.url;
   };
 
-  const toBase64Chunk = (bytes: Uint8Array): string => {
-    let binary = "";
-    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-    return btoa(binary);
-  };
-
-  const uploadVideoPresigned = async (file: File): Promise<string> => {
-    const token = localStorage.getItem(TOKEN_KEY) || "";
-    const headers = { "Content-Type": "application/json", "X-Authorization": token };
-    const post = (body: object) =>
-      fetch(UPLOAD_CHUNK_API, { method: "POST", headers, body: JSON.stringify(body) });
-
-    // 1. Init multipart upload
-    const initRes = await post({ action: "init", content_type: file.type });
-    if (!initRes.ok) throw new Error(`Ошибка инициализации: ${initRes.status}`);
-    const { upload_id, key } = await initRes.json();
-
-    // 2. Upload parts (~500 KB each)
-    const CHUNK = 500 * 1024;
-    const arrayBuffer = await file.arrayBuffer();
-    const bytes = new Uint8Array(arrayBuffer);
-    const parts: { part_number: number; etag: string }[] = [];
-
-    for (let i = 0; i < bytes.length; i += CHUNK) {
-      const chunk = bytes.subarray(i, i + CHUNK);
-      const partNumber = Math.floor(i / CHUNK) + 1;
-      const partRes = await post({
-        action: "part",
-        key,
-        upload_id,
-        part_number: partNumber,
-        data: toBase64Chunk(chunk),
-      });
-      if (!partRes.ok) throw new Error(`Ошибка загрузки части ${partNumber}: ${partRes.status}`);
-      const { etag } = await partRes.json();
-      parts.push({ part_number: partNumber, etag });
-    }
-
-    // 3. Finish
-    const finishRes = await post({ action: "finish", key, upload_id, parts });
-    if (!finishRes.ok) throw new Error(`Ошибка завершения: ${finishRes.status}`);
-    const { url } = await finishRes.json();
-    return url;
-  };
-
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (fileRef.current) fileRef.current.value = "";
     if (!files.length) return;
 
-    files.forEach(async file => {
-      const isVideo = file.type.startsWith("video");
-      if (isVideo) {
-        if (file.type !== "video/mp4") {
-          alert(`Видео в формате "${file.type || file.name.split(".").pop()}" не поддерживается браузерами.\n\nПожалуйста, сохраните видео в формате MP4 (кодек H.264) и загрузите снова.\n\nВ HandBrake выберите: Формат → MP4, Кодек → H.264`);
-          return;
-        }
-        const MAX_BYTES = 50 * 1024 * 1024;
-        if (file.size > MAX_BYTES) {
-          alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 50 МБ.`);
-          return;
-        }
-        setUploadingMedia(true);
+    files.forEach(file => {
+      setUploadingMedia(true);
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
         try {
-          const cdnUrl = await uploadVideoPresigned(file);
-          setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
-        } catch (err) {
-          alert(`Не удалось загрузить видео: ${err instanceof Error ? err.message : String(err)}`);
+          const dataUrl = ev.target?.result as string;
+          const prepared = await compressImage(dataUrl);
+          const cdnUrl = await uploadToS3(prepared);
+          setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
         } finally {
           setUploadingMedia(false);
         }
-      } else {
-        setUploadingMedia(true);
-        const reader = new FileReader();
-        reader.onload = async (ev) => {
-          try {
-            const dataUrl = ev.target?.result as string;
-            const prepared = await compressImage(dataUrl);
-            const cdnUrl = await uploadToS3(prepared);
-            setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
-          } finally {
-            setUploadingMedia(false);
-          }
-        };
-        reader.readAsDataURL(file);
-      }
+      };
+      reader.readAsDataURL(file);
     });
   };
 
@@ -175,10 +109,14 @@ export default function BlogManager() {
     if (!form.title.trim()) return;
     setSaving(true);
     try {
+      const allMedia: MediaItem[] = [
+        ...mediaItems,
+        ...(videoUrl.trim() ? [{ type: "video" as const, url: videoUrl.trim() }] : []),
+      ];
       const res = await fetch(BLOG_API, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...form, media: mediaItems, teacher_photo: teacherPhoto, teacher_name: teacherName }),
+        body: JSON.stringify({ ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName }),
       });
       if (!res.ok) {
         alert("Ошибка при публикации. Попробуйте ещё раз.");
@@ -189,6 +127,7 @@ export default function BlogManager() {
       setMediaItems([]);
       setTeacherPhoto("");
       setTeacherName("");
+      setVideoUrl("");
       if (activeTab === form.category) {
         loadPosts(activeTab);
       } else {
@@ -347,7 +286,7 @@ export default function BlogManager() {
 
             {/* MEDIA */}
             <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото и видео</label>
+              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото</label>
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
@@ -355,14 +294,13 @@ export default function BlogManager() {
                 className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
               >
                 <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
-                {uploadingMedia ? "Загружаем файл..." : "Добавить фото или видео"}
+                {uploadingMedia ? "Загружаем фото..." : "Добавить фото"}
               </button>
-              <p className="text-xs text-gray-400 mt-1.5">Видео — до 4 МБ. Сожмите заранее любым удобным приложением.</p>
               <input
                 ref={fileRef}
                 type="file"
                 multiple
-                accept="image/*,video/*"
+                accept="image/*"
                 className="hidden"
                 onChange={handleFileAdd}
               />
@@ -370,13 +308,7 @@ export default function BlogManager() {
                 <div className="flex flex-wrap gap-2 mt-3">
                   {mediaItems.map((m, i) => (
                     <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 group">
-                      {m.type === "video" ? (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-800">
-                          <Icon name="PlayCircle" size={28} className="text-white" />
-                        </div>
-                      ) : (
-                        <img src={m.url} alt="" className="w-full h-full object-cover" />
-                      )}
+                      <img src={m.url} alt="" className="w-full h-full object-cover" />
                       <button
                         type="button"
                         onClick={() => removeMedia(i)}
@@ -387,6 +319,30 @@ export default function BlogManager() {
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+
+            {/* VIDEO URL */}
+            <div>
+              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Видео (необязательно)</label>
+              <div className="relative">
+                <input
+                  type="url"
+                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 pl-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  placeholder="Вставьте ссылку на видео из хранилища..."
+                  value={videoUrl}
+                  onChange={e => setVideoUrl(e.target.value)}
+                />
+                <Icon name="Video" size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                {videoUrl && (
+                  <button type="button" onClick={() => setVideoUrl("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    <Icon name="X" size={16} />
+                  </button>
+                )}
+              </div>
+              <p className="text-xs text-gray-400 mt-1.5">Загрузите видео в Ядро → Хранилище, скопируйте ссылку и вставьте сюда</p>
+              {videoUrl && (
+                <video src={videoUrl} controls className="mt-3 w-full rounded-2xl max-h-48 bg-black" />
               )}
             </div>
 
