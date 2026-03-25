@@ -23,12 +23,12 @@ interface Question {
 }
 
 const TEACHERS: Record<string, Teacher & { photo?: string }> = {
-  irina_p_teacher: { name: "Ирина Павловна", role: "Учитель начальных классов" },
+  irina_p_teacher: { name: "Ирина Павловна", role: "Учитель начальных классов", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/cf6fdc8d-d414-4883-8e42-51fe0c980bff.jpg" },
   irina_p_manager: { name: "Ирина Павловна", role: "Управляющая центром", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/cf6fdc8d-d414-4883-8e42-51fe0c980bff.jpg" },
-  irina_v:         { name: "Ирина Васильевна", role: "Педагог-психолог, воспитатель ясельной группы" },
-  svetlana:        { name: "Светлана Владимировна", role: "Воспитатель старшей группы, креатив-педагог" },
-  victoria:        { name: "Виктория Анатольевна", role: "Логопед" },
-  natalia:         { name: "Наталья Петровна", role: "Учитель продлёнки, учитель английского, педагог-вожатый" },
+  irina_v:         { name: "Ирина Васильевна", role: "Педагог-психолог, воспитатель ясельной группы", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/6d70e757-b181-403b-9f62-94cb81221ac7.jpg" },
+  svetlana:        { name: "Светлана Владимировна", role: "Воспитатель старшей группы, креатив-педагог", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/a82e6d86-7c74-47c4-abcc-d6a296719e5b.jpg" },
+  victoria:        { name: "Виктория Анатольевна", role: "Логопед", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/6a8eabb8-750e-4cba-87b1-bf25857b0b40.jpg" },
+  natalia:         { name: "Наталья Петровна", role: "Учитель продлёнки, учитель английского, педагог-вожатый", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/ba79529f-fc27-49bf-9fc8-093e58408c0d.jpg" },
 };
 
 function StarRating({ value, onChange }: { value: number; onChange?: (v: number) => void }) {
