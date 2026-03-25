@@ -157,6 +157,13 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
               <h3 className="font-black text-lg text-gray-800 mb-3">Группа английского языка</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Новости, материалы и анонсы группы английского языка.</p>
             </div>
+            <div className="bg-rose-50 border border-rose-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog/qa")}>
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-rose-300 to-orange-300 flex items-center justify-center mx-auto mb-4 border-4 border-rose-200 shadow text-3xl">
+                💬
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Спрашивали — Отвечаем</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Задайте вопрос нашим педагогам — отвечаем публично, чтобы помочь всем родителям.</p>
+            </div>
           </div>
           <div className="text-center">
             <button
