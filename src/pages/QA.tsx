@@ -51,17 +51,18 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
   );
 }
 
-function TeacherAvatar({ id, size = "md" }: { id: string; size?: "sm" | "md" | "lg" }) {
+function TeacherAvatar({ id }: { id: string }) {
   const t = TEACHERS[id];
   const initials = t?.name.split(" ").map(w => w[0]).slice(0, 2).join("") || "?";
-  const sizes = { sm: "w-12 h-12 text-xs", md: "w-16 h-16 text-sm", lg: "w-24 h-24 text-base" };
   if (t?.photo) {
     return (
-      <img src={t.photo} alt={t.name} className={`${sizes[size]} rounded-full object-cover object-top shrink-0 border-2 border-orange-200`} />
+      <div className="w-12 h-16 rounded-xl overflow-hidden shrink-0 border border-orange-100 shadow-sm">
+        <img src={t.photo} alt={t.name} className="w-full h-full object-cover object-top" />
+      </div>
     );
   }
   return (
-    <div className={`${sizes[size]} rounded-full bg-gradient-to-br from-orange-300 to-rose-400 flex items-center justify-center text-white font-black shrink-0`}>
+    <div className="w-12 h-16 rounded-xl bg-gradient-to-br from-orange-300 to-rose-400 flex items-center justify-center text-white font-black shrink-0 text-lg">
       {initials}
     </div>
   );
@@ -244,27 +245,33 @@ export default function QA() {
               {/* Выбор педагога */}
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-2 block">Выберите педагога</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {Object.entries(TEACHERS).map(([id, t]) => (
                     <button
                       key={id}
                       type="button"
                       onClick={() => setForm(f => ({ ...f, teacher_id: id }))}
-                      className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 text-center transition-all relative ${
+                      className={`flex items-center gap-3 p-3 rounded-2xl border-2 text-left transition-all relative ${
                         form.teacher_id === id
                           ? "border-orange-400 bg-orange-50"
                           : "border-gray-100 hover:border-orange-200 hover:bg-orange-50/50"
                       }`}
                     >
-                      <TeacherAvatar id={id} size="lg" />
-                      <div>
-                        <div className="font-bold text-gray-800 text-xs leading-tight">{t.name}</div>
-                        <div className="text-xs text-gray-400 leading-tight mt-0.5">{t.role.split(",")[0]}</div>
+                      {t.photo ? (
+                        <div className="w-14 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                          <img src={t.photo} alt={t.name} className="w-full h-full object-cover object-top" />
+                        </div>
+                      ) : (
+                        <div className="w-14 h-20 rounded-xl bg-gradient-to-br from-orange-300 to-rose-400 flex items-center justify-center text-white font-black text-xl shrink-0">
+                          {t.name.split(" ").map(w => w[0]).slice(0, 2).join("")}
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="font-black text-gray-800 text-sm leading-tight">{t.name}</div>
+                        <div className="text-xs text-gray-400 leading-snug mt-1">{t.role}</div>
                       </div>
                       {form.teacher_id === id && (
-                        <div className="absolute top-2 right-2">
-                          <Icon name="CheckCircle" size={16} className="text-orange-400" />
-                        </div>
+                        <Icon name="CheckCircle" size={18} className="text-orange-400 shrink-0 absolute top-2 right-2" />
                       )}
                     </button>
                   ))}
@@ -341,7 +348,9 @@ export default function QA() {
                   filterTeacher === id ? "bg-orange-400 text-white" : "bg-gray-100 text-gray-500 hover:bg-orange-50 hover:text-orange-500"
                 }`}
               >
-                <TeacherAvatar id={id} size="sm" />
+                {t.photo ? (
+                  <img src={t.photo} alt={t.name} className="w-5 h-5 rounded object-cover object-top shrink-0" />
+                ) : null}
                 {t.name.split(" ")[0]} {t.name.split(" ")[1]?.[0]}.
               </button>
             ))}
