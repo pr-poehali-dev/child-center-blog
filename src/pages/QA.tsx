@@ -24,7 +24,7 @@ interface Question {
 
 const TEACHERS: Record<string, Teacher & { photo?: string }> = {
   irina_p_teacher: { name: "Ирина Павловна", role: "Учитель начальных классов" },
-  irina_p_manager: { name: "Ирина Павловна", role: "Управляющая центром" },
+  irina_p_manager: { name: "Ирина Павловна", role: "Управляющая центром", photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/cf6fdc8d-d414-4883-8e42-51fe0c980bff.jpg" },
   irina_v:         { name: "Ирина Васильевна", role: "Педагог-психолог, воспитатель ясельной группы" },
   svetlana:        { name: "Светлана Владимировна", role: "Воспитатель старшей группы, креатив-педагог" },
   victoria:        { name: "Виктория Анатольевна", role: "Логопед" },
@@ -55,6 +55,11 @@ function TeacherAvatar({ id, size = "md" }: { id: string; size?: "sm" | "md" | "
   const t = TEACHERS[id];
   const initials = t?.name.split(" ").map(w => w[0]).slice(0, 2).join("") || "?";
   const sizes = { sm: "w-8 h-8 text-xs", md: "w-12 h-12 text-sm", lg: "w-16 h-16 text-base" };
+  if (t?.photo) {
+    return (
+      <img src={t.photo} alt={t.name} className={`${sizes[size]} rounded-full object-cover shrink-0 border-2 border-orange-200`} />
+    );
+  }
   return (
     <div className={`${sizes[size]} rounded-full bg-gradient-to-br from-orange-300 to-rose-400 flex items-center justify-center text-white font-black shrink-0`}>
       {initials}
