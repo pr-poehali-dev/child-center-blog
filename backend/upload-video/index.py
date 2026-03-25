@@ -20,7 +20,7 @@ def check_auth(event: dict) -> bool:
 
 
 def handler(event: dict, context) -> dict:
-    """Загружает видео (бинарный body или base64) в S3 и возвращает CDN URL"""
+    """Загружает видео (base64 в JSON body) в S3 и возвращает CDN URL"""
 
     if event.get('httpMethod') == 'OPTIONS':
         return {'statusCode': 200, 'headers': CORS, 'body': ''}
@@ -28,14 +28,15 @@ def handler(event: dict, context) -> dict:
     if not check_auth(event):
         return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
 
-    headers = event.get('headers') or {}
-    content_type = headers.get('X-File-Type', 'video/mp4')
-
     body_raw = event.get('body', '') or ''
     if event.get('isBase64Encoded'):
-        raw = base64.b64decode(body_raw)
-    else:
-        raw = body_raw.encode('latin-1') if body_raw else b''
+        body_raw = base64.b64decode(body_raw).decode('utf-8')
+
+    body = json.loads(body_raw) if body_raw else {}
+    content_type = body.get('content_type', 'video/mp4')
+    file_b64 = body.get('file', '')
+
+    raw = base64.b64decode(file_b64)
 
     ext_map = {'video/mp4': 'mp4', 'video/quicktime': 'mov', 'video/webm': 'webm'}
     ext = ext_map.get(content_type, 'mp4')

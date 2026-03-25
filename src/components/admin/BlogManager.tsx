@@ -79,23 +79,17 @@ export default function BlogManager() {
 
   const uploadVideoPresigned = async (file: File): Promise<string> => {
     const token = localStorage.getItem(TOKEN_KEY) || "";
-
-    const urlRes = await fetch(GET_UPLOAD_URL_API, {
+    const arrayBuffer = await file.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    const res = await fetch(UPLOAD_VIDEO_API, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Authorization": token },
-      body: JSON.stringify({ content_type: file.type }),
+      body: JSON.stringify({ file: base64, content_type: file.type }),
     });
-    if (!urlRes.ok) throw new Error(`Ошибка получения ссылки: ${urlRes.status}`);
-    const { upload_url, cdn_url } = await urlRes.json();
-
-    const uploadRes = await fetch(upload_url, {
-      method: "PUT",
-      headers: { "Content-Type": file.type },
-      body: file,
-    });
-    if (!uploadRes.ok) throw new Error(`Ошибка загрузки в хранилище: ${uploadRes.status}`);
-
-    return cdn_url;
+    if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status}`);
+    const data = await res.json();
+    if (!data.url) throw new Error(`Сервер не вернул ссылку`);
+    return data.url;
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
