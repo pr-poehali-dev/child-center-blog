@@ -54,10 +54,10 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
 function TeacherAvatar({ id, size = "md" }: { id: string; size?: "sm" | "md" | "lg" }) {
   const t = TEACHERS[id];
   const initials = t?.name.split(" ").map(w => w[0]).slice(0, 2).join("") || "?";
-  const sizes = { sm: "w-8 h-8 text-xs", md: "w-12 h-12 text-sm", lg: "w-16 h-16 text-base" };
+  const sizes = { sm: "w-10 h-10 text-xs", md: "w-14 h-14 text-sm", lg: "w-20 h-20 text-base" };
   if (t?.photo) {
     return (
-      <img src={t.photo} alt={t.name} className={`${sizes[size]} rounded-full object-cover shrink-0 border-2 border-orange-200`} />
+      <img src={t.photo} alt={t.name} className={`${sizes[size]} rounded-full object-cover object-top shrink-0 border-2 border-orange-200`} />
     );
   }
   return (
