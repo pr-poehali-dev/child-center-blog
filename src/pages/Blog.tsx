@@ -269,7 +269,7 @@ export default function Blog() {
             onClick={() => navigate("/blog/qa")}
             className="flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all bg-rose-100 text-rose-600 hover:bg-rose-200"
           >
-            <span>💬</span>
+            <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/15744313-9270-4292-bb6b-c44dc00a492a.png" alt="" className="w-5 h-5 object-contain" />
             <span>Спрашивали — Отвечаем</span>
           </button>
         </div>
