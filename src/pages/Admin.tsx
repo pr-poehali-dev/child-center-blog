@@ -5,6 +5,7 @@ import LoginScreen from "@/components/admin/LoginScreen";
 import BlogManager from "@/components/admin/BlogManager";
 import BookingsManager from "@/components/admin/BookingsManager";
 import ReviewsManager from "@/components/admin/ReviewsManager";
+import QAManager from "@/components/admin/QAManager";
 
 export default function Admin() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
@@ -12,7 +13,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [updating, setUpdating] = useState<number | null>(null);
-  const [tab, setTab] = useState<"bookings" | "blog" | "reviews">("bookings");
+  const [tab, setTab] = useState<"bookings" | "blog" | "reviews" | "qa">("bookings");
 
   const load = async () => {
     setLoading(true);
@@ -81,10 +82,11 @@ export default function Admin() {
             { key: "bookings", label: "Заявки",  emoji: "📋" },
             { key: "blog",     label: "Блог",    emoji: "✍️" },
             { key: "reviews",  label: "Отзывы",  emoji: "⭐" },
+            { key: "qa",       label: "Q&A",     emoji: "💬" },
           ].map(t => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key as "bookings" | "blog" | "reviews")}
+              onClick={() => setTab(t.key as "bookings" | "blog" | "reviews" | "qa")}
               className={`flex items-center gap-1.5 px-5 py-3 text-sm font-bold border-b-2 transition-colors ${
                 tab === t.key
                   ? "border-orange-400 text-orange-500"
@@ -111,6 +113,7 @@ export default function Admin() {
         )}
         {tab === "blog" && <BlogManager />}
         {tab === "reviews" && <ReviewsManager />}
+        {tab === "qa" && <QAManager />}
       </div>
     </div>
   );

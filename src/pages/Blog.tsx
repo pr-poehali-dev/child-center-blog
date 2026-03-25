@@ -265,6 +265,13 @@ export default function Blog() {
               <span>{cat.label}</span>
             </button>
           ))}
+          <button
+            onClick={() => navigate("/blog/qa")}
+            className="flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all bg-rose-100 text-rose-600 hover:bg-rose-200"
+          >
+            <span>💬</span>
+            <span>Спрашивали — Отвечаем</span>
+          </button>
         </div>
       </div>
 
