@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, UPLOAD_CHUNK_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -77,6 +77,47 @@ export default function BlogManager() {
     return data.url;
   };
 
+  const uploadVideoChunked = async (file: File): Promise<string> => {
+    const token = localStorage.getItem(TOKEN_KEY) || "";
+    const headers = { "Content-Type": "application/json", "X-Authorization": token };
+    const CHUNK_SIZE = 1 * 1024 * 1024;
+
+    const initRes = await fetch(UPLOAD_CHUNK_API, {
+      method: "POST", headers,
+      body: JSON.stringify({ action: "init", content_type: file.type }),
+    });
+    const { upload_id, key } = await initRes.json();
+
+    const parts: { part_number: number; etag: string }[] = [];
+    let partNumber = 1;
+    let offset = 0;
+
+    while (offset < file.size) {
+      const chunk = file.slice(offset, offset + CHUNK_SIZE);
+      const arrayBuffer = await chunk.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      const b64 = btoa(binary);
+
+      const partRes = await fetch(UPLOAD_CHUNK_API, {
+        method: "POST", headers,
+        body: JSON.stringify({ action: "part", key, upload_id, part_number: partNumber, data: b64 }),
+      });
+      const { etag } = await partRes.json();
+      parts.push({ part_number: partNumber, etag });
+      partNumber++;
+      offset += CHUNK_SIZE;
+    }
+
+    const finishRes = await fetch(UPLOAD_CHUNK_API, {
+      method: "POST", headers,
+      body: JSON.stringify({ action: "finish", key, upload_id, parts }),
+    });
+    const { url } = await finishRes.json();
+    return url;
+  };
+
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (fileRef.current) fileRef.current.value = "";
@@ -89,22 +130,18 @@ export default function BlogManager() {
           alert(`Видео в формате "${file.type || file.name.split(".").pop()}" не поддерживается браузерами.\n\nПожалуйста, сохраните видео в формате MP4 (кодек H.264) и загрузите снова.\n\nВ HandBrake выберите: Формат → MP4, Кодек → H.264`);
           return;
         }
-        const MAX_BYTES = 7 * 1024 * 1024;
+        const MAX_BYTES = 50 * 1024 * 1024;
         if (file.size > MAX_BYTES) {
-          alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 7 МБ. Попробуйте сжать видео сильнее.`);
+          alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 50 МБ.`);
           return;
         }
         setUploadingMedia(true);
-        const reader = new FileReader();
-        reader.onload = async ev => {
-          try {
-            const cdnUrl = await uploadToS3(ev.target?.result as string);
-            setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
-          } finally {
-            setUploadingMedia(false);
-          }
-        };
-        reader.readAsDataURL(file);
+        try {
+          const cdnUrl = await uploadVideoChunked(file);
+          setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
+        } finally {
+          setUploadingMedia(false);
+        }
       } else {
         setUploadingMedia(true);
         const reader = new FileReader();
