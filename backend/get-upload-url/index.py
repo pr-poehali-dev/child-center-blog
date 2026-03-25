@@ -20,7 +20,7 @@ def check_auth(event: dict) -> bool:
 
 
 def handler(event: dict, context) -> dict:
-    """Генерирует presigned URL для прямой загрузки файла в S3"""
+    """Генерирует presigned URL для прямой загрузки файла в S3, устанавливает CORS на бакет"""
 
     if event.get('httpMethod') == 'OPTIONS':
         return {'statusCode': 200, 'headers': CORS, 'body': ''}
@@ -46,6 +46,22 @@ def handler(event: dict, context) -> dict:
         aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
         config=Config(signature_version='s3v4'),
     )
+
+    try:
+        s3.put_bucket_cors(
+            Bucket='files',
+            CORSConfiguration={
+                'CORSRules': [{
+                    'AllowedHeaders': ['*'],
+                    'AllowedMethods': ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'],
+                    'AllowedOrigins': ['*'],
+                    'ExposeHeaders': ['ETag'],
+                    'MaxAgeSeconds': 86400,
+                }]
+            }
+        )
+    except Exception:
+        pass
 
     presigned_url = s3.generate_presigned_url(
         'put_object',

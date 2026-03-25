@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, UPLOAD_VIDEO_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, GET_UPLOAD_URL_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -79,15 +79,23 @@ export default function BlogManager() {
 
   const uploadVideoPresigned = async (file: File): Promise<string> => {
     const token = localStorage.getItem(TOKEN_KEY) || "";
-    const res = await fetch(UPLOAD_VIDEO_API, {
+
+    const urlRes = await fetch(GET_UPLOAD_URL_API, {
       method: "POST",
-      headers: { "X-Authorization": token, "X-File-Type": file.type },
+      headers: { "Content-Type": "application/json", "X-Authorization": token },
+      body: JSON.stringify({ content_type: file.type }),
+    });
+    if (!urlRes.ok) throw new Error(`Ошибка получения ссылки: ${urlRes.status}`);
+    const { upload_url, cdn_url } = await urlRes.json();
+
+    const uploadRes = await fetch(upload_url, {
+      method: "PUT",
+      headers: { "Content-Type": file.type },
       body: file,
     });
-    if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status}`);
-    const data = await res.json();
-    if (!data.url) throw new Error(`Сервер не вернул ссылку: ${JSON.stringify(data)}`);
-    return data.url;
+    if (!uploadRes.ok) throw new Error(`Ошибка загрузки в хранилище: ${uploadRes.status}`);
+
+    return cdn_url;
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
