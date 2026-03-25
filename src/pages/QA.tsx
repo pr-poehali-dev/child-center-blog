@@ -57,8 +57,8 @@ function TeacherAvatar({ id }: { id: string }) {
   if (t?.photo) {
     const isPng = t.photo.toLowerCase().endsWith('.png');
     return (
-      <div className={`w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-orange-100 shadow-sm flex items-center justify-center bg-white`}>
-        <img src={t.photo} alt={t.name} className={`w-full h-full ${isPng ? 'object-contain' : 'object-cover object-top'}`} />
+      <div className={`w-14 h-14 rounded-full overflow-hidden shrink-0 border border-orange-100 shadow-sm`}>
+        <img src={t.photo} alt={t.name} className={`w-full h-full ${isPng ? 'object-cover object-center scale-110' : 'object-cover object-top'}`} />
       </div>
     );
   }
