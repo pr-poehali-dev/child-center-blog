@@ -54,7 +54,7 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
 function TeacherAvatar({ id, size = "md" }: { id: string; size?: "sm" | "md" | "lg" }) {
   const t = TEACHERS[id];
   const initials = t?.name.split(" ").map(w => w[0]).slice(0, 2).join("") || "?";
-  const sizes = { sm: "w-10 h-10 text-xs", md: "w-14 h-14 text-sm", lg: "w-20 h-20 text-base" };
+  const sizes = { sm: "w-12 h-12 text-xs", md: "w-16 h-16 text-sm", lg: "w-24 h-24 text-base" };
   if (t?.photo) {
     return (
       <img src={t.photo} alt={t.name} className={`${sizes[size]} rounded-full object-cover object-top shrink-0 border-2 border-orange-200`} />
@@ -244,25 +244,27 @@ export default function QA() {
               {/* Выбор педагога */}
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-2 block">Выберите педагога</label>
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-3 gap-3">
                   {Object.entries(TEACHERS).map(([id, t]) => (
                     <button
                       key={id}
                       type="button"
                       onClick={() => setForm(f => ({ ...f, teacher_id: id }))}
-                      className={`flex items-center gap-3 p-3 rounded-2xl border-2 text-left transition-all ${
+                      className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 text-center transition-all relative ${
                         form.teacher_id === id
                           ? "border-orange-400 bg-orange-50"
                           : "border-gray-100 hover:border-orange-200 hover:bg-orange-50/50"
                       }`}
                     >
-                      <TeacherAvatar id={id} size="sm" />
-                      <div className="min-w-0">
-                        <div className="font-bold text-gray-800 text-sm leading-tight">{t.name}</div>
-                        <div className="text-xs text-gray-400 leading-tight truncate">{t.role}</div>
+                      <TeacherAvatar id={id} size="lg" />
+                      <div>
+                        <div className="font-bold text-gray-800 text-xs leading-tight">{t.name}</div>
+                        <div className="text-xs text-gray-400 leading-tight mt-0.5">{t.role.split(",")[0]}</div>
                       </div>
                       {form.teacher_id === id && (
-                        <Icon name="CheckCircle" size={18} className="text-orange-400 shrink-0 ml-auto" />
+                        <div className="absolute top-2 right-2">
+                          <Icon name="CheckCircle" size={16} className="text-orange-400" />
+                        </div>
                       )}
                     </button>
                   ))}
