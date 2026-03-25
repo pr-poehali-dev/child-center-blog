@@ -85,6 +85,10 @@ export default function BlogManager() {
     files.forEach(async file => {
       const isVideo = file.type.startsWith("video");
       if (isVideo) {
+        if (file.type !== "video/mp4") {
+          alert(`Видео в формате "${file.type || file.name.split(".").pop()}" не поддерживается браузерами.\n\nПожалуйста, сохраните видео в формате MP4 (кодек H.264) и загрузите снова.\n\nВ HandBrake выберите: Формат → MP4, Кодек → H.264`);
+          return;
+        }
         const MAX_BYTES = 4 * 1024 * 1024;
         if (file.size > MAX_BYTES) {
           alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 4 МБ. Сожмите видео и попробуйте снова.`);
