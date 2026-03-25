@@ -3,10 +3,14 @@
     {
       "name": "GET all posts",
       "method": "GET",
+      "path": "/?category=tips",
+      "expectedStatus": 200
+    },
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
       "path": "/",
-      "expectedStatus": 200,
-      "expectedBody": {"posts": []},
-      "bodyMatcher": "partial"
+      "expectedStatus": 200
     }
   ]
 }

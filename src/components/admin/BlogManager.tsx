@@ -19,6 +19,7 @@ export default function BlogManager() {
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const [teacherName, setTeacherName] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
@@ -104,6 +105,31 @@ export default function BlogManager() {
     setMediaItems(prev => prev.filter((_, idx) => idx !== i));
   };
 
+  const resetForm = () => {
+    setShowForm(false);
+    setEditingPost(null);
+    setForm({ category: "tips", title: "", content: "" });
+    setMediaItems([]);
+    setTeacherPhoto("");
+    setTeacherName("");
+    setVideoUrl("");
+    setShowEmoji(false);
+  };
+
+  const startEdit = (post: Post) => {
+    const videoItem = post.media?.find(m => m.type === "video");
+    const imageItems = (post.media || []).filter(m => m.type === "image");
+    setEditingPost(post);
+    setForm({ category: post.category, title: post.title, content: post.content });
+    setMediaItems(imageItems);
+    setTeacherPhoto(post.teacher_photo || "");
+    setTeacherName(post.teacher_name || "");
+    setVideoUrl(videoItem?.url || "");
+    setShowForm(true);
+    setShowEmoji(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim()) return;
@@ -113,21 +139,17 @@ export default function BlogManager() {
         ...mediaItems,
         ...(videoUrl.trim() ? [{ type: "video" as const, url: videoUrl.trim() }] : []),
       ];
+      const isEdit = !!editingPost;
       const res = await fetch(BLOG_API, {
-        method: "POST",
+        method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName }),
+        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName }),
       });
       if (!res.ok) {
-        alert("Ошибка при публикации. Попробуйте ещё раз.");
+        alert("Ошибка при сохранении. Попробуйте ещё раз.");
         return;
       }
-      setShowForm(false);
-      setForm({ category: "tips", title: "", content: "" });
-      setMediaItems([]);
-      setTeacherPhoto("");
-      setTeacherName("");
-      setVideoUrl("");
+      resetForm();
       if (activeTab === form.category) {
         loadPosts(activeTab);
       } else {
@@ -162,7 +184,7 @@ export default function BlogManager() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-black text-xl text-gray-800">Управление блогом</h2>
         <button
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => showForm ? resetForm() : setShowForm(true)}
           className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-2xl transition-colors text-sm"
         >
           <Icon name={showForm ? "X" : "Plus"} size={16} />
@@ -173,7 +195,7 @@ export default function BlogManager() {
       {/* FORM */}
       {showForm && (
         <div className="bg-white rounded-3xl border border-orange-100 p-6 mb-6 shadow-sm">
-          <h3 className="font-black text-gray-800 mb-5">Новый пост</h3>
+          <h3 className="font-black text-gray-800 mb-5">{editingPost ? "Редактировать пост" : "Новый пост"}</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="text-xs font-bold text-gray-500 mb-1.5 block">Раздел</label>
@@ -351,7 +373,7 @@ export default function BlogManager() {
               disabled={saving || uploadingMedia}
               className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-3.5 rounded-2xl transition-colors"
             >
-              {saving ? "Сохраняем..." : "Опубликовать пост"}
+              {saving ? "Сохраняем..." : editingPost ? "Сохранить изменения" : "Опубликовать пост"}
             </button>
           </form>
         </div>
@@ -415,13 +437,23 @@ export default function BlogManager() {
                     )}
                   </div>
                 </div>
-                <button
-                  onClick={() => deletePost(post.id)}
-                  disabled={deleting === post.id}
-                  className="shrink-0 text-gray-300 hover:text-red-400 transition-colors disabled:opacity-50"
-                >
-                  <Icon name={deleting === post.id ? "Loader2" : "Trash2"} size={18} className={deleting === post.id ? "animate-spin" : ""} />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => startEdit(post)}
+                    className="text-gray-300 hover:text-orange-400 transition-colors"
+                    title="Редактировать"
+                  >
+                    <Icon name="Pencil" size={16} />
+                  </button>
+                  <button
+                    onClick={() => deletePost(post.id)}
+                    disabled={deleting === post.id}
+                    className="text-gray-300 hover:text-red-400 transition-colors disabled:opacity-50"
+                    title="Удалить"
+                  >
+                    <Icon name={deleting === post.id ? "Loader2" : "Trash2"} size={18} className={deleting === post.id ? "animate-spin" : ""} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

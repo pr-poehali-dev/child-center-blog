@@ -10,7 +10,7 @@ import boto3
 SCHEMA = 't_p99892216_child_center_blog'
 CORS = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-Authorization',
     'Access-Control-Max-Age': '86400',
 }
@@ -130,6 +130,45 @@ def handler(event: dict, context) -> dict:
         cur.close()
         conn.close()
         return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat()})}
+
+    if method == 'PUT':
+        if not check_auth(event):
+            cur.close(); conn.close()
+            return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
+        body = json.loads(event.get('body') or '{}')
+        post_id = int(body.get('id', 0))
+        category = escape(body.get('category', ''))
+        title = escape(body.get('title', ''))
+        content = escape(body.get('content', ''))
+        media_list = body.get('media', [])
+        teacher_photo_data = body.get('teacher_photo', '')
+        teacher_name = escape(body.get('teacher_name', ''))
+
+        s3 = get_s3()
+        uploaded = []
+        for item in media_list:
+            url = item.get('url', '')
+            mtype = item.get('type', 'image')
+            if url.startswith('data:'):
+                url = upload_media(s3, url)
+            uploaded.append({'type': mtype, 'url': url})
+
+        teacher_photo_url = ''
+        if teacher_photo_data.startswith('data:'):
+            teacher_photo_url = upload_media(s3, teacher_photo_data)
+        elif teacher_photo_data.startswith('http'):
+            teacher_photo_url = teacher_photo_data
+
+        media_json = escape(json.dumps(uploaded, ensure_ascii=False))
+        teacher_photo_escaped = escape(teacher_photo_url)
+
+        cur.execute(
+            f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}' WHERE id={post_id}"
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True})}
 
     if method == 'DELETE':
         if not check_auth(event):
