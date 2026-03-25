@@ -89,9 +89,9 @@ export default function BlogManager() {
           alert(`Видео в формате "${file.type || file.name.split(".").pop()}" не поддерживается браузерами.\n\nПожалуйста, сохраните видео в формате MP4 (кодек H.264) и загрузите снова.\n\nВ HandBrake выберите: Формат → MP4, Кодек → H.264`);
           return;
         }
-        const MAX_BYTES = 4 * 1024 * 1024;
+        const MAX_BYTES = 7 * 1024 * 1024;
         if (file.size > MAX_BYTES) {
-          alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 4 МБ. Сожмите видео и попробуйте снова.`);
+          alert(`Файл слишком большой: ${(file.size / 1024 / 1024).toFixed(1)} МБ. Максимум — 7 МБ. Попробуйте сжать видео сильнее.`);
           return;
         }
         setUploadingMedia(true);
