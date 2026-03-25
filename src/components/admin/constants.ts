@@ -4,6 +4,7 @@ export const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-2
 export const UPLOAD_API = "https://functions.poehali.dev/a7038ca8-4f9f-4936-abb3-9236e5cf235a";
 export const GET_UPLOAD_URL_API = "https://functions.poehali.dev/ce28a0c2-d56b-44b0-9a1e-da4b4865dbd3";
 export const UPLOAD_CHUNK_API = "https://functions.poehali.dev/d5693159-8c64-4d4f-b55f-2db20fa0b98d";
+export const UPLOAD_VIDEO_API = "https://functions.poehali.dev/2b11cad0-8e9c-4451-94c5-34d426eb44a7";
 export const TOKEN_KEY = "admin_token";
 
 export const STATUS_CONFIG: Record<string, { label: string; color: string; next: string; nextLabel: string }> = {
