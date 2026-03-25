@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
@@ -208,7 +208,10 @@ function PostCard({ post }: { post: Post }) {
 
 export default function Blog() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("tips");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const validIds = CATEGORIES.map(c => c.id);
+  const paramCat = searchParams.get("category") || "";
+  const [activeTab, setActiveTab] = useState(validIds.includes(paramCat) ? paramCat : "tips");
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -225,6 +228,7 @@ export default function Blog() {
 
   useEffect(() => {
     loadPosts(activeTab);
+    setSearchParams({ category: activeTab }, { replace: true });
   }, [activeTab]);
 
   const activeCat = CATEGORIES.find(c => c.id === activeTab)!;
