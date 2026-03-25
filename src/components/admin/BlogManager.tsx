@@ -86,7 +86,10 @@ export default function BlogManager() {
       method: "POST", headers,
       body: JSON.stringify({ action: "init", content_type: file.type }),
     });
-    const { upload_id, key } = await initRes.json();
+    if (!initRes.ok) throw new Error(`Ошибка инициализации загрузки: ${initRes.status}`);
+    const initData = await initRes.json();
+    if (!initData.key || !initData.upload_id) throw new Error(`Сервер не вернул данные загрузки: ${JSON.stringify(initData)}`);
+    const { upload_id, key } = initData;
 
     const parts: { part_number: number; etag: string }[] = [];
     let partNumber = 1;
@@ -96,9 +99,15 @@ export default function BlogManager() {
       const chunk = file.slice(offset, offset + CHUNK_SIZE);
       const arrayBuffer = await chunk.arrayBuffer();
       const bytes = new Uint8Array(arrayBuffer);
-      let binary = "";
-      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
-      const b64 = btoa(binary);
+      const b64 = await new Promise<string>((resolve) => {
+        const blob = new Blob([bytes]);
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result as string;
+          resolve(dataUrl.split(",")[1]);
+        };
+        reader.readAsDataURL(blob);
+      });
 
       const partRes = await fetch(UPLOAD_CHUNK_API, {
         method: "POST", headers,
@@ -139,6 +148,8 @@ export default function BlogManager() {
         try {
           const cdnUrl = await uploadVideoChunked(file);
           setMediaItems(prev => [...prev, { type: "video", url: cdnUrl }]);
+        } catch (err) {
+          alert(`Не удалось загрузить видео: ${err instanceof Error ? err.message : String(err)}`);
         } finally {
           setUploadingMedia(false);
         }
