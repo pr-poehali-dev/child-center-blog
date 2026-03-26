@@ -127,13 +127,13 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
         {media.map((m, i) => (
           <div
             key={i}
-            className={`rounded-2xl overflow-hidden bg-gray-100 group ${m.type === "video" ? "aspect-video" : "aspect-square cursor-pointer"}`}
+            className={`rounded-2xl overflow-hidden bg-gray-100 group ${m.type === "video" ? "aspect-video" : media.length === 1 ? "cursor-pointer" : "aspect-square cursor-pointer"}`}
             onClick={m.type === "image" ? () => setActive(m) : undefined}
           >
             {m.type === "video" ? (
               <VideoThumb url={m.url} onClick={() => setActive(m)} />
             ) : (
-              <img src={m.url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <img src={m.url} alt="" className={`w-full transition-transform duration-500 group-hover:scale-105 ${media.length === 1 ? "h-auto object-contain" : "h-full object-cover"}`} />
             )}
           </div>
         ))}
