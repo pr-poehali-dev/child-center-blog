@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://child-center-blog.poehali.app/sitemap.xml
+Sitemap: https://blogribkadolli.ru/sitemap.xml
