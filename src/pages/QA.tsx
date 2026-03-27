@@ -2,6 +2,20 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
+function usePageMeta(title: string, description: string) {
+  useEffect(() => {
+    const prev = document.title;
+    document.title = title;
+    const meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    const prevDesc = meta?.content ?? "";
+    if (meta) meta.content = description;
+    return () => {
+      document.title = prev;
+      if (meta) meta.content = prevDesc;
+    };
+  }, [title, description]);
+}
+
 const QA_API = "https://functions.poehali.dev/dbf8090e-245f-45dd-9b83-298fcdf8b666";
 
 interface Teacher {
@@ -146,6 +160,10 @@ function QuestionCard({ q, onRate }: { q: Question; onRate: (id: number, rating:
 }
 
 export default function QA() {
+  usePageMeta(
+    "Вопросы и ответы — Детский центр «Рыбка Долли» Керчь | Педагоги отвечают",
+    "Педагоги детского центра «Рыбка Долли» отвечают на вопросы родителей о воспитании, развитии детей и жизни центра. Задайте свой вопрос!"
+  );
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);

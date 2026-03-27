@@ -2,6 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
+function usePageMeta(title: string, description: string) {
+  useEffect(() => {
+    const prev = document.title;
+    document.title = title;
+    const meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    const prevDesc = meta?.content ?? "";
+    if (meta) meta.content = description;
+    return () => {
+      document.title = prev;
+      if (meta) meta.content = prevDesc;
+    };
+  }, [title, description]);
+}
+
 const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
 const TG_LINK = "https://t.me/irinadolli";
 
@@ -207,6 +221,10 @@ function PostCard({ post }: { post: Post }) {
 }
 
 export default function Blog() {
+  usePageMeta(
+    "Блог детского центра «Рыбка Долли» — Керчь | Советы педагогов, новости, мероприятия",
+    "Блог детского центра «Рыбка Долли» в Керчи — советы педагогов, новости центра, статьи о развитии и воспитании детей. Советы для любящих родителей."
+  );
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const validIds = CATEGORIES.map(c => c.id);
