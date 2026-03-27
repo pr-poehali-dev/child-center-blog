@@ -4,8 +4,28 @@ import Icon from "@/components/ui/icon";
 import { TEAM, REVIEWS } from "./constants";
 
 const REVIEWS_API = "https://functions.poehali.dev/1c662b6b-5f56-4e25-b517-f6fdfc24912b";
+const VISIT_COUNTER_API = "https://functions.poehali.dev/7d977bf0-24cd-492c-aa4e-0c0324d97f97";
 
 const BG_COLORS = ["bg-rose-50", "bg-amber-50", "bg-violet-50", "bg-teal-50", "bg-sky-50", "bg-orange-50"];
+
+function VisitCounter() {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch(VISIT_COUNTER_API, { method: 'POST' })
+      .then(r => r.json())
+      .then(d => setCount(d.total))
+      .catch(() => {});
+  }, []);
+
+  if (count === null) return null;
+
+  return (
+    <div className="mt-3 text-xs text-gray-600 opacity-50">
+      Нас посетили {count.toLocaleString('ru-RU')} раз
+    </div>
+  );
+}
 
 function LiveReviews() {
   const [reviews, setReviews] = useState<{id: number; name: string; child: string | null; text: string; stars: number}[]>([]);
@@ -300,6 +320,7 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
         <div className="text-2xl mb-2">🌟</div>
         <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Рыбка Долли</div>
         <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
+        <VisitCounter />
         <a href="/admin" className="mt-4 inline-block text-xs text-gray-600 hover:text-gray-400 transition-colors">
           Вход для администратора
         </a>
