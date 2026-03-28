@@ -121,6 +121,50 @@ interface HomeSectionsProps {
   onFormClick: () => void;
 }
 
+const POPULAR_POSTS = [
+  { id: 16, title: "Гаджеты. Польза или вред?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-100", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 15, title: "Holidays-каникулы", category: "english", emoji: "🇬🇧", color: "bg-sky-50", border: "border-sky-100", tag: "bg-sky-100 text-sky-700", label: "Английский язык" },
+  { id: 13, title: "Старт продаж смен", category: "summer", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-100", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб" },
+  { id: 12, title: "Бессонница у детей. Причины и как бороться.", category: "detail", emoji: "📖", color: "bg-teal-50", border: "border-teal-100", tag: "bg-teal-100 text-teal-700", label: "Подробно о важном" },
+  { id: 4, title: "Как сделать адаптацию малыша легкой?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-100", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+];
+
+function PopularPosts() {
+  const navigate = useNavigate();
+  return (
+    <section className="py-16 bg-orange-50">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-10">
+          <div className="font-caveat text-orange-400 text-2xl mb-2">Читают чаще всего</div>
+          <h2 className="font-black text-3xl text-gray-800">Популярные статьи</h2>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {POPULAR_POSTS.map(post => (
+            <div
+              key={post.id}
+              onClick={() => navigate(`/blog?category=${post.category}`)}
+              className={`${post.color} border ${post.border} rounded-3xl p-6 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1`}
+            >
+              <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 ${post.tag}`}>
+                {post.emoji} {post.label}
+              </span>
+              <h3 className="font-black text-gray-800 text-base leading-snug">{post.title}</h3>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <button
+            onClick={() => navigate("/blog")}
+            className="bg-orange-400 hover:bg-orange-500 text-white font-black px-8 py-3.5 rounded-2xl transition-colors"
+          >
+            Все статьи блога
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function HomeSections({ onFormClick }: HomeSectionsProps) {
   const navigate = useNavigate();
 
@@ -195,6 +239,8 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
           </div>
         </div>
       </section>
+
+      <PopularPosts />
 
       {/* TEAM */}
       <section id="team" className="py-24 bg-gradient-to-b from-rose-50 to-orange-50">
