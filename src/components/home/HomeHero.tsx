@@ -21,8 +21,18 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
 
         {/* ЗАГОЛОВОК */}
         <div className="text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full mb-6" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
-            <span>✨</span> Детский центр «Рыбка Долли»
+          <div className="inline-flex items-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
+              <span>✨</span> Детский центр «Рыбка Долли»
+            </div>
+            <button
+              onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
+              title="Популярные статьи"
+              className="w-11 h-11 rounded-full bg-orange-400 hover:bg-orange-500 text-xl flex items-center justify-center transition-all hover:-translate-y-0.5 active:translate-y-0.5 flex-shrink-0"
+              style={{ boxShadow: "0 4px 0 #c2410c, 0 6px 14px #fb923c66" }}
+            >
+              📚
+            </button>
           </div>
           <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
             Растём вместе
