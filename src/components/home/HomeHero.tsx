@@ -27,11 +27,11 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             </div>
             <button
               onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
-              className="flex flex-col items-center gap-1 bg-orange-400 hover:bg-orange-500 text-white font-black px-5 py-3 rounded-2xl transition-all hover:-translate-y-0.5 active:translate-y-0.5 flex-shrink-0"
+              className="flex flex-col items-center gap-1 bg-orange-400 hover:bg-orange-500 text-white font-black w-20 h-20 rounded-full transition-all hover:-translate-y-0.5 active:translate-y-0.5 flex-shrink-0"
               style={{ boxShadow: "0 5px 0 #c2410c, 0 8px 16px #fb923c66" }}
             >
               <span className="text-2xl">📚</span>
-              <span className="text-xs leading-tight whitespace-nowrap">Популярные статьи</span>
+              <span className="text-[10px] leading-tight text-center px-1">Популярные статьи</span>
             </button>
           </div>
           <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
