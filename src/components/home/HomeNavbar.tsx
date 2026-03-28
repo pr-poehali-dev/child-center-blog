@@ -41,6 +41,12 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
             </button>
           ))}
           <NavBookingDropdown onFormClick={onFormClick} />
+          <button
+            onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
+            className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-black px-4 py-2 rounded-full text-sm transition-all hover:shadow-md hover:-translate-y-0.5"
+          >
+            <span>📚</span> Популярные статьи
+          </button>
         </div>
         <button className="md:hidden text-gray-600" onClick={() => setMenuOpen(!menuOpen)}>
           <Icon name={menuOpen ? "X" : "Menu"} size={24} />
@@ -54,6 +60,12 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
             </button>
           ))}
           <NavBookingDropdown onFormClick={onFormClick} />
+          <button
+            onClick={() => { setMenuOpen(false); document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" }); }}
+            className="flex items-center gap-2 bg-orange-400 text-white font-black px-4 py-2 rounded-full text-sm w-fit"
+          >
+            <span>📚</span> Популярные статьи
+          </button>
         </div>
       )}
     </nav>
