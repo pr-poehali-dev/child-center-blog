@@ -25,14 +25,19 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
               <span>✨</span> Детский центр «Рыбка Долли»
             </div>
-            <button
-              onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
-              className="flex flex-col items-center gap-1 bg-orange-400 hover:bg-orange-500 text-white font-black w-20 h-20 rounded-full transition-all hover:-translate-y-0.5 active:translate-y-0.5 flex-shrink-0"
-              style={{ boxShadow: "0 5px 0 #c2410c, 0 8px 16px #fb923c66" }}
-            >
-              <span className="text-2xl">📚</span>
-              <span className="text-[10px] leading-tight text-center px-1">Популярные статьи</span>
-            </button>
+            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+              <button
+                onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
+                className="w-20 h-20 rounded-full flex items-center justify-center transition-all hover:-translate-y-1 active:translate-y-0.5"
+                style={{
+                  background: "radial-gradient(circle at 35% 35%, #fde68a, #fb923c 55%, #c2410c)",
+                  boxShadow: "0 6px 0 #92400e, 0 10px 24px #fb923c88, inset 0 2px 6px rgba(255,255,255,0.4)"
+                }}
+              >
+                <span className="text-3xl">📚</span>
+              </button>
+              <span className="text-xs font-black text-orange-600 tracking-wide">Популярные статьи</span>
+            </div>
           </div>
           <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
             Растём вместе
