@@ -121,45 +121,71 @@ interface HomeSectionsProps {
   onFormClick: () => void;
 }
 
+const POPULAR_POSTS = [
+  { id: 16, title: "Гаджеты. Польза или вред?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 15, title: "Holidays-каникулы", category: "english", emoji: "🇬🇧", color: "bg-sky-50", border: "border-sky-200", tag: "bg-sky-100 text-sky-700", label: "Английский язык" },
+  { id: 13, title: "Старт продаж смен", category: "summer", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб" },
+  { id: 12, title: "Бессонница у детей. Причины и как бороться.", category: "detail", emoji: "📖", color: "bg-teal-50", border: "border-teal-200", tag: "bg-teal-100 text-teal-700", label: "Подробно о важном" },
+  { id: 4, title: "Как сделать адаптацию малыша легкой?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+];
+
 function PopularPosts() {
   const navigate = useNavigate();
+
+  const scrollToList = () => {
+    document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section className="py-12 bg-orange-50 flex justify-center">
+    <>
       <style>{`
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 0 18px 4px #fb923c88, 0 8px 32px 0 #fb923c44; }
-          50% { box-shadow: 0 0 36px 10px #fb923ccc, 0 12px 40px 0 #fb923c77; }
+          0%, 100% { box-shadow: 0 8px 0 #c2410c, 0 0 18px 4px #fb923c88, 0 12px 32px 0 #fb923c44; }
+          50% { box-shadow: 0 8px 0 #c2410c, 0 0 36px 10px #fb923ccc, 0 16px 40px 0 #fb923c77; }
         }
         @keyframes book-float {
           0%, 100% { transform: translateY(0px) scale(1); }
           50% { transform: translateY(-6px) scale(1.07); }
         }
-        .popular-btn {
-          animation: glow-pulse 2.2s ease-in-out infinite;
-        }
-        .popular-btn:hover {
-          animation: none;
-          box-shadow: 0 0 48px 16px #fb923cee, 0 16px 48px 0 #fb923c99;
-          transform: translateY(-4px) scale(1.04);
-        }
-        .book-icon {
-          animation: book-float 2.2s ease-in-out infinite;
-          display: inline-block;
-        }
+        .popular-btn { animation: glow-pulse 2.2s ease-in-out infinite; }
+        .popular-btn:hover { animation: none; box-shadow: 0 4px 0 #c2410c, 0 0 48px 16px #fb923cee, 0 16px 48px 0 #fb923c99; transform: translateY(-2px) scale(1.03); }
+        .book-icon { animation: book-float 2.2s ease-in-out infinite; display: inline-block; }
       `}</style>
-      <button
-        onClick={() => navigate("/blog")}
-        className="popular-btn relative bg-gradient-to-br from-orange-400 via-orange-500 to-amber-400 text-white font-black px-10 py-6 rounded-3xl text-xl transition-all duration-300 flex items-center gap-4 cursor-pointer"
-        style={{ boxShadow: "0 8px 0 #c2410c, 0 12px 32px #fb923c66" }}
-      >
-        <span className="book-icon text-4xl">📚</span>
-        <div className="text-left">
-          <div className="text-xs font-bold opacity-80 tracking-widest uppercase mb-0.5">Читают чаще всего</div>
-          <div className="text-2xl font-black leading-tight">Популярные статьи</div>
+
+      <section className="py-12 bg-orange-50 flex justify-center">
+        <button
+          onClick={scrollToList}
+          className="popular-btn bg-gradient-to-br from-orange-400 via-orange-500 to-amber-400 text-white font-black px-10 py-6 rounded-3xl transition-all duration-300 flex items-center gap-4 cursor-pointer"
+        >
+          <span className="book-icon text-4xl">📚</span>
+          <div className="text-left">
+            <div className="text-xs font-bold opacity-80 tracking-widest uppercase mb-0.5">Читают чаще всего</div>
+            <div className="text-2xl font-black leading-tight">Популярные статьи</div>
+          </div>
+          <span className="ml-2 text-2xl opacity-80">↓</span>
+        </button>
+      </section>
+
+      <section id="popular-posts-list" className="py-14 bg-orange-50">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            {POPULAR_POSTS.map(post => (
+              <div
+                key={post.id}
+                onClick={() => navigate(`/blog?category=${post.category}`)}
+                className={`${post.color} border ${post.border} rounded-3xl p-6 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1`}
+              >
+                <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 ${post.tag}`}>
+                  {post.emoji} {post.label}
+                </span>
+                <h3 className="font-black text-gray-800 text-base leading-snug">{post.title}</h3>
+                <div className="mt-3 text-orange-500 text-sm font-bold">Читать →</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <span className="ml-2 text-2xl opacity-80">→</span>
-      </button>
-    </section>
+      </section>
+    </>
   );
 }
 
