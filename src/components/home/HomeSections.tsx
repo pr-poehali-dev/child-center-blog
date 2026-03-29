@@ -140,48 +140,61 @@ function PopularPosts() {
     <>
       <style>{`
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 10px 0 #a855f7aa, 0 0 24px 6px #f472b688, 0 14px 36px 0 #fb923c44; }
-          50% { box-shadow: 0 10px 0 #a855f7cc, 0 0 44px 14px #f472b6cc, 0 18px 48px 0 #fb923c77; }
+          0%, 100% { box-shadow: 0 14px 0 #a855f7aa, 0 0 32px 10px #f472b688, 0 20px 48px 0 #fb923c44; }
+          50% { box-shadow: 0 14px 0 #a855f7cc, 0 0 60px 20px #f472b6cc, 0 24px 64px 0 #fb923c77; }
         }
-        @keyframes splat-float {
-          0%, 100% { transform: translateY(0px) scale(1) rotate(-2deg); }
-          50% { transform: translateY(-8px) scale(1.06) rotate(2deg); }
+        @keyframes splat-bounce {
+          0%, 100% { transform: translateY(0px) rotate(-3deg) scale(1); }
+          50% { transform: translateY(-12px) rotate(3deg) scale(1.08); }
         }
-        @keyframes wink {
-          0%, 85%, 100% { transform: scaleY(1); }
-          90% { transform: scaleY(0.08); }
+        @keyframes wink-left {
+          0%, 80%, 100% { ry: 9; }
+          85%, 95% { ry: 1; }
+        }
+        @keyframes wink-right {
+          0%, 88%, 100% { ry: 9; }
+          92%, 98% { ry: 1; }
         }
         .popular-btn { animation: glow-pulse 2.4s ease-in-out infinite; }
-        .popular-btn:hover { animation: none; box-shadow: 0 6px 0 #a855f7, 0 0 60px 20px #f472b6cc, 0 18px 52px 0 #fb923c99; transform: translateY(-3px) scale(1.04); }
-        .splat-img { animation: splat-float 2.4s ease-in-out infinite; display: inline-block; filter: drop-shadow(0 8px 16px rgba(248,113,113,0.5)); }
-        .wink-eye { animation: wink 3.5s ease-in-out infinite; display: inline-block; transform-origin: center; }
+        .popular-btn:hover { animation: none; box-shadow: 0 8px 0 #a855f7, 0 0 80px 28px #f472b6cc, 0 24px 64px 0 #fb923c99; transform: translateY(-4px) scale(1.05); }
+        .splat-wrap { animation: splat-bounce 2.6s ease-in-out infinite; display: inline-block; filter: drop-shadow(0 12px 24px rgba(168,85,247,0.5)); }
+        .eye-left { animation: wink-left 4s ease-in-out infinite; }
+        .eye-right { animation: wink-right 5.5s ease-in-out 1.2s infinite; }
       `}</style>
 
-      <section className="py-12 bg-orange-50 flex justify-center">
+      <section className="py-16 bg-orange-50 flex justify-center">
         <button
           onClick={scrollToList}
-          className="popular-btn relative font-black px-8 py-5 rounded-3xl transition-all duration-300 flex items-center gap-5 cursor-pointer overflow-visible"
+          className="popular-btn relative font-black px-14 py-8 rounded-[2.5rem] transition-all duration-300 flex items-center gap-8 cursor-pointer"
           style={{
-            background: "linear-gradient(135deg, #fde68a 0%, #fb923c 40%, #f472b6 75%, #a78bfa 100%)",
-            border: "3px solid rgba(255,255,255,0.6)",
+            background: "linear-gradient(135deg, #fde68a 0%, #fb923c 35%, #f472b6 70%, #a78bfa 100%)",
+            border: "4px solid rgba(255,255,255,0.7)",
           }}
         >
-          <div className="relative w-20 h-20 flex-shrink-0">
+          <div className="splat-wrap relative flex-shrink-0" style={{ width: 160, height: 160 }}>
             <img
               src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2850c281-f2a3-4d3e-897e-1503a15e2bd7.jpg"
               alt="клякса"
-              className="splat-img w-20 h-20 object-contain"
+              style={{ width: 160, height: 160, objectFit: "contain", display: "block" }}
             />
-            <span
-              className="wink-eye absolute"
-              style={{ top: "34%", left: "38%", width: 10, height: 14, background: "#1e1b4b", borderRadius: "50%", transformOrigin: "center" }}
-            />
+            <svg
+              viewBox="0 0 160 160"
+              style={{ position: "absolute", top: 0, left: 0, width: 160, height: 160, pointerEvents: "none" }}
+            >
+              <ellipse className="eye-left" cx="62" cy="72" rx="11" ry="9" fill="white" />
+              <ellipse cx="62" cy="72" rx="6" ry="6" fill="#1e1b4b" />
+              <ellipse cx="64" cy="70" rx="2" ry="2" fill="white" />
+
+              <ellipse className="eye-right" cx="98" cy="72" rx="11" ry="9" fill="white" />
+              <ellipse cx="98" cy="72" rx="6" ry="6" fill="#1e1b4b" />
+              <ellipse cx="100" cy="70" rx="2" ry="2" fill="white" />
+            </svg>
           </div>
           <div className="text-left">
-            <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-0.5">Читают чаще всего</div>
-            <div className="text-2xl font-black text-white leading-tight drop-shadow-md">Статьи в топе</div>
+            <div className="text-sm font-bold text-white/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
+            <div className="text-4xl font-black text-white leading-tight drop-shadow-lg">Статьи в топе</div>
+            <div className="text-white/70 text-base font-semibold mt-1">Нажми — увидишь ↓</div>
           </div>
-          <span className="ml-2 text-2xl text-white/80">↓</span>
         </button>
       </section>
 
