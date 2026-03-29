@@ -175,9 +175,8 @@ function PopularPosts() {
             <img
               src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2850c281-f2a3-4d3e-897e-1503a15e2bd7.jpg"
               alt="клякса"
-              style={{ width: 160, height: 160, objectFit: "contain", display: "block" }}
+              style={{ width: 160, height: 160, objectFit: "contain", display: "block", mixBlendMode: "multiply" }}
             />
-
           </div>
           <div className="text-left">
             <div className="text-sm font-bold text-white/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
