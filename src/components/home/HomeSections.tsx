@@ -181,13 +181,13 @@ function PopularPosts() {
               viewBox="0 0 160 160"
               style={{ position: "absolute", top: 0, left: 0, width: 160, height: 160, pointerEvents: "none" }}
             >
-              <ellipse className="eye-left" cx="62" cy="72" rx="11" ry="9" fill="white" />
-              <ellipse cx="62" cy="72" rx="6" ry="6" fill="#1e1b4b" />
-              <ellipse cx="64" cy="70" rx="2" ry="2" fill="white" />
+              <ellipse className="eye-left" cx="68" cy="78" rx="13" ry="11" fill="white" />
+              <ellipse cx="68" cy="78" rx="7" ry="7" fill="#1e1b4b" />
+              <ellipse cx="70" cy="76" rx="2.5" ry="2.5" fill="white" />
 
-              <ellipse className="eye-right" cx="98" cy="72" rx="11" ry="9" fill="white" />
-              <ellipse cx="98" cy="72" rx="6" ry="6" fill="#1e1b4b" />
-              <ellipse cx="100" cy="70" rx="2" ry="2" fill="white" />
+              <ellipse className="eye-right" cx="96" cy="76" rx="13" ry="11" fill="white" />
+              <ellipse cx="96" cy="76" rx="7" ry="7" fill="#1e1b4b" />
+              <ellipse cx="98" cy="74" rx="2.5" ry="2.5" fill="white" />
             </svg>
           </div>
           <div className="text-left">
