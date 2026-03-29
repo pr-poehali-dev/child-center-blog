@@ -6,15 +6,50 @@ function usePageMeta(title: string, description: string) {
   useEffect(() => {
     const prev = document.title;
     document.title = title;
-    const meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    const prevDesc = meta?.content ?? "";
-    if (meta) meta.content = description;
-    return () => {
-      document.title = prev;
-      if (meta) meta.content = prevDesc;
+    const setMeta = (name: string, content: string) => {
+      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+      if (!el) { el = document.createElement("meta"); el.setAttribute("name", name); document.head.appendChild(el); }
+      el.content = content;
     };
+    const setOg = (prop: string, content: string) => {
+      let el = document.querySelector(`meta[property="${prop}"]`) as HTMLMetaElement | null;
+      if (!el) { el = document.createElement("meta"); el.setAttribute("property", prop); document.head.appendChild(el); }
+      el.content = content;
+    };
+    setMeta("description", description);
+    setOg("og:title", title);
+    setOg("og:description", description);
+    setOg("og:type", "website");
+    return () => { document.title = prev; };
   }, [title, description]);
 }
+
+const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = {
+  tips: {
+    title: "Советы педагогов | Блог детского центра «Рыбка Долли» Керчь",
+    description: "Советы опытных педагогов детского центра «Рыбка Долли»: воспитание, адаптация, развитие ребёнка. Читайте бесплатно на сайте.",
+  },
+  life: {
+    title: "Наша жизнь | Блог детского центра «Рыбка Долли» Керчь",
+    description: "Новости и живые истории из жизни детского центра «Рыбка Долли» в Керчи. Праздники, занятия, эмоции.",
+  },
+  detail: {
+    title: "Подробно о важном | Блог детского центра «Рыбка Долли» Керчь",
+    description: "Подробные статьи о здоровье, психологии и развитии детей от педагогов центра «Рыбка Долли» в Керчи.",
+  },
+  summer: {
+    title: "Летний клуб | Детский центр «Рыбка Долли» Керчь",
+    description: "Летний клуб для детей в Керчи — «Рыбка Долли». Новости смен, расписание, запись онлайн.",
+  },
+  afterschool: {
+    title: "Группа продлённого дня | Детский центр «Рыбка Долли» Керчь",
+    description: "Группа продлённого дня для детей в Керчи. Безопасно, интересно, с заботой — детский центр «Рыбка Долли».",
+  },
+  english: {
+    title: "Английский язык для детей | Детский центр «Рыбка Долли» Керчь",
+    description: "Занятия английским языком для детей в Керчи. Игровой метод, опытные педагоги — детский центр «Рыбка Долли».",
+  },
+};
 
 const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
 const TG_LINK = "https://t.me/irinadolli";
@@ -216,20 +251,35 @@ function PostCard({ post }: { post: Post }) {
         </div>
       )}
       <MediaGallery media={post.media} />
+      <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+        <span className="text-xs text-gray-400">Понравилось? Поделитесь!</span>
+        <a
+          href={`https://vk.com/share.php?url=${encodeURIComponent("https://rybka-dolli.poehali.dev/blog?category=" + post.category)}&title=${encodeURIComponent(post.title)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full text-white text-xs font-bold transition-opacity hover:opacity-80"
+          style={{ background: "#0077FF" }}
+          onClick={e => e.stopPropagation()}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14C20.67 22 22 20.67 22 15.07V8.93C22 3.33 20.67 2 15.07 2zm2.18 13.36h-1.6c-.6 0-.79-.48-1.87-1.57-1-.92-1.43-1.04-1.68-1.04-.34 0-.44.1-.44.57v1.43c0 .41-.13.65-1.22.65-1.8 0-3.8-1.09-5.2-3.13C3.57 9.67 3.1 7.7 3.1 7.27c0-.25.1-.48.57-.48h1.6c.43 0 .59.19.75.65.83 2.38 2.2 4.47 2.77 4.47.21 0 .31-.1.31-.65V9.1c-.07-1.17-.68-1.27-.68-1.69 0-.2.16-.41.43-.41h2.52c.36 0 .49.19.49.62v3.33c0 .36.16.49.27.49.21 0 .39-.13.78-.52 1.2-1.35 2.06-3.43 2.06-3.43.11-.25.31-.48.74-.48h1.6c.48 0 .59.25.48.6-.2.93-2.14 3.67-2.14 3.67-.17.27-.23.39 0 .69.17.23.73.71 1.1 1.14.68.77 1.2 1.42 1.34 1.87.14.44-.08.67-.53.67z"/></svg>
+          ВКонтакте
+        </a>
+      </div>
     </article>
   );
 }
 
 export default function Blog() {
-  usePageMeta(
-    "Блог детского центра «Рыбка Долли» — Керчь | Советы педагогов, новости, мероприятия",
-    "Блог детского центра «Рыбка Долли» в Керчи — советы педагогов, новости центра, статьи о развитии и воспитании детей. Советы для любящих родителей."
-  );
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const validIds = CATEGORIES.map(c => c.id);
   const paramCat = searchParams.get("category") || "";
   const [activeTab, setActiveTab] = useState(validIds.includes(paramCat) ? paramCat : "tips");
+  const seo = SEO_BY_CATEGORY[activeTab] ?? {
+    title: "Блог детского центра «Рыбка Долли» — Керчь",
+    description: "Блог детского центра «Рыбка Долли» в Керчи — советы педагогов, новости центра, статьи о развитии детей.",
+  };
+  usePageMeta(seo.title, seo.description);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
