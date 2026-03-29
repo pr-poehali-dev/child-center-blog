@@ -1,9 +1,15 @@
 {
   "tests": [
     {
-      "name": "GET all posts",
+      "name": "GET all posts by category",
       "method": "GET",
       "path": "/?category=tips",
+      "expectedStatus": 200
+    },
+    {
+      "name": "GET single post by id",
+      "method": "GET",
+      "path": "/?id=4",
       "expectedStatus": 200
     },
     {

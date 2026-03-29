@@ -251,10 +251,16 @@ function PostCard({ post }: { post: Post }) {
         </div>
       )}
       <MediaGallery media={post.media} />
-      <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-        <span className="text-xs text-gray-400">Понравилось? Поделитесь!</span>
+      <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-2 flex-wrap">
         <a
-          href={`https://vk.com/share.php?url=${encodeURIComponent("https://rybka-dolli.poehali.dev/blog?category=" + post.category)}&title=${encodeURIComponent(post.title)}`}
+          href={`/blog/${post.id}`}
+          className="text-orange-500 font-bold text-sm hover:underline flex items-center gap-1"
+          onClick={e => e.stopPropagation()}
+        >
+          Открыть статью →
+        </a>
+        <a
+          href={`https://vk.com/share.php?url=${encodeURIComponent("https://blogribkadolli.ru/blog/" + post.id)}&title=${encodeURIComponent(post.title)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 px-4 py-1.5 rounded-full text-white text-xs font-bold transition-opacity hover:opacity-80"

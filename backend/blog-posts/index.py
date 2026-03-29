@@ -64,7 +64,25 @@ def handler(event: dict, context) -> dict:
 
     if method == 'GET':
         params = event.get('queryStringParameters') or {}
+        post_id = params.get('id')
         category = params.get('category')
+
+        if post_id:
+            cur.execute(
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name FROM {SCHEMA}.blog_posts WHERE id = {int(post_id)}"
+            )
+            row = cur.fetchone()
+            cur.close()
+            conn.close()
+            if not row:
+                return {'statusCode': 404, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'error': 'Not found'})}
+            post = {
+                'id': row[0], 'category': row[1], 'title': row[2], 'content': row[3],
+                'media': row[4], 'created_at': row[5].isoformat(),
+                'teacher_photo': row[6], 'teacher_name': row[7] or '',
+            }
+            return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'post': post}, ensure_ascii=False)}
+
         if category and category != 'all':
             cat_escaped = escape(category)
             cur.execute(
@@ -79,14 +97,9 @@ def handler(event: dict, context) -> dict:
         conn.close()
         posts = [
             {
-                'id': r[0],
-                'category': r[1],
-                'title': r[2],
-                'content': r[3],
-                'media': r[4],
-                'created_at': r[5].isoformat(),
-                'teacher_photo': r[6],
-                'teacher_name': r[7] or '',
+                'id': r[0], 'category': r[1], 'title': r[2], 'content': r[3],
+                'media': r[4], 'created_at': r[5].isoformat(),
+                'teacher_photo': r[6], 'teacher_name': r[7] or '',
             }
             for r in rows
         ]
