@@ -12,10 +12,21 @@ function VisitCounter() {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch(VISIT_COUNTER_API, { method: 'POST' })
-      .then(r => r.json())
-      .then(d => setCount(d.total))
-      .catch(() => {});
+    const key = 'visit_counted_day';
+    const today = new Date().toISOString().slice(0, 10);
+    const already = localStorage.getItem(key) === today;
+
+    if (already) {
+      fetch(VISIT_COUNTER_API)
+        .then(r => r.json())
+        .then(d => setCount(d.total))
+        .catch(() => {});
+    } else {
+      fetch(VISIT_COUNTER_API, { method: 'POST' })
+        .then(r => r.json())
+        .then(d => { setCount(d.total); localStorage.setItem(key, today); })
+        .catch(() => {});
+    }
   }, []);
 
   if (count === null) return null;
