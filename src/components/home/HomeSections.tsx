@@ -162,30 +162,6 @@ function PopularPosts() {
         .eye-right { animation: wink-right 5.5s ease-in-out 1.2s infinite; }
       `}</style>
 
-      <section className="py-16 bg-orange-50 flex justify-center">
-        <button
-          onClick={scrollToList}
-          className="popular-btn relative font-black px-14 py-8 rounded-[2.5rem] transition-all duration-300 flex items-center gap-8 cursor-pointer"
-          style={{
-            background: "linear-gradient(135deg, #fde68a 0%, #fb923c 35%, #f472b6 70%, #a78bfa 100%)",
-            border: "4px solid rgba(255,255,255,0.7)",
-          }}
-        >
-          <div className="splat-wrap relative flex-shrink-0" style={{ width: 160, height: 160 }}>
-            <img
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
-              alt="клякса"
-              style={{ width: 160, height: 160, objectFit: "contain", display: "block" }}
-            />
-          </div>
-          <div className="text-left">
-            <div className="text-sm font-bold text-white/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
-            <div className="text-4xl font-black text-white leading-tight drop-shadow-lg">Статьи в топе</div>
-            <div className="text-white/70 text-base font-semibold mt-1">Нажми — увидишь ↓</div>
-          </div>
-        </button>
-      </section>
-
       <section id="popular-posts-list" className="py-14 bg-orange-50">
         <div className="max-w-4xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-4">
@@ -214,6 +190,31 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
 
   return (
     <>
+      {/* КНОПКА СТАТЬИ В ТОПЕ */}
+      <section className="py-16 bg-white flex justify-center">
+        <button
+          onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
+          className="popular-btn relative font-black px-14 py-8 rounded-[2.5rem] transition-all duration-300 flex items-center gap-8 cursor-pointer"
+          style={{
+            background: "linear-gradient(135deg, #fde68a 0%, #fb923c 35%, #f472b6 70%, #a78bfa 100%)",
+            border: "4px solid rgba(255,255,255,0.7)",
+          }}
+        >
+          <div className="splat-wrap relative flex-shrink-0" style={{ width: 160, height: 160 }}>
+            <img
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
+              alt="клякса"
+              style={{ width: 160, height: 160, objectFit: "contain", display: "block" }}
+            />
+          </div>
+          <div className="text-left">
+            <div className="text-sm font-bold text-white/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
+            <div className="text-4xl font-black text-white leading-tight drop-shadow-lg">Статьи в топе</div>
+            <div className="text-white/70 text-base font-semibold mt-1">Нажми — увидишь ↓</div>
+          </div>
+        </button>
+      </section>
+
       {/* BLOG PROMO */}
       <section id="blog-promo" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4">
