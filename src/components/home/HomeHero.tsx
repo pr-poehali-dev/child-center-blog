@@ -21,7 +21,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
 
         {/* ЗАГОЛОВОК */}
         <div className="text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-8 mb-6">
+          <div className="inline-flex items-center gap-16 mb-6">
             <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
               <span>✨</span> Детский центр «Рыбка Долли»
             </div>
