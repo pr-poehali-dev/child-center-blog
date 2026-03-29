@@ -28,15 +28,19 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             <div className="flex flex-col items-center gap-2 flex-shrink-0">
               <button
                 onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
-                className="w-20 h-20 rounded-full flex items-center justify-center transition-all hover:-translate-y-1 active:translate-y-0.5"
+                className="w-20 h-20 rounded-full flex items-center justify-center transition-all hover:-translate-y-1 active:translate-y-0.5 overflow-hidden"
                 style={{
-                  background: "radial-gradient(circle at 35% 35%, #fde68a, #fb923c 55%, #c2410c)",
-                  boxShadow: "0 6px 0 #92400e, 0 10px 24px #fb923c88, inset 0 2px 6px rgba(255,255,255,0.4)"
+                  background: "transparent",
+                  boxShadow: "0 6px 0 #a855f788, 0 10px 24px #f472b688, inset 0 2px 6px rgba(255,255,255,0.4)"
                 }}
               >
-                <span className="text-3xl">📚</span>
+                <img
+                  src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2850c281-f2a3-4d3e-897e-1503a15e2bd7.jpg"
+                  alt="клякса"
+                  className="w-full h-full object-contain"
+                />
               </button>
-              <span className="text-xs font-black text-orange-600 tracking-wide">Популярные статьи</span>
+              <span className="text-xs font-black text-orange-600 tracking-wide">Статьи в топе</span>
             </div>
           </div>
           <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">

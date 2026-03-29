@@ -140,29 +140,48 @@ function PopularPosts() {
     <>
       <style>{`
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 8px 0 #c2410c, 0 0 18px 4px #fb923c88, 0 12px 32px 0 #fb923c44; }
-          50% { box-shadow: 0 8px 0 #c2410c, 0 0 36px 10px #fb923ccc, 0 16px 40px 0 #fb923c77; }
+          0%, 100% { box-shadow: 0 10px 0 #a855f7aa, 0 0 24px 6px #f472b688, 0 14px 36px 0 #fb923c44; }
+          50% { box-shadow: 0 10px 0 #a855f7cc, 0 0 44px 14px #f472b6cc, 0 18px 48px 0 #fb923c77; }
         }
-        @keyframes book-float {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-6px) scale(1.07); }
+        @keyframes splat-float {
+          0%, 100% { transform: translateY(0px) scale(1) rotate(-2deg); }
+          50% { transform: translateY(-8px) scale(1.06) rotate(2deg); }
         }
-        .popular-btn { animation: glow-pulse 2.2s ease-in-out infinite; }
-        .popular-btn:hover { animation: none; box-shadow: 0 4px 0 #c2410c, 0 0 48px 16px #fb923cee, 0 16px 48px 0 #fb923c99; transform: translateY(-2px) scale(1.03); }
-        .book-icon { animation: book-float 2.2s ease-in-out infinite; display: inline-block; }
+        @keyframes wink {
+          0%, 85%, 100% { transform: scaleY(1); }
+          90% { transform: scaleY(0.08); }
+        }
+        .popular-btn { animation: glow-pulse 2.4s ease-in-out infinite; }
+        .popular-btn:hover { animation: none; box-shadow: 0 6px 0 #a855f7, 0 0 60px 20px #f472b6cc, 0 18px 52px 0 #fb923c99; transform: translateY(-3px) scale(1.04); }
+        .splat-img { animation: splat-float 2.4s ease-in-out infinite; display: inline-block; filter: drop-shadow(0 8px 16px rgba(248,113,113,0.5)); }
+        .wink-eye { animation: wink 3.5s ease-in-out infinite; display: inline-block; transform-origin: center; }
       `}</style>
 
       <section className="py-12 bg-orange-50 flex justify-center">
         <button
           onClick={scrollToList}
-          className="popular-btn bg-gradient-to-br from-orange-400 via-orange-500 to-amber-400 text-white font-black px-10 py-6 rounded-3xl transition-all duration-300 flex items-center gap-4 cursor-pointer"
+          className="popular-btn relative font-black px-8 py-5 rounded-3xl transition-all duration-300 flex items-center gap-5 cursor-pointer overflow-visible"
+          style={{
+            background: "linear-gradient(135deg, #fde68a 0%, #fb923c 40%, #f472b6 75%, #a78bfa 100%)",
+            border: "3px solid rgba(255,255,255,0.6)",
+          }}
         >
-          <span className="book-icon text-4xl">📚</span>
-          <div className="text-left">
-            <div className="text-xs font-bold opacity-80 tracking-widest uppercase mb-0.5">Читают чаще всего</div>
-            <div className="text-2xl font-black leading-tight">Популярные статьи</div>
+          <div className="relative w-20 h-20 flex-shrink-0">
+            <img
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2850c281-f2a3-4d3e-897e-1503a15e2bd7.jpg"
+              alt="клякса"
+              className="splat-img w-20 h-20 object-contain"
+            />
+            <span
+              className="wink-eye absolute"
+              style={{ top: "34%", left: "38%", width: 10, height: 14, background: "#1e1b4b", borderRadius: "50%", transformOrigin: "center" }}
+            />
           </div>
-          <span className="ml-2 text-2xl opacity-80">↓</span>
+          <div className="text-left">
+            <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-0.5">Читают чаще всего</div>
+            <div className="text-2xl font-black text-white leading-tight drop-shadow-md">Статьи в топе</div>
+          </div>
+          <span className="ml-2 text-2xl text-white/80">↓</span>
         </button>
       </section>
 

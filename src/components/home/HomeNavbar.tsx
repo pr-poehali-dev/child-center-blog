@@ -56,9 +56,15 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
           <NavBookingDropdown onFormClick={onFormClick} />
           <button
             onClick={() => { setMenuOpen(false); document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="flex items-center gap-2 bg-orange-400 text-white font-black px-4 py-2 rounded-full text-sm w-fit"
+            className="flex items-center gap-2 font-black px-4 py-2 rounded-full text-sm w-fit text-white"
+            style={{ background: "linear-gradient(135deg, #fb923c, #f472b6, #a78bfa)", boxShadow: "0 4px 0 #a855f788" }}
           >
-            <span>📚</span> Популярные статьи
+            <img
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2850c281-f2a3-4d3e-897e-1503a15e2bd7.jpg"
+              alt="клякса"
+              className="w-6 h-6 object-contain"
+            />
+            Статьи в топе
           </button>
         </div>
       )}
