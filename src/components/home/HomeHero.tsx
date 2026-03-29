@@ -21,26 +21,23 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
 
         {/* ЗАГОЛОВОК */}
         <div className="text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-3 mb-6">
+          <div className="inline-flex items-center gap-8 mb-6">
             <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-5 py-2 rounded-full" style={{fontFamily: 'Pacifico, cursive', fontSize: '1.25rem'}}>
               <span>✨</span> Детский центр «Рыбка Долли»
             </div>
-            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+            <div className="flex flex-col items-center gap-1 flex-shrink-0">
               <button
                 onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
-                className="w-20 h-20 rounded-full flex items-center justify-center transition-all hover:-translate-y-1 active:translate-y-0.5 overflow-hidden"
-                style={{
-                  background: "transparent",
-                  boxShadow: "0 6px 0 #a855f788, 0 10px 24px #f472b688, inset 0 2px 6px rgba(255,255,255,0.4)"
-                }}
+                className="w-28 h-28 rounded-full flex items-center justify-center transition-all hover:-translate-y-2 active:translate-y-0.5"
+                style={{ background: "transparent", border: "none", padding: 0 }}
               >
                 <img
                   src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
                   alt="клякса"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain drop-shadow-lg"
                 />
               </button>
-              <span className="text-xs font-black text-orange-600 tracking-wide">Статьи в топе</span>
+              <span className="text-sm font-black text-orange-600 tracking-wide">Статьи в топе</span>
             </div>
           </div>
           <h1 className="font-nunito text-5xl md:text-6xl font-black text-gray-800 leading-tight mb-4">
