@@ -173,9 +173,9 @@ function PopularPosts() {
         >
           <div className="splat-wrap relative flex-shrink-0" style={{ width: 160, height: 160 }}>
             <img
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2850c281-f2a3-4d3e-897e-1503a15e2bd7.jpg"
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
               alt="клякса"
-              style={{ width: 160, height: 160, objectFit: "contain", display: "block", mixBlendMode: "multiply" }}
+              style={{ width: 160, height: 160, objectFit: "contain", display: "block" }}
             />
           </div>
           <div className="text-left">
