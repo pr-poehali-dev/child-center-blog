@@ -28,13 +28,18 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             <div className="flex flex-col items-center gap-1 flex-shrink-0">
               <button
                 onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
-                className="w-28 h-28 rounded-full flex items-center justify-center transition-all hover:-translate-y-2 active:translate-y-0.5"
-                style={{ background: "transparent", border: "none", padding: 0 }}
+                className="w-28 h-28 rounded-full flex items-center justify-center transition-all duration-150 hover:-translate-y-2 active:translate-y-1"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  padding: 0,
+                  filter: "drop-shadow(0 8px 0px rgba(168,85,247,0.5)) drop-shadow(0 12px 20px rgba(244,114,182,0.4))",
+                }}
               >
                 <img
                   src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
                   alt="клякса"
-                  className="w-full h-full object-contain drop-shadow-lg"
+                  className="w-full h-full object-contain"
                 />
               </button>
               <span className="text-sm font-black text-orange-600 tracking-wide">Статьи в топе</span>
