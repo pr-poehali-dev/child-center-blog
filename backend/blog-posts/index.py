@@ -5,15 +5,33 @@ import uuid
 import hashlib
 import psycopg2
 import boto3
-
+import urllib.request
 
 SCHEMA = 't_p99892216_child_center_blog'
+BASE_URL = 'https://blogribkadolli.ru'
+YANDEX_USER_ID = '1462613238'
+YANDEX_HOST_ID = 'http:blogribkadolli.ru:80'
 CORS = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, X-Authorization',
     'Access-Control-Max-Age': '86400',
 }
+
+
+def ping_yandex(post_id: int):
+    token = os.environ.get('YANDEX_WEBMASTER_TOKEN', '')
+    if not token:
+        return
+    url = f'https://api.webmaster.yandex.net/v4/user/{YANDEX_USER_ID}/hosts/{YANDEX_HOST_ID}/reindex/tasks'
+    data = json.dumps({'data': [{'url': f'{BASE_URL}/blog/{post_id}'}]}).encode('utf-8')
+    req = urllib.request.Request(url, data=data, method='POST')
+    req.add_header('Authorization', f'OAuth {token}')
+    req.add_header('Content-Type', 'application/json')
+    try:
+        urllib.request.urlopen(req, timeout=5)
+    except Exception:
+        pass
 
 
 def check_auth(event: dict) -> bool:
@@ -142,6 +160,7 @@ def handler(event: dict, context) -> dict:
         conn.commit()
         cur.close()
         conn.close()
+        ping_yandex(row[0])
         return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat()})}
 
     if method == 'PUT':
