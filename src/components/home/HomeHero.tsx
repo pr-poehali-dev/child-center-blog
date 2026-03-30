@@ -80,12 +80,6 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" wrapperClassName="flex-1" />
           </div>
           <div className="flex flex-wrap justify-center gap-3 mt-3">
-            <button
-              onClick={() => onScrollTo("articles")}
-              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-3 rounded-full text-base border-2 border-orange-200 transition-all"
-            >
-              Читать блог
-            </button>
             <a
               href="https://vk.com/app6379730_-179759189#l=6"
               target="_blank"
