@@ -419,7 +419,7 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
                   </div>
                 </div>
                 <a
-                  href="https://www.google.com/search?q=Рыбка+Долли+детский+центр+Керчь"
+                  href="https://ribkadollli.ru"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-3 hover:shadow-md transition-all hover:-translate-y-0.5 w-full"
@@ -431,8 +431,8 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
                     <path d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" fill="#1976D2"/>
                   </svg>
                   <div>
-                    <div className="text-xs text-gray-400 font-semibold">Google</div>
-                    <div className="text-gray-700 font-semibold text-sm">Найти нас в Google</div>
+                    <div className="text-xs text-gray-400 font-semibold">Основной сайт</div>
+                    <div className="text-gray-700 font-semibold text-sm">ribkadollli.ru</div>
                   </div>
                 </a>
               </div>
@@ -456,7 +456,7 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
         <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
         <div className="mt-5">
           <a
-            href="https://www.google.com/search?q=Рыбка+Долли+детский+центр+Керчь"
+            href="https://ribkadollli.ru"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-white text-gray-700 font-bold px-5 py-2.5 rounded-full text-sm hover:shadow-lg transition-all hover:-translate-y-0.5"
