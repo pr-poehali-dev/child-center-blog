@@ -281,26 +281,24 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
               <h3 className="font-black text-lg text-gray-800 mb-3">Группа английского языка</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Новости, материалы и анонсы группы английского языка.</p>
             </div>
-            <div className="bg-purple-50 border border-purple-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=experiments")}>
-              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-200 shadow flex items-center justify-center bg-purple-100 text-4xl">
-                🔬
+            <div className="bg-purple-50 border border-purple-100 rounded-3xl p-8 hover:shadow-md transition-all hover:-translate-y-1">
+              <div className="text-center mb-5">
+                <div className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-purple-200 shadow flex items-center justify-center bg-purple-100 text-4xl">
+                  🎨
+                </div>
+                <h3 className="font-black text-lg text-gray-800">Творим с детьми</h3>
               </div>
-              <h3 className="font-black text-lg text-gray-800 mb-3">Экспериментаторы</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Увлекательные опыты и эксперименты — маленькие учёные открывают мир.</p>
-            </div>
-            <div className="bg-orange-50 border border-orange-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=chefs")}>
-              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-orange-200 shadow flex items-center justify-center bg-orange-100 text-4xl">
-                👨‍🍳
+              <div className="flex flex-col gap-2">
+                <button onClick={() => navigate("/blog?category=experiments")} className="flex items-center gap-2 bg-white rounded-2xl px-4 py-3 text-sm font-bold text-gray-700 hover:bg-purple-100 transition-colors text-left">
+                  <span className="text-xl">🔬</span> Экспериментаторы
+                </button>
+                <button onClick={() => navigate("/blog?category=chefs")} className="flex items-center gap-2 bg-white rounded-2xl px-4 py-3 text-sm font-bold text-gray-700 hover:bg-purple-100 transition-colors text-left">
+                  <span className="text-xl">👨‍🍳</span> Шеф-повара
+                </button>
+                <button onClick={() => navigate("/blog?category=masters")} className="flex items-center gap-2 bg-white rounded-2xl px-4 py-3 text-sm font-bold text-gray-700 hover:bg-purple-100 transition-colors text-left">
+                  <span className="text-xl">✨</span> Мастера вдохновения
+                </button>
               </div>
-              <h3 className="font-black text-lg text-gray-800 mb-3">Шеф-повара</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Кулинарные мастер-классы для детей — готовим вкусно и с радостью.</p>
-            </div>
-            <div className="bg-pink-50 border border-pink-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=masters")}>
-              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-pink-200 shadow flex items-center justify-center bg-pink-100 text-4xl">
-                🎨
-              </div>
-              <h3 className="font-black text-lg text-gray-800 mb-3">Мастера вдохновения</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">Творческие мастер-классы — рисуем, лепим и создаём шедевры вместе.</p>
             </div>
             <div className="bg-rose-50 border border-rose-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog/qa")}>
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-rose-200 shadow">
