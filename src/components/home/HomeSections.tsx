@@ -97,7 +97,8 @@ function ReviewForm() {
 
   return (
     <form onSubmit={handleSubmit} className="bg-orange-50 rounded-3xl p-8 border border-orange-100">
-      <h3 className="font-black text-xl text-gray-800 mb-5">Оставить отзыв</h3>
+      <h3 className="font-black text-xl text-gray-800 mb-1">Оставить отзыв в блоге</h3>
+      <p className="text-gray-400 text-sm mb-5">Отзыв появится на этом сайте после проверки</p>
       <div className="space-y-4">
         <div>
           <label className="text-xs font-bold text-gray-500 mb-1 block">Ваше имя</label>
