@@ -309,14 +309,7 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
               <p className="text-gray-500 text-sm leading-relaxed">Задайте вопрос нашим педагогам — отвечаем публично, чтобы помочь всем родителям.</p>
             </div>
           </div>
-          <div className="text-center">
-            <button
-              onClick={() => navigate("/blog")}
-              className="bg-orange-400 hover:bg-orange-500 text-white font-black px-10 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
-            >
-              Перейти в блог →
-            </button>
-          </div>
+
         </div>
       </section>
 
