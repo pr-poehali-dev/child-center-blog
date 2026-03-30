@@ -1,7 +1,33 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
+function usePageMeta(title: string, description: string) {
+  useEffect(() => {
+    const prev = document.title;
+    document.title = title;
+    const setMeta = (name: string, content: string) => {
+      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+      if (!el) { el = document.createElement("meta"); el.setAttribute("name", name); document.head.appendChild(el); }
+      el.content = content;
+    };
+    const setOg = (prop: string, content: string) => {
+      let el = document.querySelector(`meta[property="${prop}"]`) as HTMLMetaElement | null;
+      if (!el) { el = document.createElement("meta"); el.setAttribute("property", prop); document.head.appendChild(el); }
+      el.content = content;
+    };
+    setMeta("description", description);
+    setOg("og:title", title);
+    setOg("og:description", description);
+    return () => { document.title = prev; };
+  }, [title, description]);
+}
+
 export default function Contacts() {
+  usePageMeta(
+    "Контакты детского центра «Рыбка Долли» — Керчь, ул. Циолковского, 12",
+    "Адрес, телефон и часы работы детского центра «Рыбка Долли» в Керчи. Запись по телефону +7 (988) 152-16-98. Работаем пн–пт с 8:00 до 18:00. Первое занятие — бесплатно!"
+  );
   const navigate = useNavigate();
 
   return (
