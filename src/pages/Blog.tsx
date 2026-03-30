@@ -296,6 +296,8 @@ export default function Blog() {
   const validIds = CATEGORIES.map(c => c.id);
   const paramCat = searchParams.get("category") || "";
   const [activeTab, setActiveTab] = useState(validIds.includes(paramCat) ? paramCat : "tips");
+  const postsRef = useRef<HTMLDivElement>(null);
+  const scrolledRef = useRef(false);
   const seo = SEO_BY_CATEGORY[activeTab] ?? {
     title: "Блог детского центра «Рыбка Долли» — Керчь",
     description: "Блог детского центра «Рыбка Долли» в Керчи — советы педагогов, новости центра, статьи о развитии детей.",
@@ -319,6 +321,15 @@ export default function Blog() {
     loadPosts(activeTab);
     setSearchParams({ category: activeTab }, { replace: true });
   }, [activeTab]);
+
+  useEffect(() => {
+    if (paramCat && validIds.includes(paramCat) && !scrolledRef.current) {
+      scrolledRef.current = true;
+      setTimeout(() => {
+        postsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+    }
+  }, []);
 
   const activeCat = CATEGORIES.find(c => c.id === activeTab)!;
 
@@ -365,7 +376,7 @@ export default function Blog() {
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div ref={postsRef} className="max-w-3xl mx-auto px-4 py-8">
         {activeTab === "summer" && (
           <ContactDropdown label="Забронировать смену летнего клуба" emoji="☀️" colorClass="bg-yellow-400 hover:bg-yellow-500" />
         )}
