@@ -4,12 +4,12 @@ import { MAX_LINK, TG_LINK } from "./constants";
 
 function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormClick?: () => void }) {
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 min-w-max">
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 w-full">
       {onFormClick && (
         <>
           <button
             onClick={() => { onFormClick(); onClose(); }}
-            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full text-left whitespace-nowrap"
+            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full text-left"
           >
             <span className="text-xl">📋</span>
             Заполнить форму
@@ -22,7 +22,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClose}
-        className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 whitespace-nowrap"
+        className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full"
       >
         <span className="text-xl">💬</span>
         Написать в MAX
@@ -33,7 +33,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClose}
-        className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 whitespace-nowrap"
+        className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full"
       >
         <span className="text-xl">✈️</span>
         Написать в Telegram
@@ -64,7 +64,7 @@ export function ContactDropdown({ label, className, wrapperClassName }: { label:
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 mt-2">
+        <div className="absolute top-full left-0 right-0 mt-2">
           <DropdownMenu onClose={() => setOpen(false)} />
         </div>
       )}
@@ -124,7 +124,7 @@ export function BookingDropdown({ onFormClick, className }: { onFormClick: () =>
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 mt-2">
+        <div className="absolute top-full left-0 right-0 mt-2">
           <DropdownMenu onClose={() => setOpen(false)} onFormClick={onFormClick} />
         </div>
       )}
