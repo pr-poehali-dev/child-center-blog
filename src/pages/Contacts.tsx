@@ -38,6 +38,7 @@ export default function Contacts() {
                 <h2 className="font-black text-gray-800 text-lg mb-1">Адрес</h2>
                 <p className="text-gray-600 leading-relaxed">
                   Республика Крым, г. Керчь<br />
+                  ул. Циолковского, 12<br />
                   <span className="text-gray-400 text-sm">Детский развивающий центр «Рыбка Долли»</span>
                 </p>
               </div>
@@ -60,7 +61,7 @@ export default function Contacts() {
                     +7 (978) 712-03-53
                   </a>
                 </div>
-                <p className="text-gray-400 text-sm mt-1">Звонки и WhatsApp</p>
+                <p className="text-gray-400 text-sm mt-1">Звонки, WhatsApp и Макс</p>
               </div>
             </div>
           </div>
@@ -96,8 +97,8 @@ export default function Contacts() {
                 <h2 className="font-black text-gray-800 text-lg mb-3">Режим работы</h2>
                 <div className="space-y-2">
                   {[
-                    { day: "Понедельник — пятница", time: "8:00 — 20:00" },
-                    { day: "Суббота", time: "9:00 — 18:00" },
+                    { day: "Понедельник — пятница", time: "8:00 — 18:00" },
+                    { day: "Суббота", time: "Выходной" },
                     { day: "Воскресенье", time: "Выходной" },
                   ].map((item) => (
                     <div key={item.day} className="flex justify-between text-sm">
