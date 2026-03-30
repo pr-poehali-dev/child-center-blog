@@ -357,7 +357,18 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
             ))}
             <LiveReviews />
           </div>
-          <div className="max-w-lg mx-auto">
+          <div className="max-w-lg mx-auto space-y-4">
+            <a
+              href="https://yandex.ru/maps/org/rybka_dolli/1719871147/reviews/?add-review=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full bg-[#FC3F1D] hover:bg-[#e5361a] text-white font-black py-4 rounded-2xl transition-colors text-base shadow-md"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.5 2C7.25 2 3 6.25 3 11.5C3 16.75 7.25 21 12.5 21C17.75 21 22 16.75 22 11.5C22 6.25 17.75 2 12.5 2ZM14 16H11V13H8L12.5 8L17 13H14V16Z" fill="white"/>
+              </svg>
+              Оставить отзыв на Яндексе
+            </a>
             <ReviewForm />
           </div>
         </div>
