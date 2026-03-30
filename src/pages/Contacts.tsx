@@ -136,6 +136,17 @@ export default function Contacts() {
                 title="Карта Керчи"
               />
             </div>
+            <div className="p-4 border-t border-gray-100">
+              <a
+                href="https://yandex.ru/maps/?rtext=~44.4576,36.4769&rtt=auto&text=Керчь%2C%20улица%20Циолковского%2C%2012"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full bg-orange-400 hover:bg-orange-500 text-white font-bold py-3 rounded-2xl transition-colors"
+              >
+                <Icon name="Navigation" size={18} />
+                Построить маршрут
+              </a>
+            </div>
           </div>
         </div>
 
