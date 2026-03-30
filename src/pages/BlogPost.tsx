@@ -69,6 +69,52 @@ export default function BlogPost() {
           setOg("og:type", "article");
           setOg("og:url", `https://blogribkadolli.ru/blog/${id}`);
           if (firstImg) setOg("og:image", firstImg);
+
+          const schema: Record<string, unknown> = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": d.post.title,
+            "description": desc,
+            "url": `https://blogribkadolli.ru/blog/${id}`,
+            "datePublished": d.post.created_at,
+            "dateModified": d.post.created_at,
+            "inLanguage": "ru-RU",
+            "publisher": {
+              "@type": "Organization",
+              "name": "Детский центр «Рыбка Долли»",
+              "url": "https://blogribkadolli.ru/",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png"
+              }
+            },
+            "isPartOf": {
+              "@type": "Blog",
+              "name": "Блог детского центра «Рыбка Долли»",
+              "url": "https://blogribkadolli.ru/blog"
+            }
+          };
+          if (d.post.teacher_name) {
+            schema["author"] = {
+              "@type": "Person",
+              "name": d.post.teacher_name,
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Детский центр «Рыбка Долли»"
+              }
+            };
+          }
+          if (firstImg) {
+            schema["image"] = { "@type": "ImageObject", "url": firstImg };
+          }
+          let ldEl = document.querySelector('script[data-schema="blogpost"]') as HTMLScriptElement | null;
+          if (!ldEl) {
+            ldEl = document.createElement("script");
+            ldEl.setAttribute("type", "application/ld+json");
+            ldEl.setAttribute("data-schema", "blogpost");
+            document.head.appendChild(ldEl);
+          }
+          ldEl.textContent = JSON.stringify(schema);
         }
       })
       .catch(() => {})

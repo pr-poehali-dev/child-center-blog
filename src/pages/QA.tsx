@@ -179,7 +179,37 @@ export default function QA() {
       const url = filterTeacher ? `${QA_API}?teacher_id=${filterTeacher}` : QA_API;
       const res = await fetch(url);
       const data = await res.json();
-      setQuestions(data.questions || []);
+      const qs: Question[] = data.questions || [];
+      setQuestions(qs);
+
+      const answered = qs.filter(q => q.answer);
+      if (answered.length > 0) {
+        const faqSchema = {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": answered.map(q => ({
+            "@type": "Question",
+            "name": q.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": q.answer,
+              "author": {
+                "@type": "Person",
+                "name": q.teacher?.name,
+                "worksFor": { "@type": "Organization", "name": "Детский центр «Рыбка Долли»" }
+              }
+            }
+          }))
+        };
+        let ldEl = document.querySelector('script[data-schema="faq"]') as HTMLScriptElement | null;
+        if (!ldEl) {
+          ldEl = document.createElement("script");
+          ldEl.setAttribute("type", "application/ld+json");
+          ldEl.setAttribute("data-schema", "faq");
+          document.head.appendChild(ldEl);
+        }
+        ldEl.textContent = JSON.stringify(faqSchema);
+      }
     } finally {
       setLoading(false);
     }
