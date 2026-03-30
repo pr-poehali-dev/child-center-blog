@@ -10,6 +10,8 @@
     <meta name="yandex-verification" content="7d4ca55b6376ecc0"/>
     <meta name="geo.region" content="RU-KR"/>
     <meta name="geo.placename" content="Керчь"/>
+    <meta name="geo.position" content="45.3601;36.4748"/>
+    <meta name="ICBM" content="45.3601, 36.4748"/>
     <link rel="canonical" href="https://blogribkadolli.ru/"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,17 +34,40 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
+      "@type": ["EducationalOrganization", "LocalBusiness"],
       "name": "Детский центр «Рыбка Долли»",
       "description": "Детский центр развития в Керчи — занятия для детей, английский язык, группа продлённого дня, летний клуб. Первое занятие бесплатно!",
-      "url": "https://child-center-blog.poehali.app/",
+      "url": "https://blogribkadolli.ru/",
       "telephone": ["+7-988-152-16-98", "+7-978-712-03-53"],
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "ул. Циолковского, 12",
         "addressLocality": "Керчь",
+        "addressRegion": "Республика Крым",
         "addressCountry": "RU"
       },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.3601,
+        "longitude": 36.4748
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "10:00",
+          "closes": "15:00"
+        }
+      ],
+      "priceRange": "₽₽",
+      "currenciesAccepted": "RUB",
+      "paymentAccepted": "Cash, Card",
       "sameAs": ["https://vk.com/rybka_dolli", "https://t.me/irinadolli"],
       "foundingDate": "2016",
       "slogan": "Растём вместе с радостью!"

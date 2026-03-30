@@ -2,60 +2,75 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://blogribkadolli.ru/</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://blogribkadolli.ru/blog</loc>
-    <changefreq>daily</changefreq>
+    <loc>https://blogribkadolli.ru/contacts</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://blogribkadolli.ru/blog?category=tips</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://blogribkadolli.ru/blog</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://blogribkadolli.ru/blog?category=tips</loc>
+    <lastmod>2026-03-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://blogribkadolli.ru/blog?category=life</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://blogribkadolli.ru/blog?category=detail</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://blogribkadolli.ru/blog?category=summer</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://blogribkadolli.ru/blog?category=afterschool</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://blogribkadolli.ru/blog?category=english</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://blogribkadolli.ru/blog/qa</loc>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  <url><loc>https://blogribkadolli.ru/blog/4</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/11</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/12</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/13</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/14</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/15</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/16</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/17</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/18</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/19</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/20</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/21</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://blogribkadolli.ru/blog/22</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/4</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/11</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/12</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/13</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/14</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/15</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/16</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/17</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/18</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/19</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/20</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/21</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://blogribkadolli.ru/blog/22</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>
