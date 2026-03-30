@@ -7,7 +7,7 @@ export const NAV_LINKS = [
   { label: "Блог", id: "blog-link" },
   { label: "Команда", id: "team" },
   { label: "Отзывы", id: "reviews" },
-  { label: "Контакты", id: "contacts" },
+  { label: "Контакты", id: "contacts-link" },
 ];
 
 export const TEAM = [

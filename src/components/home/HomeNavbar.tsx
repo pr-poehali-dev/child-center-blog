@@ -19,6 +19,11 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
       navigate("/blog");
       return;
     }
+    if (id === "contacts-link") {
+      setMenuOpen(false);
+      navigate("/contacts");
+      return;
+    }
     setMenuOpen(false);
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
