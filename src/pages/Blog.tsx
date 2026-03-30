@@ -49,6 +49,18 @@ const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = 
     title: "Английский язык для детей в Керчи — «Рыбка Долли» | С 4 лет",
     description: "Занятия английским языком для детей в Керчи в игровой форме. Опытный педагог, малые группы, быстрый результат. Детский центр «Рыбка Долли» — запись на пробный урок.",
   },
+  experiments: {
+    title: "Экспериментаторы — Творим с детьми | «Рыбка Долли» Керчь",
+    description: "Увлекательные опыты и эксперименты для детей в центре «Рыбка Долли» в Керчи. Маленькие учёные открывают мир через творчество и науку.",
+  },
+  chefs: {
+    title: "Шеф-повара — Творим с детьми | «Рыбка Долли» Керчь",
+    description: "Кулинарные мастер-классы для детей в центре «Рыбка Долли» в Керчи. Дети готовят вкусные блюда, развивают самостоятельность и любовь к творчеству.",
+  },
+  masters: {
+    title: "Мастера вдохновения — Творим с детьми | «Рыбка Долли» Керчь",
+    description: "Творческие мастер-классы и арт-занятия для детей в центре «Рыбка Долли» в Керчи. Рисуем, лепим, создаём шедевры и вдохновляем друг друга.",
+  },
 };
 
 const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
@@ -114,6 +126,9 @@ const CATEGORIES = [
   { id: "summer",      label: "Лето с нами. Новости летнего клуба", emoji: "☀️", color: "bg-yellow-50",  border: "border-yellow-200",  tag: "bg-yellow-100 text-yellow-700"  },
   { id: "afterschool", label: "Группа продлённого дня",    emoji: "📚", color: "bg-indigo-50",  border: "border-indigo-200",  tag: "bg-indigo-100 text-indigo-700"  },
   { id: "english",     label: "Группа английского языка", emoji: "🇬🇧", color: "bg-sky-50",    border: "border-sky-200",    tag: "bg-sky-100 text-sky-700"        },
+  { id: "experiments", label: "Экспериментаторы",         emoji: "🔬", color: "bg-purple-50",  border: "border-purple-200",  tag: "bg-purple-100 text-purple-700"  },
+  { id: "chefs",       label: "Шеф-повара",               emoji: "👨‍🍳", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700"  },
+  { id: "masters",     label: "Мастера вдохновения",      emoji: "🎨", color: "bg-pink-50",    border: "border-pink-200",    tag: "bg-pink-100 text-pink-700"      },
 ];
 
 interface MediaItem {

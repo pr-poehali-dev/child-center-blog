@@ -21,6 +21,9 @@ export const BLOG_CATEGORIES = [
   { id: "summer",      label: "Лето с нами. Новости летнего клуба", emoji: "☀️" },
   { id: "afterschool", label: "Группа продлённого дня",      emoji: "📚" },
   { id: "english",     label: "Группа английского языка",   emoji: "🇬🇧" },
+  { id: "experiments", label: "Экспериментаторы",            emoji: "🔬" },
+  { id: "chefs",       label: "Шеф-повара",                  emoji: "👨‍🍳" },
+  { id: "masters",     label: "Мастера вдохновения",         emoji: "🎨" },
 ];
 
 export interface Booking {

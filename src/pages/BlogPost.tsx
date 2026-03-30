@@ -10,7 +10,10 @@ const CATEGORIES: Record<string, { label: string; emoji: string; color: string; 
   detail:      { label: "Подробно о важном",               emoji: "📖", color: "bg-teal-50",   border: "border-teal-200",   tag: "bg-teal-100 text-teal-700"    },
   summer:      { label: "Лето с нами. Летний клуб",        emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700"},
   afterschool: { label: "Группа продлённого дня",          emoji: "📚", color: "bg-indigo-50", border: "border-indigo-200", tag: "bg-indigo-100 text-indigo-700"},
-  english:     { label: "Группа английского языка",        emoji: "🇬🇧", color: "bg-sky-50",   border: "border-sky-200",    tag: "bg-sky-100 text-sky-700"      },
+  english:     { label: "Группа английского языка",        emoji: "🇬🇧", color: "bg-sky-50",    border: "border-sky-200",    tag: "bg-sky-100 text-sky-700"       },
+  experiments: { label: "Экспериментаторы",                emoji: "🔬", color: "bg-purple-50", border: "border-purple-200", tag: "bg-purple-100 text-purple-700" },
+  chefs:       { label: "Шеф-повара",                      emoji: "👨‍🍳", color: "bg-orange-50", border: "border-orange-200", tag: "bg-orange-100 text-orange-700" },
+  masters:     { label: "Мастера вдохновения",              emoji: "🎨", color: "bg-pink-50",   border: "border-pink-200",   tag: "bg-pink-100 text-pink-700"     },
 };
 
 interface MediaItem { type: "image" | "video"; url: string; }
