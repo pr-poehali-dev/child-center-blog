@@ -94,7 +94,7 @@ export function NavBookingDropdown({ onFormClick }: { onFormClick: () => void })
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={16} />
       </button>
       {open && (
-        <div className="absolute top-full right-0 mt-2">
+        <div className="absolute top-full right-0 mt-2 w-64">
           <DropdownMenu onClose={() => setOpen(false)} onFormClick={onFormClick} />
         </div>
       )}
