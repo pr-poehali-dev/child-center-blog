@@ -286,7 +286,8 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
                 <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-200 shadow">
                   <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/3a509872-bc53-4f4f-9a6d-82c65ff04619.png" alt="Творим с детьми" className="w-full h-full object-cover object-top" />
                 </div>
-                <h3 className="font-black text-lg text-gray-800">Творим с детьми</h3>
+                <h3 className="font-black text-lg text-gray-800 mb-3">Творим с детьми</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">Все секреты мастер-классов тут ↓</p>
               </div>
               <div className="flex flex-col gap-2">
                 <button onClick={() => navigate("/blog?category=experiments")} className="flex items-center gap-2 bg-white rounded-2xl px-4 py-3 text-sm font-bold text-gray-700 hover:bg-purple-100 transition-colors text-left">
