@@ -128,7 +128,7 @@ export default function Contacts() {
             </div>
             <div className="aspect-[16/9]">
               <iframe
-                src="https://yandex.ru/map-widget/v1/?text=Керчь%2C%20Республика%20Крым&z=13&l=map"
+                src="https://yandex.ru/map-widget/v1/?text=Керчь%2C%20улица%20Циолковского%2C%2012&z=17&l=map"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
