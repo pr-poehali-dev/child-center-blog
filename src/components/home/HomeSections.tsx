@@ -281,6 +281,27 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
               <h3 className="font-black text-lg text-gray-800 mb-3">Группа английского языка</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Новости, материалы и анонсы группы английского языка.</p>
             </div>
+            <div className="bg-purple-50 border border-purple-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=experiments")}>
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-200 shadow flex items-center justify-center bg-purple-100 text-4xl">
+                🔬
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Экспериментаторы</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Увлекательные опыты и эксперименты — маленькие учёные открывают мир.</p>
+            </div>
+            <div className="bg-orange-50 border border-orange-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=chefs")}>
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-orange-200 shadow flex items-center justify-center bg-orange-100 text-4xl">
+                👨‍🍳
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Шеф-повара</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Кулинарные мастер-классы для детей — готовим вкусно и с радостью.</p>
+            </div>
+            <div className="bg-pink-50 border border-pink-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=masters")}>
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-pink-200 shadow flex items-center justify-center bg-pink-100 text-4xl">
+                🎨
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Мастера вдохновения</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Творческие мастер-классы — рисуем, лепим и создаём шедевры вместе.</p>
+            </div>
             <div className="bg-rose-50 border border-rose-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog/qa")}>
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-rose-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/15744313-9270-4292-bb6b-c44dc00a492a.png" alt="Спрашивали — Отвечаем" className="w-full h-full object-cover object-top" />
