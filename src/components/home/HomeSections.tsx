@@ -283,8 +283,8 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
             </div>
             <div className="bg-purple-50 border border-purple-100 rounded-3xl p-8 hover:shadow-md transition-all hover:-translate-y-1">
               <div className="text-center mb-5">
-                <div className="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-purple-200 shadow flex items-center justify-center bg-purple-100 text-4xl">
-                  🎨
+                <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-200 shadow">
+                  <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/3a509872-bc53-4f4f-9a6d-82c65ff04619.png" alt="Творим с детьми" className="w-full h-full object-cover object-top" />
                 </div>
                 <h3 className="font-black text-lg text-gray-800">Творим с детьми</h3>
               </div>
