@@ -52,12 +52,14 @@ export default function Contacts() {
               </div>
               <div>
                 <h2 className="font-black text-gray-800 text-lg mb-1">Телефон</h2>
-                <a
-                  href="tel:+79780000000"
-                  className="text-orange-500 font-bold text-lg hover:text-orange-600 transition-colors"
-                >
-                  +7 (978) 000-00-00
-                </a>
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+79881521698" className="text-orange-500 font-bold text-lg hover:text-orange-600 transition-colors">
+                    +7 (988) 152-16-98
+                  </a>
+                  <a href="tel:+79787120353" className="text-orange-500 font-bold text-lg hover:text-orange-600 transition-colors">
+                    +7 (978) 712-03-53
+                  </a>
+                </div>
                 <p className="text-gray-400 text-sm mt-1">Звонки и WhatsApp</p>
               </div>
             </div>
