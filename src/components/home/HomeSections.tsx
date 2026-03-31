@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
+import StickerTag from "@/components/ui/sticker-tag";
 import { TEAM, REVIEWS } from "./constants";
+
+const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
 const REVIEWS_API = "https://functions.poehali.dev/1c662b6b-5f56-4e25-b517-f6fdfc24912b";
 const VISIT_COUNTER_API = "https://functions.poehali.dev/7d977bf0-24cd-492c-aa4e-0c0324d97f97";
@@ -227,6 +230,11 @@ function PopularPosts() {
 
 export default function HomeSections({ onFormClick }: HomeSectionsProps) {
   const navigate = useNavigate();
+  const [stickers, setStickers] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch(STICKERS_API).then(r => r.json()).then(d => setStickers(d.stickers || {})).catch(() => {});
+  }, []);
 
   return (
     <>
@@ -239,49 +247,56 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
             <p className="text-gray-500 mt-3 text-lg">Живые истории, советы и важные мысли от педагогов центра</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-amber-50 border border-amber-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=tips")}>
+            <div className="relative bg-amber-50 border border-amber-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=tips")}>
+              {stickers["tips"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["tips"]} size="md" /></div>}
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-amber-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/0197539d-8a43-48cb-984f-105c0ea5576e.png" alt="Советы от педагога" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Советы от педагога</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Практические советы и наблюдения от наших специалистов — для родителей и детей.</p>
             </div>
-            <div className="bg-rose-50 border border-rose-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=life")}>
+            <div className="relative bg-rose-50 border border-rose-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=life")}>
+              {stickers["life"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["life"]} size="md" /></div>}
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-rose-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/22e93845-4c2c-4628-880d-afcfec7e8786.png" alt="Наша жизнь на ладони" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Наша жизнь на ладони</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Фото и видео из жизни центра: занятия, праздники, улыбки и добрые моменты.</p>
             </div>
-            <div className="bg-teal-50 border border-teal-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=detail")}>
+            <div className="relative bg-teal-50 border border-teal-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=detail")}>
+              {stickers["detail"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["detail"]} size="md" /></div>}
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-teal-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/a71a6275-d7f8-42f8-aa42-3c09f3686564.png" alt="Подробно о важном" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Подробно о важном</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Развёрнутые материалы о воспитании, развитии и важных темах для семьи.</p>
             </div>
-            <div className="bg-yellow-50 border border-yellow-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=summer")}>
+            <div className="relative bg-yellow-50 border border-yellow-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=summer")}>
+              {stickers["summer"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["summer"]} size="md" /></div>}
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-yellow-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/2616ec37-92bb-4d46-8895-ba8e9193a111.png" alt="Лето с нами" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Лето с нами. Новости летнего клуба</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Всё о летнем клубе: программа, новости, яркие моменты и анонсы.</p>
             </div>
-            <div className="bg-indigo-50 border border-indigo-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=afterschool")}>
+            <div className="relative bg-indigo-50 border border-indigo-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=afterschool")}>
+              {stickers["afterschool"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["afterschool"]} size="md" /></div>}
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-indigo-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/6e1b8fbb-a82f-46f2-bf6e-293d270f8290.png" alt="Группа продлённого дня" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Группа продлённого дня</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Всё о группе продлённого дня: расписание, новости и полезная информация.</p>
             </div>
-            <div className="bg-sky-50 border border-sky-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog?category=english")}>
+            <div className="relative bg-sky-50 border border-sky-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=english")}>
+              {stickers["english"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["english"]} size="md" /></div>}
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-sky-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/cfee62df-ab60-46fb-98c2-d612abb288c8.png" alt="Группа английского языка" className="w-full h-full object-cover object-center" />
               </div>
               <h3 className="font-black text-lg text-gray-800 mb-3">Группа английского языка</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Новости, материалы и анонсы группы английского языка.</p>
             </div>
-            <div className="bg-purple-50 border border-purple-100 rounded-3xl p-8 hover:shadow-md transition-all hover:-translate-y-1">
+            <div className="relative bg-purple-50 border border-purple-100 rounded-3xl p-8 hover:shadow-md transition-all hover:-translate-y-1 overflow-visible">
+              {(stickers["experiments"] || stickers["chefs"] || stickers["masters"]) && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["experiments"] || stickers["chefs"] || stickers["masters"]} size="md" /></div>}
               <div className="text-center mb-5">
                 <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-purple-200 shadow">
                   <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/3a509872-bc53-4f4f-9a6d-82c65ff04619.png" alt="Творим с детьми" className="w-full h-full object-cover object-top" />
