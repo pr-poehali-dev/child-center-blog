@@ -22,6 +22,7 @@ export default function BlogManager() {
   const [editingPost, setEditingPost] = useState<Post | null>(null);
 
   const fileRef = useRef<HTMLInputElement>(null);
+  const docRef = useRef<HTMLInputElement>(null);
   const teacherPhotoRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -69,14 +70,35 @@ export default function BlogManager() {
     });
   };
 
-  const uploadToS3 = async (dataUrl: string): Promise<string> => {
+  const uploadToS3 = async (dataUrl: string, fileName?: string): Promise<string> => {
     const res = await fetch(UPLOAD_API, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-      body: JSON.stringify({ data_url: dataUrl }),
+      body: JSON.stringify({ data_url: dataUrl, file_name: fileName }),
     });
     const data = await res.json();
     return data.url;
+  };
+
+  const handleDocAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (docRef.current) docRef.current.value = "";
+    if (!files.length) return;
+
+    files.forEach(file => {
+      setUploadingMedia(true);
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          const dataUrl = ev.target?.result as string;
+          const cdnUrl = await uploadToS3(dataUrl, file.name);
+          setMediaItems(prev => [...prev, { type: "document", url: cdnUrl, name: file.name }]);
+        } finally {
+          setUploadingMedia(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +140,7 @@ export default function BlogManager() {
 
   const startEdit = (post: Post) => {
     const videoItem = post.media?.find(m => m.type === "video");
-    const imageItems = (post.media || []).filter(m => m.type === "image");
+    const imageItems = (post.media || []).filter(m => m.type === "image" || m.type === "document");
     setEditingPost(post);
     setForm({ category: post.category, title: post.title, content: post.content });
     setMediaItems(imageItems);
@@ -316,7 +338,7 @@ export default function BlogManager() {
                 className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
               >
                 <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
-                {uploadingMedia ? "Загружаем фото..." : "Добавить фото"}
+                {uploadingMedia ? "Загружаем..." : "Добавить фото"}
               </button>
               <input
                 ref={fileRef}
@@ -326,9 +348,9 @@ export default function BlogManager() {
                 className="hidden"
                 onChange={handleFileAdd}
               />
-              {mediaItems.length > 0 && (
+              {mediaItems.filter(m => m.type === "image").length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {mediaItems.map((m, i) => (
+                  {mediaItems.map((m, i) => m.type === "image" && (
                     <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 group">
                       <img src={m.url} alt="" className="w-full h-full object-cover" />
                       <button
@@ -337,6 +359,41 @@ export default function BlogManager() {
                         className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <Icon name="X" size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* DOCUMENTS */}
+            <div>
+              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Документы (PDF, Word)</label>
+              <button
+                type="button"
+                onClick={() => docRef.current?.click()}
+                disabled={uploadingMedia}
+                className="flex items-center gap-2 border-2 border-dashed border-blue-200 hover:border-blue-400 text-blue-400 hover:text-blue-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
+              >
+                <Icon name={uploadingMedia ? "Loader2" : "Paperclip"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
+                {uploadingMedia ? "Загружаем..." : "Прикрепить документ"}
+              </button>
+              <input
+                ref={docRef}
+                type="file"
+                multiple
+                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                className="hidden"
+                onChange={handleDocAdd}
+              />
+              {mediaItems.filter(m => m.type === "document").length > 0 && (
+                <div className="flex flex-col gap-2 mt-3">
+                  {mediaItems.map((m, i) => m.type === "document" && (
+                    <div key={i} className="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-2.5">
+                      <Icon name="FileText" size={18} className="text-blue-400 shrink-0" />
+                      <span className="text-sm text-blue-700 font-semibold truncate flex-1">{m.name || "Документ"}</span>
+                      <button type="button" onClick={() => removeMedia(i)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0">
+                        <Icon name="X" size={16} />
                       </button>
                     </div>
                   ))}

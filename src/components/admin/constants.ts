@@ -37,8 +37,9 @@ export interface Booking {
 }
 
 export interface MediaItem {
-  type: "image" | "video";
+  type: "image" | "video" | "document";
   url: string;
+  name?: string;
 }
 
 export interface Post {
@@ -49,4 +50,5 @@ export interface Post {
   media: MediaItem[];
   created_at: string;
   teacher_photo?: string;
+  teacher_name?: string;
 }

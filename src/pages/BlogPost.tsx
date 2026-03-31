@@ -16,7 +16,7 @@ const CATEGORIES: Record<string, { label: string; emoji: string; color: string; 
   masters:     { label: "Мастера вдохновения",              emoji: "🎨", color: "bg-pink-50",   border: "border-pink-200",   tag: "bg-pink-100 text-pink-700"     },
 };
 
-interface MediaItem { type: "image" | "video"; url: string; }
+interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; }
 interface Post {
   id: number; category: string; title: string; content: string;
   media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string;
@@ -198,20 +198,48 @@ export default function BlogPost() {
               <div className="text-gray-700 text-base leading-relaxed whitespace-pre-wrap mb-6">{post.content}</div>
             )}
 
-            {/* Медиа */}
-            {post.media?.length > 0 && (
-              <div className={`grid gap-3 mb-6 ${post.media.length === 1 ? "grid-cols-1" : post.media.length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
-                {post.media.map((m, i) =>
+            {/* Медиа (фото и видео) */}
+            {post.media?.filter(m => m.type !== "document").length > 0 && (
+              <div className={`grid gap-3 mb-6 ${post.media.filter(m => m.type !== "document").length === 1 ? "grid-cols-1" : post.media.filter(m => m.type !== "document").length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
+                {post.media.filter(m => m.type !== "document").map((m, i) =>
                   m.type === "video" ? (
-                    <div key={i} className={post.media.length === 1 ? "" : "aspect-square overflow-hidden rounded-2xl"}>
+                    <div key={i} className={post.media.filter(x => x.type !== "document").length === 1 ? "" : "aspect-square overflow-hidden rounded-2xl"}>
                       <VideoThumb url={m.url} />
                     </div>
                   ) : (
-                    <div key={i} className={`rounded-2xl overflow-hidden cursor-pointer ${post.media.length === 1 ? "" : "aspect-square"}`} onClick={() => setLightbox(m.url)}>
+                    <div key={i} className={`rounded-2xl overflow-hidden cursor-pointer ${post.media.filter(x => x.type !== "document").length === 1 ? "" : "aspect-square"}`} onClick={() => setLightbox(m.url)}>
                       <img src={m.url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                     </div>
                   )
                 )}
+              </div>
+            )}
+
+            {/* Документы */}
+            {post.media?.filter(m => m.type === "document").length > 0 && (
+              <div className="flex flex-col gap-2 mb-6">
+                <p className="text-xs font-bold text-gray-500 mb-1">Прикреплённые документы</p>
+                {post.media.filter(m => m.type === "document").map((m, i) => {
+                  const ext = m.url.split('.').pop()?.toLowerCase() || '';
+                  const isPdf = ext === 'pdf';
+                  return (
+                    <a
+                      key={i}
+                      href={m.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 border border-blue-100 rounded-2xl px-4 py-3 transition-colors group"
+                    >
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 font-black text-xs ${isPdf ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}>
+                        {isPdf ? "PDF" : "DOC"}
+                      </div>
+                      <span className="text-sm font-semibold text-blue-700 group-hover:text-blue-800 truncate flex-1">
+                        {m.name || `Документ.${ext}`}
+                      </span>
+                      <Icon name="Download" size={16} className="text-blue-400 shrink-0" />
+                    </a>
+                  );
+                })}
               </div>
             )}
 
