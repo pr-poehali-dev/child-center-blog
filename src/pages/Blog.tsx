@@ -412,8 +412,8 @@ export default function Blog() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            {posts.map(post => (
-              <PostCard key={post.id} post={post} categoryStickerText={stickers[post.category]} />
+            {posts.map((post, idx) => (
+              <PostCard key={post.id} post={post} categoryStickerText={idx === 0 ? stickers[post.category] : undefined} />
             ))}
           </div>
         )}
