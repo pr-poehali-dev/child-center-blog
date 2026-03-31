@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
-import StickerTag from "@/components/ui/sticker-tag";
-import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, STICKERS_API, Post, MediaItem } from "./constants";
-
-const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
+import { BLOG_API, UPLOAD_API, TOKEN_KEY, STICKERS_API, Post, MediaItem } from "./constants";
+import PostForm from "./PostForm";
+import PostsList from "./PostsList";
+import StickersPanel from "./StickersPanel";
 
 export default function BlogManager() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -26,24 +26,6 @@ export default function BlogManager() {
   const [stickers, setStickers] = useState<Record<string, string>>({});
   const [stickerEdits, setStickerEdits] = useState<Record<string, string>>({});
   const [savingSticker, setSavingSticker] = useState<string | null>(null);
-
-  const fileRef = useRef<HTMLInputElement>(null);
-  const docRef = useRef<HTMLInputElement>(null);
-  const teacherPhotoRef = useRef<HTMLInputElement>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
-
-  const insertEmoji = (emoji: string) => {
-    const field = emojiTarget;
-    const ref = field === "title" ? titleRef : contentRef;
-    const el = ref.current;
-    if (!el) return;
-    const start = el.selectionStart ?? el.value.length;
-    const end = el.selectionEnd ?? el.value.length;
-    const newVal = el.value.slice(0, start) + emoji + el.value.slice(end);
-    setForm(f => ({ ...f, [field]: newVal }));
-    setTimeout(() => { el.focus(); el.setSelectionRange(start + emoji.length, start + emoji.length); }, 0);
-  };
 
   const loadPosts = async (cat: string) => {
     setLoading(true);
@@ -116,53 +98,6 @@ export default function BlogManager() {
     return data.url;
   };
 
-  const handleDocAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (docRef.current) docRef.current.value = "";
-    if (!files.length) return;
-
-    files.forEach(file => {
-      setUploadingMedia(true);
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
-        try {
-          const dataUrl = ev.target?.result as string;
-          const cdnUrl = await uploadToS3(dataUrl, file.name);
-          setMediaItems(prev => [...prev, { type: "document", url: cdnUrl, name: file.name }]);
-        } finally {
-          setUploadingMedia(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleFileAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (fileRef.current) fileRef.current.value = "";
-    if (!files.length) return;
-
-    files.forEach(file => {
-      setUploadingMedia(true);
-      const reader = new FileReader();
-      reader.onload = async (ev) => {
-        try {
-          const dataUrl = ev.target?.result as string;
-          const prepared = await compressImage(dataUrl);
-          const cdnUrl = await uploadToS3(prepared);
-          setMediaItems(prev => [...prev, { type: "image", url: cdnUrl }]);
-        } finally {
-          setUploadingMedia(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const removeMedia = (i: number) => {
-    setMediaItems(prev => prev.filter((_, idx) => idx !== i));
-  };
-
   const resetForm = () => {
     setShowForm(false);
     setEditingPost(null);
@@ -216,7 +151,7 @@ export default function BlogManager() {
         setActiveTab(form.category);
       }
     } catch {
-      alert("Не удалось подключиться к серверу. Проверьте интернет и попробуйте снова.");
+      alert("Не удалось подключиться к серверу. Проверьте интернет и попробуйте ещё раз.");
     } finally {
       setSaving(false);
     }
@@ -232,11 +167,6 @@ export default function BlogManager() {
     });
     setPosts(prev => prev.filter(p => p.id !== id));
     setDeleting(null);
-  };
-
-  const formatDate = (iso: string) => {
-    const d = new Date(iso);
-    return d.toLocaleDateString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -272,381 +202,57 @@ export default function BlogManager() {
         </button>
       </div>
 
-      {/* STICKERS PANEL */}
       {managerTab === "stickers" && (
-        <div className="space-y-4">
-          <p className="text-sm text-gray-500 mb-2">Добавь стикер к любому разделу — он будет отображаться на карточках раздела как яркая наклейка. Оставь поле пустым, чтобы убрать стикер.</p>
-          {BLOG_CATEGORIES.map(cat => {
-            const current = stickers[cat.id] || "";
-            const edited = stickerEdits[cat.id] ?? current;
-            const hasActive = !!current;
-            return (
-              <div key={cat.id} className={`rounded-2xl border p-4 ${hasActive ? "bg-orange-50 border-orange-200" : "bg-white border-gray-100"}`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">{cat.emoji}</span>
-                  <span className="font-bold text-sm text-gray-700">{cat.label}</span>
-                  {hasActive && (
-                    <span className="ml-auto text-xs bg-orange-400 text-white font-bold px-2 py-0.5 rounded-full">Активен</span>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={edited}
-                    maxLength={60}
-                    onChange={e => setStickerEdits(prev => ({ ...prev, [cat.id]: e.target.value }))}
-                    placeholder="Текст стикера, например: «Внутри приятный бонус!»"
-                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                  />
-                  <button
-                    onClick={() => saveSticker(cat.id)}
-                    disabled={savingSticker === cat.id}
-                    className="flex items-center gap-1.5 bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-bold px-4 py-2 rounded-xl text-sm transition-colors"
-                  >
-                    <Icon name={savingSticker === cat.id ? "Loader2" : "Check"} size={15} className={savingSticker === cat.id ? "animate-spin" : ""} />
-                    Сохранить
-                  </button>
-                </div>
-                {hasActive && (
-                  <div className="mt-3">
-                    <p className="text-xs text-gray-400 mb-1.5">Предпросмотр стикера:</p>
-                    <StickerTag text={current} size="sm" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <StickersPanel
+          stickers={stickers}
+          stickerEdits={stickerEdits}
+          setStickerEdits={setStickerEdits}
+          savingSticker={savingSticker}
+          onSave={saveSticker}
+        />
       )}
 
-      {/* POSTS PANEL */}
-      {managerTab === "posts" && (<>
-
-      {/* FORM */}
-      {showForm && (
-        <div className="bg-white rounded-3xl border border-orange-100 p-6 mb-6 shadow-sm">
-          <h3 className="font-black text-gray-800 mb-5">{editingPost ? "Редактировать пост" : "Новый пост"}</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Раздел</label>
-              <div className="flex flex-wrap gap-2">
-                {BLOG_CATEGORIES.map(cat => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setForm(f => ({ ...f, category: cat.id }))}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all ${
-                      form.category === cat.id
-                        ? "bg-orange-400 text-white"
-                        : "bg-gray-100 text-gray-500 hover:bg-orange-50 hover:text-orange-500"
-                    }`}
-                  >
-                    <span>{cat.emoji}</span>
-                    <span>{cat.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Заголовок</label>
-              <div className="relative">
-                <input
-                  ref={titleRef}
-                  required
-                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                  placeholder="О чём этот пост?"
-                  value={form.title}
-                  onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                />
-                <button type="button" onClick={() => { setEmojiTarget("title"); setShowEmoji(v => emojiTarget === "title" ? !v : true); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-xl hover:scale-110 transition-transform">😊</button>
-              </div>
-            </div>
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Текст (необязательно)</label>
-              <div className="relative">
-                <textarea
-                  ref={contentRef}
-                  rows={5}
-                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 resize-none"
-                  placeholder="Напишите подробнее..."
-                  value={form.content}
-                  onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
-                />
-                <button type="button" onClick={() => { setEmojiTarget("content"); setShowEmoji(v => emojiTarget === "content" ? !v : true); }} className="absolute right-3 top-3 text-xl hover:scale-110 transition-transform">😊</button>
-              </div>
-            </div>
-            {showEmoji && (
-              <div className="bg-white border border-gray-200 rounded-2xl p-3 shadow-md">
-                <div className="flex flex-wrap gap-1.5">
-                  {EMOJIS.map(e => (
-                    <button key={e} type="button" onClick={() => insertEmoji(e)} className="text-2xl hover:scale-125 transition-transform leading-none">{e}</button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* AUTHOR */}
-            <div>
-                <label className="text-xs font-bold text-gray-500 mb-1.5 block">Автор (необязательно)</label>
-                <div className="flex items-center gap-4">
-                  {teacherPhoto ? (
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-orange-300 shrink-0">
-                      <img src={teacherPhoto} className="w-full h-full object-cover" alt="Автор" />
-                      <button type="button" onClick={() => setTeacherPhoto("")} className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                        <Icon name="X" size={16} className="text-white" />
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => teacherPhotoRef.current?.click()}
-                      className="w-16 h-16 rounded-full border-2 border-dashed border-orange-200 hover:border-orange-400 flex items-center justify-center text-orange-300 hover:text-orange-400 transition-colors shrink-0"
-                    >
-                      <Icon name="UserRound" size={22} />
-                    </button>
-                  )}
-                  <div className="flex-1">
-                    <input
-                      type="text"
-                      className="w-full border border-gray-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                      placeholder="Имя автора (необязательно)"
-                      value={teacherName}
-                      onChange={e => setTeacherName(e.target.value)}
-                    />
-                    <p className="text-xs text-gray-400 mt-1">Фото и имя появятся рядом с текстом поста</p>
-                  </div>
-                </div>
-                <input
-                  ref={teacherPhotoRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={async e => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = async ev => {
-                      const compressed = await compressImage(ev.target?.result as string, 400);
-                      const cdnUrl = await uploadToS3(compressed);
-                      setTeacherPhoto(cdnUrl);
-                    };
-                    reader.readAsDataURL(file);
-                    if (teacherPhotoRef.current) teacherPhotoRef.current.value = "";
-                  }}
-                />
-            </div>
-
-            {/* MEDIA */}
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Фото</label>
-              <button
-                type="button"
-                onClick={() => fileRef.current?.click()}
-                disabled={uploadingMedia}
-                className="flex items-center gap-2 border-2 border-dashed border-orange-200 hover:border-orange-400 text-orange-400 hover:text-orange-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
-              >
-                <Icon name={uploadingMedia ? "Loader2" : "ImagePlus"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
-                {uploadingMedia ? "Загружаем..." : "Добавить фото"}
-              </button>
-              <input
-                ref={fileRef}
-                type="file"
-                multiple
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileAdd}
-              />
-              {mediaItems.filter(m => m.type === "image").length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {mediaItems.map((m, i) => m.type === "image" && (
-                    <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 group">
-                      <img src={m.url} alt="" className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => removeMedia(i)}
-                        className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Icon name="X" size={12} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* DOCUMENTS */}
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Документы (PDF, Word)</label>
-              <button
-                type="button"
-                onClick={() => docRef.current?.click()}
-                disabled={uploadingMedia}
-                className="flex items-center gap-2 border-2 border-dashed border-blue-200 hover:border-blue-400 text-blue-400 hover:text-blue-500 rounded-2xl px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-60"
-              >
-                <Icon name={uploadingMedia ? "Loader2" : "Paperclip"} size={18} className={uploadingMedia ? "animate-spin" : ""} />
-                {uploadingMedia ? "Загружаем..." : "Прикрепить документ"}
-              </button>
-              <input
-                ref={docRef}
-                type="file"
-                multiple
-                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                className="hidden"
-                onChange={handleDocAdd}
-              />
-              {mediaItems.filter(m => m.type === "document").length > 0 && (
-                <div className="flex flex-col gap-2 mt-3">
-                  {mediaItems.map((m, i) => m.type === "document" && (
-                    <div key={i} className="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-2xl px-4 py-2.5">
-                      <Icon name="FileText" size={18} className="text-blue-400 shrink-0" />
-                      <span className="text-sm text-blue-700 font-semibold truncate flex-1">{m.name || "Документ"}</span>
-                      <button type="button" onClick={() => removeMedia(i)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0">
-                        <Icon name="X" size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* VIDEO URL */}
-            <div>
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block">Видео (необязательно)</label>
-              <div className="relative">
-                <input
-                  type="url"
-                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 pl-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-                  placeholder="Вставьте ссылку на видео из хранилища..."
-                  value={videoUrl}
-                  onChange={e => setVideoUrl(e.target.value)}
-                />
-                <Icon name="Video" size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                {videoUrl && (
-                  <button type="button" onClick={() => setVideoUrl("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                    <Icon name="X" size={16} />
-                  </button>
-                )}
-              </div>
-              <p className="text-xs text-gray-400 mt-1.5">Загрузите видео в Ядро → Хранилище, скопируйте ссылку и вставьте сюда</p>
-              {videoUrl && (
-                <video src={videoUrl} controls className="mt-3 w-full rounded-2xl max-h-48 bg-black" />
-              )}
-            </div>
-
-            {/* STICKER */}
-            <div className="bg-orange-50 border border-orange-100 rounded-2xl p-4">
-              <label className="text-xs font-bold text-gray-500 mb-1.5 block flex items-center gap-1.5">
-                <span>🏷️</span> Стикер к посту (необязательно)
-              </label>
-              <input
-                type="text"
-                maxLength={60}
-                value={postSticker}
-                onChange={e => setPostSticker(e.target.value)}
-                placeholder="Например: «Внутри приятный бонус!»"
-                className="w-full border border-orange-200 bg-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-              />
-              <p className="text-xs text-gray-400 mt-1.5">Стикер виден на карточке поста в блоге — бросается в глаза</p>
-              {postSticker.trim() && (
-                <div className="mt-3">
-                  <p className="text-xs text-gray-400 mb-2">Предпросмотр:</p>
-                  <StickerTag text={postSticker.trim()} />
-                </div>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={saving || uploadingMedia}
-              className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-3.5 rounded-2xl transition-colors"
-            >
-              {saving ? "Сохраняем..." : editingPost ? "Сохранить изменения" : "Опубликовать пост"}
-            </button>
-          </form>
-        </div>
+      {managerTab === "posts" && (
+        <>
+          {showForm && (
+            <PostForm
+              form={form}
+              setForm={setForm}
+              mediaItems={mediaItems}
+              setMediaItems={setMediaItems}
+              teacherPhoto={teacherPhoto}
+              setTeacherPhoto={setTeacherPhoto}
+              teacherName={teacherName}
+              setTeacherName={setTeacherName}
+              videoUrl={videoUrl}
+              setVideoUrl={setVideoUrl}
+              postSticker={postSticker}
+              setPostSticker={setPostSticker}
+              showEmoji={showEmoji}
+              setShowEmoji={setShowEmoji}
+              emojiTarget={emojiTarget}
+              setEmojiTarget={setEmojiTarget}
+              uploadingMedia={uploadingMedia}
+              saving={saving}
+              isEditing={!!editingPost}
+              onSubmit={handleSubmit}
+              onCancel={resetForm}
+              compressImage={compressImage}
+              uploadToS3={uploadToS3}
+              setUploadingMedia={setUploadingMedia}
+            />
+          )}
+          <PostsList
+            posts={posts}
+            loading={loading}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            deleting={deleting}
+            onEdit={startEdit}
+            onDelete={deletePost}
+          />
+        </>
       )}
-
-      {/* TABS */}
-      <div className="flex gap-2 mb-5 flex-wrap">
-        {BLOG_CATEGORIES.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setActiveTab(cat.id)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all ${
-              activeTab === cat.id
-                ? "bg-orange-400 text-white"
-                : "bg-gray-100 text-gray-500 hover:bg-orange-50 hover:text-orange-500"
-            }`}
-          >
-            {cat.emoji} {cat.label}
-          </button>
-        ))}
-      </div>
-
-      {/* POSTS LIST */}
-      {loading ? (
-        <div className="text-center py-16 text-gray-300">
-          <Icon name="Loader2" size={32} className="animate-spin mx-auto" />
-        </div>
-      ) : posts.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-3xl border border-orange-100">
-          <div className="text-4xl mb-3">📭</div>
-          <div className="font-black text-gray-500 mb-1">Постов пока нет</div>
-          <div className="text-gray-400 text-sm">Нажмите «Добавить пост» чтобы создать первый</div>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {posts.map(post => (
-            <div key={post.id} className="bg-white rounded-2xl border border-orange-100 p-5 hover:shadow-sm transition-all">
-              <div className="flex items-start gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="font-black text-gray-800 text-sm mb-1 leading-snug">{post.title}</div>
-                  {post.content && (
-                    <div className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-2">{post.content}</div>
-                  )}
-                  <div className="flex items-center gap-3 flex-wrap">
-                    <span className="text-xs text-gray-400">{formatDate(post.created_at)}</span>
-                    {post.media?.length > 0 && (
-                      <span className="flex items-center gap-1 text-xs text-gray-400">
-                        <Icon name="Image" size={12} />
-                        {post.media.length}
-                      </span>
-                    )}
-                    {(post.teacher_photo || post.teacher_name) && (
-                      <span className="flex items-center gap-1.5 text-xs text-amber-600 font-semibold">
-                        {post.teacher_photo ? (
-                          <img src={post.teacher_photo} alt="" className="w-4 h-4 rounded-full object-cover" />
-                        ) : (
-                          <Icon name="UserRound" size={12} />
-                        )}
-                        {post.teacher_name || "Автор"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => startEdit(post)}
-                    className="text-gray-300 hover:text-orange-400 transition-colors"
-                    title="Редактировать"
-                  >
-                    <Icon name="Pencil" size={16} />
-                  </button>
-                  <button
-                    onClick={() => deletePost(post.id)}
-                    disabled={deleting === post.id}
-                    className="text-gray-300 hover:text-red-400 transition-colors disabled:opacity-50"
-                    title="Удалить"
-                  >
-                    <Icon name={deleting === post.id ? "Loader2" : "Trash2"} size={18} className={deleting === post.id ? "animate-spin" : ""} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      </>)}
     </div>
   );
 }
