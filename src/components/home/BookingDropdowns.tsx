@@ -124,7 +124,7 @@ export function BookingDropdown({ onFormClick, className }: { onFormClick: () =>
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 right-0 mt-2 z-50">
+        <div className="absolute bottom-full left-0 right-0 mb-2 z-50">
           <DropdownMenu onClose={() => setOpen(false)} onFormClick={onFormClick} />
         </div>
       )}
