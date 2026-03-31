@@ -118,6 +118,7 @@ function ContactDropdown({ label, emoji, colorClass }: { label: string; emoji: s
 }
 
 const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-264f6d13e325";
+const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
 const CATEGORIES = [
   { id: "tips", label: "Советы от педагога", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700" },
@@ -214,7 +215,7 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
   );
 }
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post, sticker }: { post: Post; sticker?: string }) {
   const cat = CATEGORIES.find(c => c.id === post.category);
   const [expanded, setExpanded] = useState(false);
   const isLong = post.content.length > 300;
@@ -225,7 +226,15 @@ function PostCard({ post }: { post: Post }) {
   };
 
   return (
-    <article className={`${cat?.color || "bg-white"} rounded-3xl p-6 border ${cat?.border || "border-gray-100"} shadow-sm`}>
+    <article className={`relative ${cat?.color || "bg-white"} rounded-3xl p-6 border ${cat?.border || "border-gray-100"} shadow-sm overflow-visible`}>
+      {sticker && (
+        <div className="absolute -top-3 right-5 z-10">
+          <div className="flex items-center gap-1.5 bg-gradient-to-r from-orange-400 via-pink-400 to-rose-400 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg rotate-[-1.5deg] whitespace-nowrap" style={{boxShadow: "0 4px 14px 0 rgba(251,113,133,0.45)"}}>
+            <span>🎁</span>
+            <span>{sticker}</span>
+          </div>
+        </div>
+      )}
       <div className="flex items-start justify-between gap-3 mb-3">
         <span className={`text-xs font-bold px-3 py-1 rounded-full ${cat?.tag || "bg-gray-100 text-gray-500"}`}>
           {cat?.emoji} {cat?.label}
@@ -305,6 +314,7 @@ export default function Blog() {
   usePageMeta(seo.title, seo.description);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stickers, setStickers] = useState<Record<string, string>>({});
 
   const loadPosts = async (cat: string) => {
     setLoading(true);
@@ -316,6 +326,10 @@ export default function Blog() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetch(STICKERS_API).then(r => r.json()).then(d => setStickers(d.stickers || {})).catch(() => {});
+  }, []);
 
   useEffect(() => {
     loadPosts(activeTab);
@@ -399,7 +413,7 @@ export default function Blog() {
         ) : (
           <div className="flex flex-col gap-6">
             {posts.map(post => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} sticker={stickers[post.category]} />
             ))}
           </div>
         )}

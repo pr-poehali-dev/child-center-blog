@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, Post, MediaItem } from "./constants";
+import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, STICKERS_API, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -20,6 +20,10 @@ export default function BlogManager() {
   const [teacherName, setTeacherName] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
+  const [stickers, setStickers] = useState<Record<string, string>>({});
+  const [stickerEdits, setStickerEdits] = useState<Record<string, string>>({});
+  const [savingSticker, setSavingSticker] = useState<string | null>(null);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const docRef = useRef<HTMLInputElement>(null);
@@ -51,6 +55,36 @@ export default function BlogManager() {
   };
 
   useEffect(() => { loadPosts(activeTab); }, [activeTab]);
+
+  const loadStickers = async () => {
+    const res = await fetch(STICKERS_API);
+    const data = await res.json();
+    const s = data.stickers || {};
+    setStickers(s);
+    setStickerEdits(s);
+  };
+
+  useEffect(() => { loadStickers(); }, []);
+
+  const saveSticker = async (categoryId: string) => {
+    setSavingSticker(categoryId);
+    const text = (stickerEdits[categoryId] || "").trim();
+    if (text) {
+      await fetch(STICKERS_API, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
+        body: JSON.stringify({ category_id: categoryId, sticker_text: text }),
+      });
+    } else {
+      await fetch(STICKERS_API, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
+        body: JSON.stringify({ category_id: categoryId }),
+      });
+    }
+    await loadStickers();
+    setSavingSticker(null);
+  };
 
   const compressImage = (dataUrl: string, maxSize = 900): Promise<string> => {
     return new Promise(resolve => {
@@ -203,16 +237,89 @@ export default function BlogManager() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="font-black text-xl text-gray-800">Управление блогом</h2>
+        {managerTab === "posts" && (
+          <button
+            onClick={() => showForm ? resetForm() : setShowForm(true)}
+            className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-2xl transition-colors text-sm"
+          >
+            <Icon name={showForm ? "X" : "Plus"} size={16} />
+            {showForm ? "Отмена" : "Добавить пост"}
+          </button>
+        )}
+      </div>
+
+      {/* MANAGER TABS */}
+      <div className="flex gap-2 mb-6">
         <button
-          onClick={() => showForm ? resetForm() : setShowForm(true)}
-          className="flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-2xl transition-colors text-sm"
+          onClick={() => setManagerTab("posts")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold transition-all ${managerTab === "posts" ? "bg-orange-400 text-white" : "bg-gray-100 text-gray-500 hover:bg-orange-50 hover:text-orange-500"}`}
         >
-          <Icon name={showForm ? "X" : "Plus"} size={16} />
-          {showForm ? "Отмена" : "Добавить пост"}
+          <Icon name="BookOpen" size={16} />
+          Посты
+        </button>
+        <button
+          onClick={() => setManagerTab("stickers")}
+          className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold transition-all ${managerTab === "stickers" ? "bg-orange-400 text-white" : "bg-gray-100 text-gray-500 hover:bg-orange-50 hover:text-orange-500"}`}
+        >
+          <Icon name="Tag" size={16} />
+          Стикеры
         </button>
       </div>
+
+      {/* STICKERS PANEL */}
+      {managerTab === "stickers" && (
+        <div className="space-y-4">
+          <p className="text-sm text-gray-500 mb-2">Добавь стикер к любому разделу — он будет отображаться на карточках раздела как яркая наклейка. Оставь поле пустым, чтобы убрать стикер.</p>
+          {BLOG_CATEGORIES.map(cat => {
+            const current = stickers[cat.id] || "";
+            const edited = stickerEdits[cat.id] ?? current;
+            const hasActive = !!current;
+            return (
+              <div key={cat.id} className={`rounded-2xl border p-4 ${hasActive ? "bg-orange-50 border-orange-200" : "bg-white border-gray-100"}`}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">{cat.emoji}</span>
+                  <span className="font-bold text-sm text-gray-700">{cat.label}</span>
+                  {hasActive && (
+                    <span className="ml-auto text-xs bg-orange-400 text-white font-bold px-2 py-0.5 rounded-full">Активен</span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={edited}
+                    maxLength={60}
+                    onChange={e => setStickerEdits(prev => ({ ...prev, [cat.id]: e.target.value }))}
+                    placeholder="Текст стикера, например: «Внутри приятный бонус!»"
+                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+                  />
+                  <button
+                    onClick={() => saveSticker(cat.id)}
+                    disabled={savingSticker === cat.id}
+                    className="flex items-center gap-1.5 bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-bold px-4 py-2 rounded-xl text-sm transition-colors"
+                  >
+                    <Icon name={savingSticker === cat.id ? "Loader2" : "Check"} size={15} className={savingSticker === cat.id ? "animate-spin" : ""} />
+                    Сохранить
+                  </button>
+                </div>
+                {hasActive && (
+                  <div className="mt-3">
+                    <p className="text-xs text-gray-400 mb-1.5">Предпросмотр стикера:</p>
+                    <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-400 to-pink-400 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-md rotate-[-1deg]">
+                      <span>🎁</span>
+                      <span>{current}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* POSTS PANEL */}
+      {managerTab === "posts" && (<>
 
       {/* FORM */}
       {showForm && (
@@ -516,6 +623,7 @@ export default function BlogManager() {
           ))}
         </div>
       )}
+      </>)}
     </div>
   );
 }

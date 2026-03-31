@@ -6,6 +6,7 @@ export const GET_UPLOAD_URL_API = "https://functions.poehali.dev/ce28a0c2-d56b-4
 export const UPLOAD_CHUNK_API = "https://functions.poehali.dev/d5693159-8c64-4d4f-b55f-2db20fa0b98d";
 export const UPLOAD_VIDEO_API = "https://functions.poehali.dev/2b11cad0-8e9c-4451-94c5-34d426eb44a7";
 export const QA_API = "https://functions.poehali.dev/dbf8090e-245f-45dd-9b83-298fcdf8b666";
+export const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 export const TOKEN_KEY = "admin_token";
 
 export const STATUS_CONFIG: Record<string, { label: string; color: string; next: string; nextLabel: string }> = {
