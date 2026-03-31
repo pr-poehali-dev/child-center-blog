@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Icon from "@/components/ui/icon";
+import StickerTag from "@/components/ui/sticker-tag";
 import { BLOG_API, UPLOAD_API, BLOG_CATEGORIES, TOKEN_KEY, STICKERS_API, Post, MediaItem } from "./constants";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
@@ -19,6 +20,7 @@ export default function BlogManager() {
   const [teacherPhoto, setTeacherPhoto] = useState<string>("");
   const [teacherName, setTeacherName] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
+  const [postSticker, setPostSticker] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
   const [stickers, setStickers] = useState<Record<string, string>>({});
@@ -169,6 +171,7 @@ export default function BlogManager() {
     setTeacherPhoto("");
     setTeacherName("");
     setVideoUrl("");
+    setPostSticker("");
     setShowEmoji(false);
   };
 
@@ -181,6 +184,7 @@ export default function BlogManager() {
     setTeacherPhoto(post.teacher_photo || "");
     setTeacherName(post.teacher_name || "");
     setVideoUrl(videoItem?.url || "");
+    setPostSticker(post.sticker || "");
     setShowForm(true);
     setShowEmoji(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -199,7 +203,7 @@ export default function BlogManager() {
       const res = await fetch(BLOG_API, {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName }),
+        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker }),
       });
       if (!res.ok) {
         alert("Ошибка при сохранении. Попробуйте ещё раз.");
@@ -306,10 +310,7 @@ export default function BlogManager() {
                 {hasActive && (
                   <div className="mt-3">
                     <p className="text-xs text-gray-400 mb-1.5">Предпросмотр стикера:</p>
-                    <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-orange-400 to-pink-400 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-md rotate-[-1deg]">
-                      <span>🎁</span>
-                      <span>{current}</span>
-                    </div>
+                    <StickerTag text={current} size="sm" />
                   </div>
                 )}
               </div>
@@ -529,6 +530,28 @@ export default function BlogManager() {
               <p className="text-xs text-gray-400 mt-1.5">Загрузите видео в Ядро → Хранилище, скопируйте ссылку и вставьте сюда</p>
               {videoUrl && (
                 <video src={videoUrl} controls className="mt-3 w-full rounded-2xl max-h-48 bg-black" />
+              )}
+            </div>
+
+            {/* STICKER */}
+            <div className="bg-orange-50 border border-orange-100 rounded-2xl p-4">
+              <label className="text-xs font-bold text-gray-500 mb-1.5 block flex items-center gap-1.5">
+                <span>🏷️</span> Стикер к посту (необязательно)
+              </label>
+              <input
+                type="text"
+                maxLength={60}
+                value={postSticker}
+                onChange={e => setPostSticker(e.target.value)}
+                placeholder="Например: «Внутри приятный бонус!»"
+                className="w-full border border-orange-200 bg-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+              />
+              <p className="text-xs text-gray-400 mt-1.5">Стикер виден на карточке поста в блоге — бросается в глаза</p>
+              {postSticker.trim() && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-400 mb-2">Предпросмотр:</p>
+                  <StickerTag text={postSticker.trim()} />
+                </div>
               )}
             </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import StickerTag from "@/components/ui/sticker-tag";
 
 const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-264f6d13e325";
 
@@ -19,7 +20,7 @@ const CATEGORIES: Record<string, { label: string; emoji: string; color: string; 
 interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; }
 interface Post {
   id: number; category: string; title: string; content: string;
-  media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string;
+  media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string; sticker?: string;
 }
 
 function VideoThumb({ url }: { url: string }) {
@@ -177,7 +178,14 @@ export default function BlogPost() {
             </div>
 
             {/* Заголовок */}
-            <h1 className="text-3xl font-black text-gray-800 leading-tight mb-6">{post.title}</h1>
+            <h1 className="text-3xl font-black text-gray-800 leading-tight mb-4">{post.title}</h1>
+
+            {/* Стикер поста */}
+            {post.sticker?.trim() && (
+              <div className="flex items-start mb-4">
+                <StickerTag text={post.sticker.trim()} size="lg" />
+              </div>
+            )}
 
             {/* Автор */}
             {(post.teacher_photo || post.teacher_name) && (

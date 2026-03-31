@@ -52,4 +52,5 @@ export interface Post {
   created_at: string;
   teacher_photo?: string;
   teacher_name?: string;
+  sticker?: string;
 }

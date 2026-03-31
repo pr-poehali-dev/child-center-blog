@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import StickerTag from "@/components/ui/sticker-tag";
 
 function usePageMeta(title: string, description: string) {
   useEffect(() => {
@@ -146,6 +147,7 @@ interface Post {
   created_at: string;
   teacher_photo?: string;
   teacher_name?: string;
+  sticker?: string;
 }
 
 function VideoThumb({ url, onClick }: { url: string; onClick: () => void }) {
@@ -215,7 +217,8 @@ function MediaGallery({ media }: { media: MediaItem[] }) {
   );
 }
 
-function PostCard({ post, sticker }: { post: Post; sticker?: string }) {
+function PostCard({ post, categoryStickerText }: { post: Post; categoryStickerText?: string }) {
+  const activeSticker = post.sticker?.trim() || categoryStickerText?.trim() || "";
   const cat = CATEGORIES.find(c => c.id === post.category);
   const [expanded, setExpanded] = useState(false);
   const isLong = post.content.length > 300;
@@ -227,12 +230,9 @@ function PostCard({ post, sticker }: { post: Post; sticker?: string }) {
 
   return (
     <article className={`relative ${cat?.color || "bg-white"} rounded-3xl p-6 border ${cat?.border || "border-gray-100"} shadow-sm overflow-visible`}>
-      {sticker && (
-        <div className="absolute -top-3 right-5 z-10">
-          <div className="flex items-center gap-1.5 bg-gradient-to-r from-orange-400 via-pink-400 to-rose-400 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg rotate-[-1.5deg] whitespace-nowrap" style={{boxShadow: "0 4px 14px 0 rgba(251,113,133,0.45)"}}>
-            <span>🎁</span>
-            <span>{sticker}</span>
-          </div>
+      {activeSticker && (
+        <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]">
+          <StickerTag text={activeSticker} size="md" />
         </div>
       )}
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -413,7 +413,7 @@ export default function Blog() {
         ) : (
           <div className="flex flex-col gap-6">
             {posts.map(post => (
-              <PostCard key={post.id} post={post} sticker={stickers[post.category]} />
+              <PostCard key={post.id} post={post} categoryStickerText={stickers[post.category]} />
             ))}
           </div>
         )}
