@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "name": "GET prerender HTML for post id=4",
+      "method": "GET",
+      "path": "/?id=4",
+      "expectedStatus": 200
+    },
+    {
+      "name": "GET prerender - missing id",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 400
+    },
+    {
+      "name": "GET prerender - not found",
+      "method": "GET",
+      "path": "/?id=999999",
+      "expectedStatus": 404
+    },
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}

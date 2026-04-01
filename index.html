@@ -146,6 +146,42 @@
     }
     </script>
 
+    <!-- PRERENDER для поисковых ботов (Яндекс, Google и др.) -->
+    <!-- Если к /blog/:id обращается бот — заменяем страницу серверным HTML со статьёй -->
+    <script>
+      (function () {
+        var ua = navigator.userAgent || '';
+        var botRe = /bot|crawl|spider|slurp|yandex|baiduspider|facebookexternalhit|twitterbot|rogerbot|linkedinbot|embedly|quora\slink\spreview|showyoubot|outbrain|pinterest|developers\.google\.com\/\+\/web\/snippet/i;
+        if (!botRe.test(ua)) return;                // живой пользователь — обычный SPA
+
+        var path = window.location.pathname;
+        var m = path.match(/^\/blog\/(\d+)\/?$/);
+        if (!m) return;                             // не страница поста — ничего не делаем
+
+        var postId = m[1];
+        var prerenderUrl = 'https://functions.poehali.dev/26f3618b-adc5-4449-b93e-48994d69bcfa?id=' + postId;
+
+        // Блокируем рендер React до получения prerender-ответа
+        document.documentElement.style.display = 'none';
+
+        fetch(prerenderUrl)
+          .then(function (r) {
+            if (!r.ok) throw new Error('prerender ' + r.status);
+            return r.text();
+          })
+          .then(function (html) {
+            document.open();
+            document.write(html);
+            document.close();
+          })
+          .catch(function () {
+            // Не удалось получить prerender — показываем обычное SPA
+            document.documentElement.style.display = '';
+          });
+      })();
+    </script>
+    <!-- END PRERENDER -->
+
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS COMMENT! -->
 
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS COMMENT! -->
