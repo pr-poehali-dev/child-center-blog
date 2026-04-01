@@ -1,20 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
-
-function usePageMeta(title: string, description: string) {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = title;
-    const meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    const prevDesc = meta?.content ?? "";
-    if (meta) meta.content = description;
-    return () => {
-      document.title = prev;
-      if (meta) meta.content = prevDesc;
-    };
-  }, [title, description]);
-}
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const QA_API = "https://functions.poehali.dev/dbf8090e-245f-45dd-9b83-298fcdf8b666";
 
@@ -160,10 +147,12 @@ function QuestionCard({ q, onRate }: { q: Question; onRate: (id: number, rating:
 }
 
 export default function QA() {
-  usePageMeta(
-    "Спрашивали — Отвечаем: вопросы родителей педагогам | «Рыбка Долли» Керчь",
-    "Задайте вопрос педагогу, психологу или логопеду детского центра «Рыбка Долли» в Керчи. Реальные ответы на вопросы о воспитании, развитии речи, адаптации к школе и жизни ребёнка."
-  );
+  usePageMeta({
+    title: "Спрашивали — Отвечаем: вопросы родителей педагогам | «Рыбка Долли» Керчь",
+    description: "Задайте вопрос педагогу, психологу или логопеду детского центра «Рыбка Долли» в Керчи. Реальные ответы на вопросы о воспитании, развитии речи, адаптации к школе и жизни ребёнка.",
+    url: "https://blogribkadolli.ru/blog/qa",
+    type: "website",
+  });
   const navigate = useNavigate();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);

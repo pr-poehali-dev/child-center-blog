@@ -2,28 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
-
-function usePageMeta(title: string, description: string) {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = title;
-    const setMeta = (name: string, content: string) => {
-      let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
-      if (!el) { el = document.createElement("meta"); el.setAttribute("name", name); document.head.appendChild(el); }
-      el.content = content;
-    };
-    const setOg = (prop: string, content: string) => {
-      let el = document.querySelector(`meta[property="${prop}"]`) as HTMLMetaElement | null;
-      if (!el) { el = document.createElement("meta"); el.setAttribute("property", prop); document.head.appendChild(el); }
-      el.content = content;
-    };
-    setMeta("description", description);
-    setOg("og:title", title);
-    setOg("og:description", description);
-    setOg("og:type", "website");
-    return () => { document.title = prev; };
-  }, [title, description]);
-}
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = {
   tips: {
@@ -311,7 +290,7 @@ export default function Blog() {
     title: "Блог детского центра «Рыбка Долли» — Керчь",
     description: "Блог детского центра «Рыбка Долли» в Керчи — советы педагогов, новости центра, статьи о развитии детей.",
   };
-  usePageMeta(seo.title, seo.description);
+  usePageMeta({ title: seo.title, description: seo.description, url: `https://blogribkadolli.ru/blog`, type: "website" });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [stickers, setStickers] = useState<Record<string, string>>({});
