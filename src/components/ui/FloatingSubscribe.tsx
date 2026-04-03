@@ -142,20 +142,20 @@ export default function FloatingSubscribe() {
       {/* Плавающая кнопка */}
       <button
         onClick={() => setOpen(o => !o)}
-        className={`fixed bottom-5 right-5 z-50 h-14 rounded-full shadow-lg transition-all duration-500
+        className={`fixed bottom-5 right-5 z-50 h-11 rounded-full shadow-lg transition-all duration-500
           bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500
-          flex items-center gap-2 px-5
+          flex items-center gap-1.5 px-4
           hover:scale-105 active:scale-95
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
         `}
         style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
       >
         {open ? (
-          <Icon name="X" size={20} className="text-white" />
+          <Icon name="X" size={16} className="text-white" />
         ) : (
-          <Icon name="Bell" size={20} className="text-white" />
+          <Icon name="Bell" size={16} className="text-white" />
         )}
-        <span className="text-white font-black text-sm whitespace-nowrap">
+        <span className="text-white font-black text-xs whitespace-nowrap">
           {open ? "Закрыть" : "Подписаться"}
         </span>
       </button>
