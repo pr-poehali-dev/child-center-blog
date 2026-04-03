@@ -6,6 +6,9 @@ import hashlib
 import psycopg2
 import boto3
 import urllib.request
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 SCHEMA = 't_p99892216_child_center_blog'
 BASE_URL = 'https://blogribkadolli.ru'
@@ -17,6 +20,75 @@ CORS = {
     'Access-Control-Allow-Headers': 'Content-Type, X-Authorization',
     'Access-Control-Max-Age': '86400',
 }
+
+
+CATEGORY_LABELS = {
+    'tips': 'Советы от педагога',
+    'life': 'Наша жизнь на ладони',
+    'detail': 'Подробно о важном',
+    'summer': 'Лето с нами',
+    'afterschool': 'Группа продлённого дня',
+    'english': 'Группа английского языка',
+    'experiments': 'Экспериментаторы',
+    'chefs': 'Шеф-повара',
+    'masters': 'Мастера вдохновения',
+}
+
+
+def notify_subscribers(post_id: int, title: str, content: str, category: str, teacher_name: str):
+    """Отправляет письма всем подписчикам о новом посте"""
+    smtp_password = os.environ.get('SMTP_PASSWORD', '')
+    if not smtp_password:
+        return
+    from_email = 'ribkadolli@mail.ru'
+    cat_label = CATEGORY_LABELS.get(category, category)
+    preview = content[:200].replace("'", "") + ('...' if len(content) > 200 else '')
+    post_url = f'{BASE_URL}/blog/{post_id}'
+
+    try:
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        cur = conn.cursor()
+        cur.execute("SELECT name, email FROM subscribers WHERE is_active = TRUE")
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+    except Exception:
+        return
+
+    for (name, email) in rows:
+        try:
+            html = f"""
+            <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #fffdf8; border-radius: 16px; overflow: hidden; border: 1px solid #ffe0c0;">
+                <div style="background: linear-gradient(135deg, #fb923c, #f43f5e); padding: 28px; text-align: center;">
+                    <div style="font-size: 40px;">📖</div>
+                    <h2 style="color: white; margin: 10px 0 0; font-size: 20px;">Новая статья в блоге!</h2>
+                    <p style="color: rgba(255,255,255,0.85); margin: 6px 0 0; font-size: 13px;">Детский центр «Рыбка Долли»</p>
+                </div>
+                <div style="padding: 28px;">
+                    <p style="color: #1f2937; font-size: 15px; margin: 0 0 12px;">Привет, <strong>{name}</strong>! 👋</p>
+                    <div style="background: #fff7ed; border-left: 4px solid #fb923c; border-radius: 0 12px 12px 0; padding: 12px 16px; margin-bottom: 16px;">
+                        <div style="color: #9a3412; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">{cat_label}</div>
+                    </div>
+                    <h3 style="color: #1f2937; font-size: 18px; margin: 0 0 10px; line-height: 1.3;">{title}</h3>
+                    {"<p style='color: #6b7280; font-size: 13px; margin: 0 0 16px; line-height: 1.6;'>Автор: " + teacher_name + "</p>" if teacher_name else ""}
+                    <p style="color: #4b5563; font-size: 14px; line-height: 1.7; margin: 0 0 20px;">{preview}</p>
+                    <a href="{post_url}" style="display: inline-block; background: linear-gradient(135deg, #fb923c, #f43f5e); color: white; font-weight: bold; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-size: 14px;">Читать статью →</a>
+                    <div style="margin-top: 24px; color: #9ca3af; font-size: 12px; text-align: center;">
+                        С теплом, команда «Рыбка Долли» ☀️
+                    </div>
+                </div>
+            </div>
+            """
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = f'📖 Новая статья: {title}'
+            msg['From'] = from_email
+            msg['To'] = email
+            msg.attach(MIMEText(html, 'html'))
+            with smtplib.SMTP_SSL('smtp.mail.ru', 465) as server:
+                server.login(from_email, smtp_password)
+                server.sendmail(from_email, email, msg.as_string())
+        except Exception:
+            pass
 
 
 def ping_yandex(post_id: int):
@@ -164,6 +236,7 @@ def handler(event: dict, context) -> dict:
         cur.close()
         conn.close()
         ping_yandex(row[0])
+        notify_subscribers(row[0], body.get('title', ''), body.get('content', ''), body.get('category', ''), body.get('teacher_name', ''))
         return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat()})}
 
     if method == 'PUT':
