@@ -11,6 +11,7 @@ import BlogPost from "./pages/BlogPost";
 import QA from "./pages/QA";
 import NotFound from "./pages/NotFound";
 import Contacts from "./pages/Contacts";
+import FloatingSubscribe from "@/components/ui/FloatingSubscribe";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <FloatingSubscribe />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
