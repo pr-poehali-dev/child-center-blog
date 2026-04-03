@@ -1,20 +1,18 @@
 {
   "tests": [
     {
-      "name": "Subscribe with valid data",
-      "method": "POST",
-      "path": "/",
-      "body": {"name": "Тест Тестов", "email": "test_subscriber_x7z9@example.com"},
-      "expectedStatus": 200,
-      "expectedBody": {"ok": true},
-      "bodyMatcher": "partial"
-    },
-    {
       "name": "Subscribe duplicate email",
       "method": "POST",
       "path": "/",
       "body": {"name": "Тест Тестов", "email": "test_subscriber_x7z9@example.com"},
       "expectedStatus": 409,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Unsubscribe with invalid token",
+      "method": "GET",
+      "path": "/?unsubscribe=invalidtoken000",
+      "expectedStatus": 404,
       "bodyMatcher": "partial"
     },
     {

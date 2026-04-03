@@ -48,15 +48,16 @@ def notify_subscribers(post_id: int, title: str, content: str, category: str, te
     try:
         conn = psycopg2.connect(os.environ['DATABASE_URL'])
         cur = conn.cursor()
-        cur.execute("SELECT name, email FROM subscribers WHERE is_active = TRUE")
+        cur.execute("SELECT name, email, unsubscribe_token FROM subscribers WHERE is_active = TRUE")
         rows = cur.fetchall()
         cur.close()
         conn.close()
     except Exception:
         return
 
-    for (name, email) in rows:
+    for (name, email, unsub_token) in rows:
         try:
+            unsub_url = f"{BASE_URL}/unsubscribe?token={unsub_token or ''}"
             html = f"""
             <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #fffdf8; border-radius: 16px; overflow: hidden; border: 1px solid #ffe0c0;">
                 <div style="background: linear-gradient(135deg, #fb923c, #f43f5e); padding: 28px; text-align: center;">
@@ -73,8 +74,11 @@ def notify_subscribers(post_id: int, title: str, content: str, category: str, te
                     {"<p style='color: #6b7280; font-size: 13px; margin: 0 0 16px; line-height: 1.6;'>Автор: " + teacher_name + "</p>" if teacher_name else ""}
                     <p style="color: #4b5563; font-size: 14px; line-height: 1.7; margin: 0 0 20px;">{preview}</p>
                     <a href="{post_url}" style="display: inline-block; background: linear-gradient(135deg, #fb923c, #f43f5e); color: white; font-weight: bold; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-size: 14px;">Читать статью →</a>
-                    <div style="margin-top: 24px; color: #9ca3af; font-size: 12px; text-align: center;">
-                        С теплом, команда «Рыбка Долли» ☀️
+                    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #ffe8d6; text-align: center;">
+                        <p style="color: #d1d5db; font-size: 11px; margin: 0;">
+                            Вы получили это письмо, потому что подписались на блог «Рыбка Долли».<br>
+                            <a href="{unsub_url}" style="color: #fb923c; text-decoration: underline;">Отписаться от рассылки</a>
+                        </p>
                     </div>
                 </div>
             </div>

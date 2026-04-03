@@ -1,0 +1,2 @@
+ALTER TABLE subscribers ADD COLUMN IF NOT EXISTS unsubscribe_token VARCHAR(64) UNIQUE;
+UPDATE subscribers SET unsubscribe_token = md5(email || id::text || 'ribkadolli_secret') WHERE unsubscribe_token IS NULL;
