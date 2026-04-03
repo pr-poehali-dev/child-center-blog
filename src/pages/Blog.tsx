@@ -4,6 +4,94 @@ import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
+const SUBSCRIBERS_API = "https://functions.poehali.dev/ad0992ef-212b-47b2-9265-aedfd9a33c3f";
+
+function SubscribeForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "exists">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim()) return;
+    setStatus("loading");
+    try {
+      const res = await fetch(SUBSCRIBERS_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), email: email.trim() }),
+      });
+      if (res.status === 409) { setStatus("exists"); return; }
+      if (!res.ok) { setStatus("error"); return; }
+      setStatus("success");
+      setName("");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 pb-12">
+      <div className="bg-gradient-to-br from-orange-50 to-rose-50 border border-orange-100 rounded-3xl p-7">
+        <div className="flex items-start gap-4">
+          <div className="text-4xl shrink-0">📬</div>
+          <div className="flex-1">
+            <h3 className="font-black text-gray-800 text-lg leading-tight">Подпишитесь на блог</h3>
+            <p className="text-gray-500 text-sm mt-1 mb-4">Получайте уведомления о новых статьях прямо на почту</p>
+
+            {status === "success" ? (
+              <div className="flex items-center gap-2 text-green-600 font-semibold text-sm bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                <Icon name="CheckCircle" size={18} />
+                Отлично! Вы подписаны. Ждите писем от нас ☀️
+              </div>
+            ) : status === "exists" ? (
+              <div className="flex items-center gap-2 text-orange-600 font-semibold text-sm bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
+                <Icon name="Info" size={18} />
+                Этот email уже подписан на блог
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  placeholder="Ваше имя"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                  className="flex-1 border border-orange-200 bg-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 transition-colors"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                  className="flex-1 border border-orange-200 bg-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors whitespace-nowrap"
+                >
+                  {status === "loading" ? (
+                    <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Icon name="Bell" size={15} />
+                  )}
+                  Подписаться
+                </button>
+              </form>
+            )}
+            {status === "error" && (
+              <p className="text-red-500 text-xs mt-2">Ошибка. Попробуйте ещё раз.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = {
   tips: {
     title: "Советы педагогов по воспитанию детей | Блог «Рыбка Долли» — Керчь",
@@ -397,6 +485,7 @@ export default function Blog() {
           </div>
         )}
       </div>
+      <SubscribeForm />
     </div>
   );
 }
