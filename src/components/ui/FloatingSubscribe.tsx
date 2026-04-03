@@ -139,24 +139,25 @@ export default function FloatingSubscribe() {
         </div>
       </div>
 
-      {/* Круглая плавающая кнопка */}
+      {/* Плавающая кнопка */}
       <button
         onClick={() => setOpen(o => !o)}
-        className={`fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full shadow-lg transition-all duration-500
+        className={`fixed bottom-5 right-5 z-50 h-14 rounded-full shadow-lg transition-all duration-500
           bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500
-          flex items-center justify-center
-          hover:scale-110 active:scale-95
+          flex items-center gap-2 px-5
+          hover:scale-105 active:scale-95
           ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
-          ${open ? "rotate-45" : "rotate-0"}
         `}
         style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
-        title="Подписаться на блог"
       >
         {open ? (
-          <Icon name="X" size={22} className="text-white" />
+          <Icon name="X" size={20} className="text-white" />
         ) : (
-          <Icon name="Bell" size={22} className="text-white" />
+          <Icon name="Bell" size={20} className="text-white" />
         )}
+        <span className="text-white font-black text-sm whitespace-nowrap">
+          {open ? "Закрыть" : "Подписаться"}
+        </span>
       </button>
     </>
   );
