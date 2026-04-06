@@ -30,7 +30,7 @@ export function usePageMeta({ title, description, url, image, type = "website" }
     setOg("og:title", title);
     setOg("og:description", description);
     setOg("og:type", type);
-    if (url) setOg("og:url", url);
+    setOg("og:url", url || window.location.href);
     setOg("og:image", image || LOGO);
 
     return () => { document.title = prevTitle; };
