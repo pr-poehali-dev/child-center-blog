@@ -3,6 +3,7 @@ import HomeBlogSection, { STICKERS_API } from "./HomeBlogSection";
 import HomeTeamSection from "./HomeTeamSection";
 import HomeReviewsSection from "./HomeReviewsSection";
 import HomeContactsSection from "./HomeContactsSection";
+import EasterSection from "./EasterSection";
 
 interface HomeSectionsProps {
   onFormClick: () => void;
@@ -17,6 +18,7 @@ export default function HomeSections({ onFormClick }: HomeSectionsProps) {
 
   return (
     <>
+      <EasterSection />
       <HomeBlogSection stickers={stickers} />
       <HomeTeamSection />
       <HomeReviewsSection />
