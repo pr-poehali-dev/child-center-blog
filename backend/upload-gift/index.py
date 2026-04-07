@@ -25,7 +25,7 @@ def handler(event: dict, context) -> dict:
         return {'statusCode': 200, 'headers': {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Password'}, 'body': ''}
 
     headers = event.get('headers', {})
-    admin_password = headers.get('X-Admin-Password', '')
+    admin_password = headers.get('X-Admin-Password', '') or headers.get('X-Authorization', '')
     correct_password = os.environ.get('ADMIN_PASSWORD', '')
     if admin_password != correct_password:
         return {'statusCode': 403, 'headers': {'Access-Control-Allow-Origin': '*'}, 'body': json.dumps({'error': 'Нет доступа'})}

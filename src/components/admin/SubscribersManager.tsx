@@ -67,7 +67,7 @@ export default function SubscribersManager() {
     try {
       const res = await fetch(UPLOAD_GIFT_API, {
         method: "POST",
-        headers: { "X-Admin-Password": token },
+        headers: { "Authorization": token },
       });
       const data = await res.json();
       if (data.ok) {
