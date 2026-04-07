@@ -52,6 +52,7 @@ function PopularPosts() {
 
       <section className="py-16 bg-white flex justify-center">
         <button
+          id="popular-posts-toggle"
           onClick={toggle}
           className="popular-btn relative font-black px-14 py-8 rounded-[2.5rem] transition-all duration-300 flex items-center gap-8 cursor-pointer"
           style={{

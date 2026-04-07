@@ -27,7 +27,11 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             </div>
             <div className="flex flex-col items-center gap-1 flex-shrink-0">
               <button
-                onClick={() => document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => {
+                  const btn = document.getElementById("popular-posts-toggle") as HTMLButtonElement | null;
+                  btn?.click();
+                  setTimeout(() => document.getElementById("popular-posts-toggle")?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+                }}
                 className="w-28 h-28 rounded-full flex items-center justify-center transition-all duration-150 hover:-translate-y-2 active:translate-y-1"
                 style={{
                   background: "transparent",
