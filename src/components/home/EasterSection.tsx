@@ -35,11 +35,7 @@ export default function EasterSection() {
         }}
         className="py-16"
       >
-        {/* Декоративные элементы фона */}
-        <div style={{ position: "absolute", top: 20, left: "5%", fontSize: 48, opacity: 0.15 }} className="es-float">🐣</div>
-        <div style={{ position: "absolute", top: 40, right: "8%", fontSize: 56, opacity: 0.12 }} className="es-float2">🌷</div>
-        <div style={{ position: "absolute", bottom: 30, left: "12%", fontSize: 40, opacity: 0.13 }} className="es-float2">🥚</div>
-        <div style={{ position: "absolute", bottom: 20, right: "5%", fontSize: 44, opacity: 0.12 }} className="es-float">🌸</div>
+
 
         <div className="max-w-4xl mx-auto px-4 relative">
 
