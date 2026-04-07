@@ -80,7 +80,7 @@ function PopularPosts() {
             {POPULAR_POSTS.map(post => (
               <div
                 key={post.id}
-                onClick={() => navigate(`/blog?category=${post.category}`)}
+                onClick={() => navigate(`/blog/${post.id}`)}
                 className={`${post.color} border ${post.border} rounded-3xl p-6 cursor-pointer hover:shadow-md transition-all hover:-translate-y-1`}
               >
                 <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-3 ${post.tag}`}>
