@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 const HIDE_AFTER = new Date("2026-04-15T00:00:00");
 
+const CHICK_URL = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/20ec02b6-392b-4e22-8ce0-d88bf6826a5d.png";
+const EGGS_GRASS_URL = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/83c5295c-0823-45ea-acad-720ffcf8b877.png";
+const TABLET_URL = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/22bfd275-9eba-4ebc-9662-2f9322160dca.png";
+
 export default function EasterBanner() {
-  const navigate = useNavigate();
   const [closed, setClosed] = useState(false);
 
   if (new Date() >= HIDE_AFTER || closed) return null;
@@ -13,46 +15,75 @@ export default function EasterBanner() {
   return (
     <>
       <style>{`
-        @keyframes eb-shine { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
-        .eb-shine { animation: eb-shine 2s ease-in-out infinite; }
+        .eb-banner {
+          background: linear-gradient(90deg, #fce4ec 0%, #f8bbd9 30%, #fdf3e7 60%, #fce4ec 100%);
+          position: relative;
+          overflow: hidden;
+          border-bottom: 2px solid #f48fb1;
+        }
+        @keyframes eb-float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+        .eb-float { animation: eb-float 3s ease-in-out infinite; }
+        .eb-float2 { animation: eb-float 3.5s ease-in-out 0.5s infinite; }
       `}</style>
 
-      <div
-        style={{
-          background: "linear-gradient(90deg, #7c3aed 0%, #db2777 40%, #ea580c 75%, #d97706 100%)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-        className="w-full"
-      >
-        {/* Декоративные полоски фона */}
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: "repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 10px, transparent 10px, transparent 20px)",
-        }} />
+      <div className="eb-banner w-full">
+        <div className="max-w-5xl mx-auto flex items-end justify-between relative" style={{ minHeight: 110 }}>
 
-        <div className="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3 relative">
-          {/* Текст */}
-          <div className="flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-center">
-            <span className="eb-shine text-lg sm:text-xl">✨</span>
-            <span className="text-white font-black text-sm sm:text-base leading-tight">
-              Светлой Пасхи! Пасхальные рецепты, поделки и советы — специально для вас
-            </span>
-            <button
-              onClick={() => {
-                const el = document.getElementById("easter-section");
-                el?.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
-              className="flex-shrink-0 bg-white text-purple-700 font-black text-xs sm:text-sm px-4 py-1.5 rounded-full hover:bg-yellow-100 transition-colors whitespace-nowrap"
-            >
-              Смотреть →
-            </button>
+          {/* Цыплёнок слева */}
+          <div className="eb-float flex-shrink-0" style={{ marginBottom: -2 }}>
+            <img
+              src={CHICK_URL}
+              alt="цыплёнок"
+              style={{ height: 120, width: "auto", display: "block" }}
+            />
           </div>
 
-          {/* Закрыть */}
+          {/* Центр: табличка + текст + кнопка */}
+          <div className="flex-1 flex flex-col items-center justify-center gap-2 pb-3 px-2">
+            <div className="eb-float2 flex-shrink-0">
+              <img
+                src={TABLET_URL}
+                alt="табличка"
+                style={{ height: 90, width: "auto" }}
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              <span style={{
+                fontFamily: "'Georgia', serif",
+                fontSize: "clamp(18px, 3vw, 26px)",
+                fontWeight: 900,
+                color: "#c2185b",
+                textShadow: "1px 1px 0 #fff, 2px 2px 0 rgba(194,24,91,0.2)",
+                whiteSpace: "nowrap",
+              }}>
+                Светлой Пасхи!
+              </span>
+              <button
+                onClick={() => {
+                  const el = document.getElementById("easter-section");
+                  el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                style={{ background: "#c2185b", color: "#fff" }}
+                className="font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap flex-shrink-0"
+              >
+                Смотреть →
+              </button>
+            </div>
+          </div>
+
+          {/* Яйца в траве справа */}
+          <div className="eb-float flex-shrink-0 hidden sm:block" style={{ marginBottom: -2 }}>
+            <img
+              src={EGGS_GRASS_URL}
+              alt="пасхальные яйца"
+              style={{ height: 115, width: "auto", display: "block" }}
+            />
+          </div>
+
+          {/* Кнопка закрыть */}
           <button
             onClick={() => setClosed(true)}
-            className="flex-shrink-0 text-white/60 hover:text-white transition-colors ml-1"
+            className="absolute top-2 right-2 text-pink-400 hover:text-pink-700 transition-colors"
           >
             <Icon name="X" size={16} />
           </button>
