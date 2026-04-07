@@ -18,43 +18,29 @@ export default function EasterBanner() {
         .eb-float  { animation: eb-float 3s ease-in-out infinite; }
         .eb-float2 { animation: eb-float 3.5s ease-in-out 0.6s infinite; }
         .eb-title  { font-family: 'Marck Script', cursive; }
-        .eb-wrap   {
-          background: linear-gradient(90deg, #fce4ec 0%, #fdf0f5 50%, #fce4ec 100%);
-          border-bottom: 2px solid #f48fb1;
-          overflow: visible;
-          position: relative;
-        }
-        .eb-inner {
-          max-width: 900px;
-          margin: 0 auto;
-          padding: 0 16px;
-          display: flex;
-          align-items: flex-end;
-          justify-content: space-between;
-          position: relative;
-          min-height: 120px;
-        }
-        .eb-chick {
-          flex-shrink: 0;
-          margin-top: -50px;
-          align-self: flex-end;
-        }
-        .eb-eggs {
-          flex-shrink: 0;
-          align-self: flex-end;
-        }
       `}</style>
 
-      <div className="eb-wrap w-full">
-        <div className="eb-inner">
+      <div style={{
+        background: "linear-gradient(90deg, #fce4ec 0%, #fdf0f5 50%, #fce4ec 100%)",
+        borderBottom: "2px solid #f48fb1",
+      }}>
+        <div style={{
+          maxWidth: 900,
+          margin: "0 auto",
+          padding: "10px 16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "relative",
+        }}>
 
-          {/* Цыплёнок слева — торчит вверх за счёт отрицательного margin-top */}
-          <div className="eb-float eb-chick hidden sm:block">
-            <img src={CHICK_URL} alt="цыплёнок" style={{ height: 170, width: "auto", display: "block" }} />
+          {/* Цыплёнок слева */}
+          <div className="eb-float hidden sm:block" style={{ flexShrink: 0 }}>
+            <img src={CHICK_URL} alt="цыплёнок" style={{ height: 110, width: "auto", display: "block" }} />
           </div>
 
           {/* Центр — надпись и кнопка */}
-          <div className="flex-1 flex flex-row items-center justify-center gap-4 pb-4 px-4">
+          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 20, padding: "0 16px" }}>
             <span className="eb-title eb-float2" style={{
               fontSize: "clamp(28px, 5vw, 48px)",
               color: "#c2185b",
@@ -68,16 +54,16 @@ export default function EasterBanner() {
               onClick={() => {
                 document.getElementById("easter-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
-              style={{ background: "#c2185b", color: "#fff" }}
-              className="font-bold text-sm px-5 py-2 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap flex-shrink-0"
+              style={{ background: "#c2185b", color: "#fff", flexShrink: 0 }}
+              className="font-bold text-sm px-5 py-2 rounded-full hover:opacity-90 transition-opacity whitespace-nowrap"
             >
               Смотреть →
             </button>
           </div>
 
           {/* Яйца в траве справа */}
-          <div className="eb-float eb-eggs hidden sm:block">
-            <img src={EGGS_GRASS_URL} alt="пасхальные яйца" style={{ height: 120, width: "auto", display: "block" }} />
+          <div className="eb-float hidden sm:block" style={{ flexShrink: 0 }}>
+            <img src={EGGS_GRASS_URL} alt="пасхальные яйца" style={{ height: 110, width: "auto", display: "block" }} />
           </div>
 
           {/* Кнопка закрыть */}
