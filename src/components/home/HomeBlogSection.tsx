@@ -5,11 +5,12 @@ import StickerTag from "@/components/ui/sticker-tag";
 const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
 const POPULAR_POSTS = [
+  { id: 43, title: "Кулич творожный", category: "recipes", emoji: "🍰", color: "bg-orange-50", border: "border-orange-200", tag: "bg-orange-100 text-orange-700", label: "Рецепты" },
+  { id: 33, title: "Космические пончики⭐", category: "recipes", emoji: "🍩", color: "bg-purple-50", border: "border-purple-200", tag: "bg-purple-100 text-purple-700", label: "Рецепты" },
   { id: 16, title: "Гаджеты. Польза или вред?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
-  { id: 15, title: "Holidays-каникулы", category: "english", emoji: "🇬🇧", color: "bg-sky-50", border: "border-sky-200", tag: "bg-sky-100 text-sky-700", label: "Английский язык" },
-  { id: 13, title: "Старт продаж смен", category: "summer", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб" },
-  { id: 12, title: "Бессонница у детей. Причины и как бороться.", category: "detail", emoji: "📖", color: "bg-teal-50", border: "border-teal-200", tag: "bg-teal-100 text-teal-700", label: "Подробно о важном" },
-  { id: 4, title: "Как сделать адаптацию малыша легкой?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 40, title: "Как выбрать летний лагерь для ребенка?", category: "summer", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб" },
+  { id: 44, title: "Пасхальный декупаж яиц", category: "creative", emoji: "🎨", color: "bg-pink-50", border: "border-pink-200", tag: "bg-pink-100 text-pink-700", label: "Творчество" },
+  { id: 39, title: "Как успокоить истерику ребенка?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
 ];
 
 function PopularPosts() {
