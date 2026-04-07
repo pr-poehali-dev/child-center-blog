@@ -52,6 +52,12 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
           <p className="text-gray-500 text-lg leading-relaxed">
             Блог для любящих родителей: статьи, советы педагогов, новости центра и запись на занятия онлайн.
           </p>
+          <div className="inline-flex items-center gap-2 mt-4 bg-white border border-orange-100 rounded-full px-5 py-2 shadow-sm text-sm text-gray-600">
+            <span className="w-2 h-2 rounded-full bg-green-400 shrink-0" />
+            <span className="font-semibold text-gray-700">Пн — Пт: 8:00 — 18:00</span>
+            <span className="text-gray-300">·</span>
+            <span className="text-gray-400">Сб — Вс: выходной</span>
+          </div>
         </div>
 
         {/* ВИДЕО */}
