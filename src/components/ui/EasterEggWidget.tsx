@@ -99,7 +99,7 @@ export default function EasterEggWidget({ onDone }: Props) {
       <div style={{
         position: "fixed",
         bottom: 20,
-        left: 20,
+        left: 70,
         zIndex: 9998,
         pointerEvents: "none",
         userSelect: "none",
