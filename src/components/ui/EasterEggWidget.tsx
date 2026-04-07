@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
+// Виджет активен до 14 апреля включительно
+const HIDE_AFTER = new Date("2026-04-15T00:00:00");
+
 export default function EasterEggWidget() {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ x: 80, y: 80 });
@@ -68,6 +71,7 @@ export default function EasterEggWidget() {
     };
   }, []);
 
+  if (new Date() >= HIDE_AFTER) return null;
   if (!visible) return null;
 
   // Зубчатая линия разлома
