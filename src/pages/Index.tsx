@@ -36,10 +36,12 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-[#fffdf8] font-nunito text-gray-700">
       <HomeNavbar activeSection={activeSection} onFormClick={openBooking} />
+      <div className="pt-16">
       <EasterBanner />
       <HomeHero onFormClick={openBooking} onScrollTo={scrollTo} />
       <HomeSections onFormClick={openBooking} />
       <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
+      </div>
     </div>
   );
 }
