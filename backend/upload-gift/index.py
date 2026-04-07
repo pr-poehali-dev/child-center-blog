@@ -1,6 +1,7 @@
 import json
 import os
 import urllib.request
+import urllib.parse
 import boto3
 
 
@@ -31,7 +32,6 @@ def handler(event: dict, context) -> dict:
 
     api_url = f"https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key={urllib.parse.quote(YANDEX_PUBLIC_KEY)}"
 
-    import urllib.parse
     req = urllib.request.Request(api_url)
     with urllib.request.urlopen(req) as resp:
         data = json.loads(resp.read())
