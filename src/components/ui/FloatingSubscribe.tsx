@@ -154,25 +154,31 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
       </div>
 
       {/* Плавающая кнопка */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        className={`fixed bottom-5 right-5 z-50 h-11 rounded-full shadow-lg transition-all duration-500
-          bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500
-          flex items-center gap-1.5 px-4
-          hover:scale-105 active:scale-95
+      <div
+        className={`fixed bottom-5 right-5 z-50 flex flex-col items-end gap-1 transition-all duration-500
           ${visible && !hidden ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
         `}
-        style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
       >
-        {open ? (
-          <Icon name="X" size={16} className="text-white" />
-        ) : (
-          <Icon name="Bell" size={16} className="text-white" />
+        {EASTER_GIFT_ACTIVE && !open && (
+          <div className="bg-white border border-orange-200 text-orange-600 text-xs font-bold px-3 py-1 rounded-full shadow-md whitespace-nowrap">
+            🎁 Подарок за подписку!
+          </div>
         )}
-        <span className="text-white font-black text-xs whitespace-nowrap">
-          {open ? "Закрыть" : "Подписаться"}
-        </span>
-      </button>
+        <button
+          onClick={() => setOpen(o => !o)}
+          className="h-11 rounded-full shadow-lg bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 flex items-center gap-1.5 px-4 hover:scale-105 active:scale-95 transition-all"
+          style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
+        >
+          {open ? (
+            <Icon name="X" size={16} className="text-white" />
+          ) : (
+            <Icon name="Bell" size={16} className="text-white" />
+          )}
+          <span className="text-white font-black text-xs whitespace-nowrap">
+            {open ? "Закрыть" : "Подписаться"}
+          </span>
+        </button>
+      </div>
     </>
   );
 }
