@@ -15,19 +15,24 @@ export default function EasterBanner() {
   return (
     <>
       <style>{`
+        @import url('https://fonts.cdnfonts.com/css/prata');
         .eb-banner {
           background: linear-gradient(90deg, #fce4ec 0%, #f8bbd9 30%, #fdf3e7 60%, #fce4ec 100%);
           position: relative;
-          overflow: hidden;
+          overflow: visible;
           border-bottom: 2px solid #f48fb1;
         }
         @keyframes eb-float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
         .eb-float { animation: eb-float 3s ease-in-out infinite; }
         .eb-float2 { animation: eb-float 3.5s ease-in-out 0.5s infinite; }
+        .eb-title {
+          font-family: 'Prata', 'Georgia', serif;
+          letter-spacing: 0.02em;
+        }
       `}</style>
 
       <div className="eb-banner w-full">
-        <div className="max-w-5xl mx-auto flex items-end justify-between relative" style={{ minHeight: 110 }}>
+        <div className="max-w-5xl mx-auto flex items-end justify-between relative" style={{ minHeight: 140 }}>
 
           {/* Цыплёнок слева */}
           <div className="eb-float flex-shrink-0" style={{ marginBottom: -2 }}>
@@ -48,10 +53,9 @@ export default function EasterBanner() {
               />
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-2">
-              <span style={{
-                fontFamily: "'Georgia', serif",
-                fontSize: "clamp(18px, 3vw, 26px)",
-                fontWeight: 900,
+              <span className="eb-title" style={{
+                fontSize: "clamp(20px, 3.5vw, 30px)",
+                fontWeight: 700,
                 color: "#c2185b",
                 textShadow: "1px 1px 0 #fff, 2px 2px 0 rgba(194,24,91,0.2)",
                 whiteSpace: "nowrap",
