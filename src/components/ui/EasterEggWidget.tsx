@@ -99,7 +99,7 @@ export default function EasterEggWidget({ onDone }: Props) {
       <div style={{
         position: "fixed",
         bottom: 20,
-        left: 70,
+        left: 20,
         zIndex: 9998,
         pointerEvents: "none",
         userSelect: "none",
@@ -111,9 +111,9 @@ export default function EasterEggWidget({ onDone }: Props) {
         {open && (
           <div style={{
             position: "absolute",
-            bottom: "calc(100% + 4px)",
-            left: "50%",
-            transform: "translateX(-50%)",
+            bottom: "calc(100% - 10px)",
+            left: "calc(100% + 8px)",
+            transform: "none",
             background: "#FFFBEA",
             border: "2px solid #C0392B",
             borderRadius: 10,
@@ -130,11 +130,11 @@ export default function EasterEggWidget({ onDone }: Props) {
           }}>
             🐣 Тут есть полезности<br />к Пасхе. Ищи в разделах.
             <div style={{
-              position: "absolute", bottom: -7, left: "50%",
-              transform: "translateX(-50%)",
-              borderLeft: "6px solid transparent",
-              borderRight: "6px solid transparent",
-              borderTop: "7px solid #C0392B",
+              position: "absolute", top: "50%", left: -7,
+              transform: "translateY(-50%)",
+              borderTop: "6px solid transparent",
+              borderBottom: "6px solid transparent",
+              borderRight: "7px solid #C0392B",
             }} />
           </div>
         )}
