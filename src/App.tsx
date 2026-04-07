@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import Contacts from "./pages/Contacts";
 import Unsubscribe from "./pages/Unsubscribe";
 import FloatingSubscribe from "@/components/ui/FloatingSubscribe";
+import EasterEggWidget from "@/components/ui/EasterEggWidget";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <FloatingSubscribe />
+        <EasterEggWidget />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
