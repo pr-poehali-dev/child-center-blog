@@ -96,12 +96,21 @@ export default function EasterEggWidget({ onDone }: Props) {
         }
       `}</style>
 
-      <div style={{
+      <div
+        onClick={() => {
+          if (cycleRef.current) clearTimeout(cycleRef.current);
+          if (timerRef.current) clearTimeout(timerRef.current);
+          setOpen(false);
+          setPhase("out");
+          setTimeout(() => { setPhase("gone"); onDone?.(); }, 700);
+        }}
+        style={{
         position: "fixed",
         bottom: 20,
         left: 20,
         zIndex: 9998,
-        pointerEvents: "none",
+        pointerEvents: "auto",
+        cursor: "pointer",
         userSelect: "none",
         transform: `translateY(${slideY})`,
         transition: "transform 0.7s cubic-bezier(0.34,1.56,0.64,1)",
