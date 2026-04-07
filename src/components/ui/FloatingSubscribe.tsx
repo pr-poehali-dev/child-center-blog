@@ -4,7 +4,11 @@ import Icon from "@/components/ui/icon";
 
 const SUBSCRIBERS_API = "https://functions.poehali.dev/ad0992ef-212b-47b2-9265-aedfd9a33c3f";
 
-export default function FloatingSubscribe() {
+interface Props {
+  hidden?: boolean;
+}
+
+export default function FloatingSubscribe({ hidden = false }: Props) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -146,7 +150,7 @@ export default function FloatingSubscribe() {
           bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500
           flex items-center gap-1.5 px-4
           hover:scale-105 active:scale-95
-          ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
+          ${visible && !hidden ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
         `}
         style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
       >
