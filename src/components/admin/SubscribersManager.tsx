@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
-import { SUBSCRIBERS_API, TOKEN_KEY } from "./constants";
+import { SUBSCRIBERS_API, UPLOAD_GIFT_API, TOKEN_KEY } from "./constants";
 
 interface Subscriber {
   id: number;
@@ -18,6 +18,9 @@ export default function SubscribersManager() {
   const [sending, setSending] = useState(false);
   const [sendResult, setSendResult] = useState<{ sent: number; errors: number } | null>(null);
   const [tab, setTab] = useState<"list" | "send">("list");
+  const [uploadingGift, setUploadingGift] = useState(false);
+  const [giftUploaded, setGiftUploaded] = useState(false);
+  const [giftUrl, setGiftUrl] = useState("");
 
   const token = localStorage.getItem(TOKEN_KEY) || "";
 
@@ -58,6 +61,24 @@ export default function SubscribersManager() {
     }
   };
 
+  const handleUploadGift = async () => {
+    setUploadingGift(true);
+    setGiftUploaded(false);
+    try {
+      const res = await fetch(UPLOAD_GIFT_API, {
+        method: "POST",
+        headers: { "X-Admin-Password": token },
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setGiftUploaded(true);
+        setGiftUrl(data.url);
+      }
+    } finally {
+      setUploadingGift(false);
+    }
+  };
+
   const active = subscribers.filter(s => s.is_active);
 
   return (
@@ -72,6 +93,41 @@ export default function SubscribersManager() {
           Обновить
         </button>
       </div>
+
+      {/* Пасхальный подарок */}
+      {new Date() <= new Date("2026-04-14T23:59:59") && (
+        <div className="mb-6 bg-gradient-to-r from-orange-50 to-pink-50 border border-orange-200 rounded-2xl p-5">
+          <div className="flex items-start gap-3">
+            <div className="text-3xl">🐣</div>
+            <div className="flex-1">
+              <div className="font-black text-gray-800 text-sm mb-0.5">Пасхальный подарок за подписку</div>
+              <p className="text-xs text-gray-500 mb-3">Чтобы файл отправлялся подписчикам в письме — сначала загрузите его в хранилище нажав кнопку ниже. Достаточно сделать один раз.</p>
+              {giftUploaded ? (
+                <div className="flex items-center gap-2 text-green-700 text-sm font-bold">
+                  <Icon name="CheckCircle" size={16} className="text-green-500" />
+                  Файл загружен! Подписчики будут получать его автоматически.
+                </div>
+              ) : (
+                <button
+                  onClick={handleUploadGift}
+                  disabled={uploadingGift}
+                  className="flex items-center gap-2 bg-gradient-to-r from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 disabled:opacity-60 text-white font-bold px-4 py-2 rounded-xl text-sm transition-all"
+                >
+                  {uploadingGift ? (
+                    <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Icon name="Upload" size={15} />
+                  )}
+                  {uploadingGift ? "Загружаю..." : "Загрузить сборник рецептов в хранилище"}
+                </button>
+              )}
+              {giftUploaded && giftUrl && (
+                <a href={giftUrl} target="_blank" rel="noreferrer" className="block mt-2 text-xs text-orange-500 underline truncate">{giftUrl}</a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Вкладки */}
       <div className="flex gap-1 mb-6 border-b border-orange-100">

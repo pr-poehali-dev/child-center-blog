@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 const SUBSCRIBERS_API = "https://functions.poehali.dev/ad0992ef-212b-47b2-9265-aedfd9a33c3f";
+const EASTER_GIFT_ACTIVE = new Date() <= new Date("2026-04-14T23:59:59");
 
 interface Props {
   hidden?: boolean;
@@ -72,7 +73,11 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
           <div className="bg-gradient-to-r from-orange-400 to-rose-400 px-5 py-4 flex items-center justify-between">
             <div>
               <div className="text-white font-black text-base leading-tight">Подписаться на блог</div>
-              <div className="text-white/80 text-xs mt-0.5">Новые статьи — на вашу почту</div>
+              {EASTER_GIFT_ACTIVE ? (
+                <div className="text-white/90 text-xs mt-0.5 font-bold">🐣 Пасхальный подарок за подписку!</div>
+              ) : (
+                <div className="text-white/80 text-xs mt-0.5">Новые статьи — на вашу почту</div>
+              )}
             </div>
             <button onClick={handleClose} className="text-white/70 hover:text-white transition-colors">
               <Icon name="X" size={18} />
@@ -84,7 +89,12 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
               <div className="text-center py-3">
                 <div className="text-4xl mb-2">☀️</div>
                 <p className="font-black text-gray-800 text-sm">Вы подписаны!</p>
-                <p className="text-gray-400 text-xs mt-1">Будем присылать новые статьи</p>
+                <p className="text-gray-400 text-xs mt-1">Проверьте почту — письмо уже летит</p>
+                {EASTER_GIFT_ACTIVE && (
+                  <div className="mt-3 bg-orange-50 border border-orange-200 rounded-xl p-3 text-xs text-orange-800 text-left">
+                    🎁 <strong>Подарок в письме!</strong> Мы отправили сборник пасхальных рецептов на вашу почту.
+                  </div>
+                )}
                 <button
                   onClick={handleClose}
                   className="mt-4 w-full bg-orange-100 text-orange-600 font-bold py-2 rounded-xl text-sm hover:bg-orange-200 transition-colors"

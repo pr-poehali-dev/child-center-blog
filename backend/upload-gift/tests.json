@@ -1,0 +1,11 @@
+{
+  "tests": [
+    {
+      "name": "Проверка без пароля",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 403,
+      "bodyMatcher": "none"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import json
 import os
 import smtplib
 import hashlib
+from datetime import date
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import psycopg2
@@ -11,6 +12,7 @@ FROM_EMAIL = 'ribkadolli@mail.ru'
 SMTP_HOST = 'smtp.mail.ru'
 SMTP_PORT = 465
 SITE_URL = 'https://blogribkadolli.ru'
+EASTER_GIFT_DEADLINE = '2026-04-14'
 
 
 def make_token(email: str, sub_id: int) -> str:
@@ -41,7 +43,30 @@ def send_email(to_email: str, subject: str, html: str):
         server.sendmail(FROM_EMAIL, to_email, msg.as_string())
 
 
+def easter_gift_block(aws_key_id: str) -> str:
+    gift_url = f"https://cdn.poehali.dev/projects/{aws_key_id}/bucket/gifts/easter-recipes.docx"
+    today = date.today()
+    deadline = date(2026, 4, 14)
+    if today > deadline:
+        return ''
+    return f"""
+    <div style="margin-top: 20px; background: linear-gradient(135deg, #fff7ed, #fdf4ff); border-radius: 14px; padding: 20px; text-align: center; border: 1px solid #fed7aa;">
+        <div style="font-size: 36px; margin-bottom: 6px;">🐣</div>
+        <div style="font-weight: 900; color: #92400e; font-size: 15px; margin-bottom: 6px;">Пасхальный подарок для вас!</div>
+        <p style="color: #78350f; font-size: 13px; margin: 0 0 14px; line-height: 1.5;">
+            Мы подготовили сборник рецептов для пасхального стола — скачайте в подарок от центра «Рыбка Долли»
+        </p>
+        <a href="{gift_url}" download
+           style="display: inline-block; background: linear-gradient(90deg, #f97316, #db2777); color: white; font-weight: 900; font-size: 14px; padding: 12px 24px; border-radius: 12px; text-decoration: none;">
+            🎁 Скачать сборник рецептов
+        </a>
+    </div>
+    """
+
+
 def welcome_html(name: str, token: str) -> str:
+    aws_key_id = os.environ.get('AWS_ACCESS_KEY_ID', '')
+    gift_block = easter_gift_block(aws_key_id)
     return f"""
     <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #fffdf8; border-radius: 16px; overflow: hidden; border: 1px solid #ffe0c0;">
         <div style="background: linear-gradient(135deg, #fb923c, #f43f5e); padding: 28px; text-align: center;">
@@ -54,7 +79,8 @@ def welcome_html(name: str, token: str) -> str:
             <p style="color: #4b5563; font-size: 15px; line-height: 1.6;">
                 Вы подписались на наш блог. Теперь вы будете первыми узнавать о новых статьях, советах для родителей и новостях центра.
             </p>
-            <div style="margin-top: 24px; background: #fff7ed; border-radius: 12px; padding: 16px; text-align: center; color: #9a3412; font-size: 13px;">
+            {gift_block}
+            <div style="margin-top: 20px; background: #fff7ed; border-radius: 12px; padding: 16px; text-align: center; color: #9a3412; font-size: 13px;">
                 Спасибо, что вы с нами! С теплом, команда «Рыбка Долли» ☀️
             </div>
             {unsubscribe_footer(token)}
