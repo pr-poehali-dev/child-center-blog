@@ -42,12 +42,11 @@ export default function EasterEggWidget() {
   };
 
   const startCycle = () => {
-    setOpen(false);
     cycleRef.current = setTimeout(() => {
       setOpen(true);
       cycleRef.current = setTimeout(() => {
         setOpen(false);
-        cycleRef.current = setTimeout(startCycle, 4000);
+        cycleRef.current = setTimeout(startCycle, 5000);
       }, 5000);
     }, 3000);
   };
@@ -71,193 +70,245 @@ export default function EasterEggWidget() {
 
   if (!visible) return null;
 
-  // SVG размеры
-  const W = 100;
-  const H = 120;
+  // Зубчатая линия разлома
+  const crackY = 58;
+  const crack = `M 9,${crackY} L 20,${crackY-13} L 30,${crackY} L 42,${crackY-13} L 52,${crackY+2} L 63,${crackY-13} L 74,${crackY} L 84,${crackY-13} L 93,${crackY}`;
+  const bottomClip = `M 9,${crackY} L 20,${crackY-13} L 30,${crackY} L 42,${crackY-13} L 52,${crackY+2} L 63,${crackY-13} L 74,${crackY} L 84,${crackY-13} L 93,${crackY} L 93,140 L 9,140 Z`;
+  const topClip    = `M 9,${crackY} L 20,${crackY-13} L 30,${crackY} L 42,${crackY-13} L 52,${crackY+2} L 63,${crackY-13} L 74,${crackY} L 84,${crackY-13} L 93,${crackY} L 93,0 L 9,0 Z`;
 
-  // Форма целого яйца (нижняя половина — скорлупа)
-  // Яйцо: эллипс примерно cx=50, cy=62, rx=42, ry=52
-  const eggCx = 50, eggCy = 64, eggRx = 42, eggRy = 52;
-
-  // Зубчатая линия разлома (~середина яйца по высоте = cy ~38)
-  // Зубцы: M 8,40 L 18,30 L 28,40 L 38,30 L 50,42 L 62,30 L 72,40 L 82,30 L 92,40
-  const crackY = 44;
-  const crackPath = `M 8,${crackY} L 18,${crackY-12} L 28,${crackY} L 38,${crackY-12} L 50,${crackY+2} L 62,${crackY-12} L 72,${crackY} L 82,${crackY-12} L 92,${crackY}`;
-
-  // Нижняя скорлупа — клип ниже зубчатой линии
-  const bottomShellClip = `M 8,${crackY} L 18,${crackY-12} L 28,${crackY} L 38,${crackY-12} L 50,${crackY+2} L 62,${crackY-12} L 72,${crackY} L 82,${crackY-12} L 92,${crackY} L 92,130 L 8,130 Z`;
-
-  // Верхняя скорлупа — клип выше зубчатой линии
-  const topShellClip = `M 8,${crackY} L 18,${crackY-12} L 28,${crackY} L 38,${crackY-12} L 50,${crackY+2} L 62,${crackY-12} L 72,${crackY} L 82,${crackY-12} L 92,${crackY} L 92,0 L 8,0 Z`;
+  // Путь яйца целиком
+  const eggPath = "M 51,4 C 28,4 9,28 9,60 C 9,90 27,114 51,114 C 75,114 93,90 93,60 C 93,28 74,4 51,4 Z";
 
   return (
     <>
       <style>{`
-        @keyframes easter-chick-pop {
-          0% { transform: translateY(18px); opacity: 0; }
-          60% { transform: translateY(-4px); opacity: 1; }
-          80% { transform: translateY(2px); }
+        @keyframes eaw-wobble {
+          0%,100% { transform: translate(-50%,-50%) rotate(0deg); }
+          25%      { transform: translate(-50%,-50%) rotate(2deg); }
+          75%      { transform: translate(-50%,-50%) rotate(-2deg); }
+        }
+        @keyframes eaw-top-open {
+          0%   { transform: rotate(0deg) translate(0px,0px); }
+          100% { transform: rotate(-32deg) translate(-14px,-16px); }
+        }
+        @keyframes eaw-top-close {
+          0%   { transform: rotate(-32deg) translate(-14px,-16px); }
+          100% { transform: rotate(0deg) translate(0px,0px); }
+        }
+        @keyframes eaw-chick-up {
+          0%   { transform: translateY(30px); opacity: 0; }
+          60%  { transform: translateY(-5px); opacity: 1; }
+          80%  { transform: translateY(2px); }
           100% { transform: translateY(0px); opacity: 1; }
         }
-        @keyframes easter-top-open {
-          0% { transform: rotate(0deg) translate(0,0); }
-          100% { transform: rotate(-28deg) translate(-12px, -14px); }
+        @keyframes eaw-chick-down {
+          0%   { transform: translateY(0px); opacity: 1; }
+          100% { transform: translateY(30px); opacity: 0; }
         }
-        @keyframes easter-top-close {
-          0% { transform: rotate(-28deg) translate(-12px, -14px); }
-          100% { transform: rotate(0deg) translate(0,0); }
-        }
-        @keyframes easter-wobble {
-          0%,100% { transform: rotate(0deg); }
-          25% { transform: rotate(2.5deg); }
-          75% { transform: rotate(-2.5deg); }
+        @keyframes eaw-sign-show {
+          0%   { opacity: 0; transform: translateX(-50%) scale(0.7); }
+          100% { opacity: 1; transform: translateX(-50%) scale(1); }
         }
       `}</style>
 
-      <div
-        style={{
-          position: "fixed",
-          left: pos.x,
-          top: pos.y,
-          transform: "translate(-50%, -50%)",
-          zIndex: 9998,
-          pointerEvents: "none",
-          userSelect: "none",
-          animation: "easter-wobble 2.4s ease-in-out infinite",
-        }}
-      >
-        {/* Табличка над виджетом */}
-        <div
-          style={{
+      <div style={{
+        position: "fixed",
+        left: pos.x,
+        top: pos.y,
+        transform: "translate(-50%,-50%)",
+        zIndex: 9998,
+        pointerEvents: "none",
+        userSelect: "none",
+        animation: "eaw-wobble 2.8s ease-in-out infinite",
+        width: 102,
+        height: 160,
+      }}>
+
+        {/* Табличка */}
+        {open && (
+          <div style={{
             position: "absolute",
-            bottom: "calc(100% + 6px)",
+            bottom: "calc(100% + 4px)",
             left: "50%",
             transform: "translateX(-50%)",
             background: "#FFFBEA",
-            border: "2px solid #D4860A",
+            border: "2px solid #C0392B",
             borderRadius: 10,
             padding: "5px 10px",
             fontSize: 10,
             fontWeight: 800,
-            color: "#7B3F00",
+            color: "#7B1A1A",
             textAlign: "center",
             lineHeight: 1.4,
             whiteSpace: "nowrap",
-            boxShadow: "0 3px 10px rgba(0,0,0,0.18)",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.22)",
             fontFamily: "sans-serif",
-            opacity: open ? 1 : 0,
-            transition: "opacity 0.4s ease",
-          }}
-        >
-          🐣 Тут есть полезности<br />к Пасхе. Ищи в разделах.
-          {/* хвостик */}
-          <div style={{
-            position: "absolute",
-            bottom: -7,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 0,
-            height: 0,
-            borderLeft: "6px solid transparent",
-            borderRight: "6px solid transparent",
-            borderTop: "7px solid #D4860A",
-          }} />
-        </div>
+            animation: "eaw-sign-show 0.4s ease forwards",
+          }}>
+            🐣 Тут есть полезности<br />к Пасхе. Ищи в разделах.
+            <div style={{
+              position: "absolute", bottom: -7, left: "50%",
+              transform: "translateX(-50%)",
+              borderLeft: "6px solid transparent",
+              borderRight: "6px solid transparent",
+              borderTop: "7px solid #C0392B",
+            }} />
+          </div>
+        )}
 
-        <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }}>
+        <svg width="102" height="160" viewBox="0 0 102 160" style={{ overflow: "visible", display: "block" }}>
           <defs>
-            {/* Клип для нижней скорлупы */}
-            <clipPath id="bottom-clip">
-              <path d={bottomShellClip} />
+            <clipPath id="eaw-bottom">
+              <path d={bottomClip} />
             </clipPath>
-            {/* Клип для верхней скорлупы */}
-            <clipPath id="top-clip">
-              <path d={topShellClip} />
+            <clipPath id="eaw-top">
+              <path d={topClip} />
             </clipPath>
+            <clipPath id="eaw-egg-full">
+              <path d={eggPath} />
+            </clipPath>
+            {/* Радиальный градиент для объёма */}
+            <radialGradient id="eaw-grad-bottom" cx="38%" cy="35%" r="65%">
+              <stop offset="0%" stopColor="#E84040" />
+              <stop offset="100%" stopColor="#8B0000" />
+            </radialGradient>
+            <radialGradient id="eaw-grad-top" cx="38%" cy="35%" r="65%">
+              <stop offset="0%" stopColor="#E84040" />
+              <stop offset="100%" stopColor="#8B0000" />
+            </radialGradient>
           </defs>
 
           {/* Тень */}
-          <ellipse cx={eggCx} cy={H - 4} rx={30} ry={5} fill="rgba(0,0,0,0.13)" />
+          <ellipse cx="51" cy="122" rx="32" ry="6" fill="rgba(0,0,0,0.18)" />
 
-          {/* === НИЖНЯЯ ПОЛОВИНА СКОРЛУПЫ === */}
-          <g clipPath="url(#bottom-clip)">
-            {/* Основа яйца — пасхальный цвет */}
-            <ellipse cx={eggCx} cy={eggCy} rx={eggRx} ry={eggRy} fill="#F9E4B7" />
-            {/* Пасхальные узоры */}
-            {/* Горизонтальные волны */}
-            <path d={`M 10,70 Q 20,64 30,70 Q 40,76 50,70 Q 60,64 70,70 Q 80,76 90,70`}
-              fill="none" stroke="#E07B54" strokeWidth="2.5" strokeLinecap="round" />
-            <path d={`M 14,82 Q 24,76 34,82 Q 44,88 54,82 Q 64,76 76,82 Q 84,88 90,84`}
-              fill="none" stroke="#5BB8A0" strokeWidth="2.5" strokeLinecap="round" />
-            {/* Цветочки / точки */}
-            <circle cx={26} cy={56} r={3} fill="#FF8FAB" />
-            <circle cx={50} cy={54} r={3.5} fill="#A8D8A8" />
-            <circle cx={74} cy={56} r={3} fill="#FFD166" />
-            <circle cx={20} cy={92} r={2.5} fill="#FFD166" />
-            <circle cx={50} cy={96} r={2.5} fill="#FF8FAB" />
-            <circle cx={78} cy={92} r={2.5} fill="#5BB8A0" />
+          {/* ===== НИЖНЯЯ ПОЛОВИНА СКОРЛУПЫ ===== */}
+          <g clipPath="url(#eaw-bottom)">
+            {/* Фон яйца */}
+            <path d={eggPath} fill="url(#eaw-grad-bottom)" />
+            {/* Цветочный узор — нижняя часть */}
+            {/* Большой цветок слева-снизу */}
+            <g transform="translate(22, 85)">
+              {[0,45,90,135,180,225,270,315].map((a,i) => (
+                <ellipse key={i} cx={0} cy={-10} rx={4} ry={8}
+                  fill={i % 2 === 0 ? "#FFD700" : "#FFF176"}
+                  transform={`rotate(${a})`} opacity={0.92} />
+              ))}
+              <circle cx={0} cy={0} r={5} fill="#FF8C00" />
+              <circle cx={0} cy={0} r={2.5} fill="#FFD700" />
+            </g>
+            {/* Маленький цветок справа */}
+            <g transform="translate(72, 75)">
+              {[0,60,120,180,240,300].map((a,i) => (
+                <ellipse key={i} cx={0} cy={-7} rx={3} ry={6}
+                  fill={i % 2 === 0 ? "#FFFFFF" : "#FFF9C4"}
+                  transform={`rotate(${a})`} opacity={0.85} />
+              ))}
+              <circle cx={0} cy={0} r={3.5} fill="#FFD700" />
+            </g>
+            {/* Средний цветок центр */}
+            <g transform="translate(50, 95)">
+              {[0,60,120,180,240,300].map((a,i) => (
+                <ellipse key={i} cx={0} cy={-8} rx={3.5} ry={7}
+                  fill={i % 2 === 0 ? "#FFD700" : "#FF8C00"}
+                  transform={`rotate(${a})`} opacity={0.9} />
+              ))}
+              <circle cx={0} cy={0} r={4} fill="#FFFFFF" opacity={0.8} />
+            </g>
+            {/* Листики */}
+            <ellipse cx={35} cy={70} rx={3} ry={7} fill="#A8D5A2" transform="rotate(30,35,70)" opacity={0.8} />
+            <ellipse cx={65} cy={100} rx={3} ry={7} fill="#A8D5A2" transform="rotate(-25,65,100)" opacity={0.8} />
+            <ellipse cx={20} cy={100} rx={2.5} ry={6} fill="#A8D5A2" transform="rotate(50,20,100)" opacity={0.8} />
+            {/* Точки-акценты */}
+            <circle cx={60} cy={68} r={2} fill="#FFD700" opacity={0.9} />
+            <circle cx={28} cy={108} r={2} fill="#FFFFFF" opacity={0.8} />
+            <circle cx={75} cy={95} r={1.8} fill="#FFD700" opacity={0.9} />
             {/* Блик */}
-            <ellipse cx={30} cy={75} rx={5} ry={8} fill="white" opacity={0.18} transform="rotate(-15,30,75)" />
+            <ellipse cx={30} cy={70} rx={6} ry={12} fill="white" opacity={0.12} transform="rotate(-15,30,70)" />
           </g>
 
-          {/* Зубчатая граница (нижняя) — видимый край */}
-          <path d={crackPath} fill="none" stroke="#D4860A" strokeWidth="1.5" strokeLinejoin="round" />
+          {/* Видимый зубчатый край (нижняя граница) */}
+          <path d={crack} fill="none" stroke="#6B0000" strokeWidth="1.5" strokeLinejoin="round" />
 
-          {/* === ЦЫПЛЁНОК внутри нижней части === */}
-          <g
-            clipPath="url(#bottom-clip)"
-            style={{
-              animation: open
-                ? "easter-chick-pop 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards"
-                : undefined,
-              opacity: open ? 1 : 0,
-              transition: open ? undefined : "opacity 0.3s ease",
-            }}
-          >
-            {/* Тело цыплёнка (жёлтый круг) */}
-            <ellipse cx={50} cy={52} rx={22} ry={20} fill="#FFD34E" />
+          {/* ===== ЦЫПЛЁНОК — поверх нижней скорлупы, без клипа ===== */}
+          <g style={{
+            animation: open
+              ? "eaw-chick-up 0.55s cubic-bezier(0.34,1.56,0.64,1) forwards"
+              : "eaw-chick-down 0.35s ease forwards",
+            transformOrigin: "51px 55px",
+          }}>
+            {/* Тело */}
+            <ellipse cx={51} cy={62} rx={20} ry={18} fill="#FFD34E" />
             {/* Голова */}
-            <circle cx={50} cy={32} r={16} fill="#FFD34E" />
+            <circle cx={51} cy={42} r={15} fill="#FFD34E" />
             {/* Крылышки */}
-            <ellipse cx={28} cy={48} rx={8} ry={5} fill="#FFC107" transform="rotate(-20,28,48)" />
-            <ellipse cx={72} cy={48} rx={8} ry={5} fill="#FFC107" transform="rotate(20,72,48)" />
+            <ellipse cx={30} cy={58} rx={9} ry={5} fill="#FFC107" transform="rotate(-20,30,58)" />
+            <ellipse cx={72} cy={58} rx={9} ry={5} fill="#FFC107" transform="rotate(20,72,58)" />
             {/* Глаза */}
-            <circle cx={44} cy={29} r={4} fill="#1a1a1a" />
-            <circle cx={56} cy={29} r={4} fill="#1a1a1a" />
-            <circle cx={45.2} cy={27.8} r={1.2} fill="white" />
-            <circle cx={57.2} cy={27.8} r={1.2} fill="white" />
+            <circle cx={45} cy={39} r={4.5} fill="#1a1a1a" />
+            <circle cx={57} cy={39} r={4.5} fill="#1a1a1a" />
+            <circle cx={46.3} cy={37.5} r={1.5} fill="white" />
+            <circle cx={58.3} cy={37.5} r={1.5} fill="white" />
             {/* Клюв */}
-            <path d="M 46,34 L 50,40 L 54,34 Z" fill="#FF8C00" />
+            <path d="M 47,44 L 51,51 L 55,44 Z" fill="#FF8C00" />
             {/* Румянец */}
-            <ellipse cx={38} cy={35} rx={4} ry={2.5} fill="#FFB3B3" opacity={0.7} />
-            <ellipse cx={62} cy={35} rx={4} ry={2.5} fill="#FFB3B3" opacity={0.7} />
+            <ellipse cx={38} cy={46} rx={4.5} ry={2.8} fill="#FFB3B3" opacity={0.7} />
+            <ellipse cx={64} cy={46} rx={4.5} ry={2.8} fill="#FFB3B3" opacity={0.7} />
+            {/* Хохолок */}
+            <ellipse cx={47} cy={27} rx={3} ry={6} fill="#FFC107" transform="rotate(-15,47,27)" />
+            <ellipse cx={51} cy={25} rx={2.5} ry={6} fill="#FFD34E" />
+            <ellipse cx={55} cy={27} rx={3} ry={6} fill="#FFC107" transform="rotate(15,55,27)" />
           </g>
 
-          {/* === ВЕРХНЯЯ ПОЛОВИНА СКОРЛУПЫ === */}
-          <g
-            style={{
-              transformOrigin: "50px 44px",
-              animation: open
-                ? "easter-top-open 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards"
-                : "easter-top-close 0.4s ease forwards",
-            }}
-          >
-            <g clipPath="url(#top-clip)">
-              {/* Основа верхушки */}
-              <ellipse cx={eggCx} cy={eggCy} rx={eggRx} ry={eggRy} fill="#F9E4B7" />
-              {/* Пасхальные узоры верхушки */}
-              <path d={`M 16,38 Q 26,30 36,38 Q 44,30 54,38 Q 64,30 74,38 Q 82,30 90,36`}
-                fill="none" stroke="#9B5DE5" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx={28} cy={20} r={3.5} fill="#FF8FAB" />
-              <circle cx={50} cy={14} r={3} fill="#A8D8A8" />
-              <circle cx={70} cy={20} r={3.5} fill="#9B5DE5" />
-              <circle cx={38} cy={30} r={2.5} fill="#FFD166" />
-              <circle cx={62} cy={30} r={2.5} fill="#E07B54" />
-              {/* Блик верхушки */}
-              <ellipse cx={30} cy={18} rx={5} ry={8} fill="white" opacity={0.2} transform="rotate(-15,30,18)" />
+          {/* ===== ВЕРХНЯЯ ПОЛОВИНА СКОРЛУПЫ — поверх цыплёнка ===== */}
+          <g style={{
+            transformOrigin: "51px 58px",
+            animation: open
+              ? "eaw-top-open 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards"
+              : "eaw-top-close 0.4s ease forwards",
+          }}>
+            <g clipPath="url(#eaw-top)">
+              {/* Фон верхушки */}
+              <path d={eggPath} fill="url(#eaw-grad-top)" />
+              {/* Узоры верхушки */}
+              {/* Большой цветок в центре верха */}
+              <g transform="translate(51, 30)">
+                {[0,45,90,135,180,225,270,315].map((a,i) => (
+                  <ellipse key={i} cx={0} cy={-11} rx={4.5} ry={9}
+                    fill={i % 2 === 0 ? "#FFD700" : "#FFF9C4"}
+                    transform={`rotate(${a})`} opacity={0.92} />
+                ))}
+                <circle cx={0} cy={0} r={5.5} fill="#FF8C00" />
+                <circle cx={0} cy={0} r={2.8} fill="#FFD700" />
+              </g>
+              {/* Маленький цветок слева */}
+              <g transform="translate(24, 46)">
+                {[0,60,120,180,240,300].map((a,i) => (
+                  <ellipse key={i} cx={0} cy={-6} rx={2.5} ry={5}
+                    fill={i % 2 === 0 ? "#FFFFFF" : "#FFF9C4"}
+                    transform={`rotate(${a})`} opacity={0.85} />
+                ))}
+                <circle cx={0} cy={0} r={3} fill="#FFD700" />
+              </g>
+              {/* Маленький цветок справа */}
+              <g transform="translate(78, 46)">
+                {[0,60,120,180,240,300].map((a,i) => (
+                  <ellipse key={i} cx={0} cy={-6} rx={2.5} ry={5}
+                    fill={i % 2 === 0 ? "#FFD700" : "#FF8C00"}
+                    transform={`rotate(${a})`} opacity={0.85} />
+                ))}
+                <circle cx={0} cy={0} r={3} fill="#FFFFFF" opacity={0.9} />
+              </g>
+              {/* Листики */}
+              <ellipse cx={37} cy={20} rx={2.5} ry={6} fill="#A8D5A2" transform="rotate(-30,37,20)" opacity={0.8} />
+              <ellipse cx={65} cy={20} rx={2.5} ry={6} fill="#A8D5A2" transform="rotate(30,65,20)" opacity={0.8} />
+              {/* Блик */}
+              <ellipse cx={30} cy={22} rx={5} ry={9} fill="white" opacity={0.15} transform="rotate(-15,30,22)" />
+              {/* Точки */}
+              <circle cx={35} cy={50} r={1.8} fill="#FFD700" opacity={0.9} />
+              <circle cx={67} cy={50} r={1.8} fill="#FFFFFF" opacity={0.8} />
             </g>
             {/* Зубчатый край верхней крышки */}
-            <path d={crackPath} fill="#F9E4B7" stroke="#D4860A" strokeWidth="1.5" strokeLinejoin="round" />
+            <path d={crack} fill="#C0392B" stroke="#6B0000" strokeWidth="1.2" strokeLinejoin="round" />
           </g>
         </svg>
       </div>
