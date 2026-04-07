@@ -83,6 +83,16 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
                     <a href="https://vk.com/rybka_dolli" target="_blank" rel="noopener noreferrer" className="text-gray-700 font-semibold text-sm hover:text-orange-500 transition-colors">vk.com/rybka_dolli</a>
                   </div>
                 </div>
+                <div className="flex gap-4 items-start">
+                  <div className="bg-orange-100 rounded-xl p-2.5 shrink-0">
+                    <Icon name="Clock" size={18} className="text-orange-500" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-400 font-semibold">Режим работы</div>
+                    <div className="text-gray-700 font-semibold text-sm">Пн — Пт: 8:00 — 18:00</div>
+                    <div className="text-gray-400 text-xs">Сб — Вс: выходной</div>
+                  </div>
+                </div>
                 <a
                   href="https://ribkadollli.ru"
                   target="_blank"
