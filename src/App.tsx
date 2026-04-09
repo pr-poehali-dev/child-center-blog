@@ -17,9 +17,11 @@ import EasterEggWidget from "@/components/ui/EasterEggWidget";
 
 const queryClient = new QueryClient();
 const EASTER_ACTIVE = new Date() < new Date("2026-04-15T00:00:00");
+const isMobile = () => window.innerWidth < 768;
 
 const App = () => {
   const [eggDone, setEggDone] = useState(false);
+  const mobile = isMobile();
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -27,8 +29,8 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <FloatingSubscribe hidden={EASTER_ACTIVE && !eggDone} />
-          {EASTER_ACTIVE && <EasterEggWidget onDone={() => setEggDone(true)} />}
+          <FloatingSubscribe hidden={EASTER_ACTIVE && !eggDone && !mobile} />
+          {EASTER_ACTIVE && !mobile && <EasterEggWidget onDone={() => setEggDone(true)} />}
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/admin" element={<Admin />} />
