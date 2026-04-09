@@ -104,6 +104,14 @@ export default function EasterEggWidget({ onDone }: Props) {
           setPhase("out");
           setTimeout(() => { setPhase("gone"); onDone?.(); }, 700);
         }}
+        onTouchEnd={(e) => {
+          e.preventDefault();
+          if (cycleRef.current) clearTimeout(cycleRef.current);
+          if (timerRef.current) clearTimeout(timerRef.current);
+          setOpen(false);
+          setPhase("out");
+          setTimeout(() => { setPhase("gone"); onDone?.(); }, 700);
+        }}
         style={{
         position: "fixed",
         bottom: 20,
@@ -112,11 +120,37 @@ export default function EasterEggWidget({ onDone }: Props) {
         pointerEvents: "auto",
         cursor: "pointer",
         userSelect: "none",
+        WebkitTapHighlightColor: "transparent",
         transform: `translateY(${slideY})`,
         transition: "transform 0.7s cubic-bezier(0.34,1.56,0.64,1)",
-        width: 102,
-        height: 160,
+        width: 120,
+        height: 180,
+        display: "flex",
+        alignItems: "flex-end",
+        paddingBottom: 10,
       }}>
+        {/* Надпись "Подарок за подписку" над яйцом */}
+        <div style={{
+          position: "absolute",
+          bottom: "calc(100% + 6px)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          background: "white",
+          border: "2px solid #FDBA74",
+          borderRadius: 20,
+          padding: "4px 10px",
+          fontSize: 11,
+          fontWeight: 800,
+          color: "#C2410C",
+          textAlign: "center",
+          whiteSpace: "nowrap",
+          boxShadow: "0 3px 10px rgba(0,0,0,0.15)",
+          fontFamily: "sans-serif",
+          animation: "eaw-sign-show 0.4s ease forwards",
+        }}>
+          🎁 Подарок за подписку!
+        </div>
+
         {open && (
           <div style={{
             position: "absolute",
