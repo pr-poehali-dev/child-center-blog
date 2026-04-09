@@ -159,7 +159,7 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
           ${visible && !hidden ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
         `}
       >
-        {EASTER_GIFT_ACTIVE && !open && (
+        {EASTER_GIFT_ACTIVE && !open && !hidden && (
           <div className="bg-white border border-orange-200 text-orange-600 text-xs font-bold px-3 py-1 rounded-full shadow-md whitespace-nowrap">
             🎁 Подарок за подписку!
           </div>
