@@ -19,9 +19,11 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
 
   const isAdmin = location.pathname.startsWith("/admin");
 
-  // Появляется после прокрутки 300px
+  // На мобильном — сразу видна, на десктопе — после прокрутки 300px
   useEffect(() => {
     if (isAdmin) return;
+    const mobile = window.innerWidth < 768;
+    if (mobile) { setVisible(true); return; }
     const onScroll = () => setVisible(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
