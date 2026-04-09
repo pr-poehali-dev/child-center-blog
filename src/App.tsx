@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,13 +20,6 @@ const EASTER_ACTIVE = new Date() < new Date("2026-04-15T00:00:00");
 
 const App = () => {
   const [eggDone, setEggDone] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -34,8 +27,12 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <FloatingSubscribe hidden={EASTER_ACTIVE && !eggDone && !isMobile} />
-          {EASTER_ACTIVE && !isMobile && <EasterEggWidget onDone={() => setEggDone(true)} />}
+          <FloatingSubscribe hidden={EASTER_ACTIVE && !eggDone} />
+          {EASTER_ACTIVE && (
+            <div className="hidden md:block">
+              <EasterEggWidget onDone={() => setEggDone(true)} />
+            </div>
+          )}
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/admin" element={<Admin />} />

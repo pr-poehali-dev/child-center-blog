@@ -19,11 +19,8 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
 
   const isAdmin = location.pathname.startsWith("/admin");
 
-  // На мобильном — сразу видна, на десктопе — после прокрутки 300px
   useEffect(() => {
     if (isAdmin) return;
-    const mobile = window.innerWidth < 768;
-    if (mobile) { setVisible(true); return; }
     const onScroll = () => setVisible(window.scrollY > 300);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -156,8 +153,25 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
       </div>
 
       {/* Плавающая кнопка */}
+      {/* Мобильная — всегда видна */}
+      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-1 md:hidden">
+        {EASTER_GIFT_ACTIVE && !open && (
+          <div className="bg-white border border-orange-200 text-orange-600 text-xs font-bold px-3 py-1 rounded-full shadow-md whitespace-nowrap">
+            🎁 Подарок за подписку!
+          </div>
+        )}
+        <button
+          onClick={() => setOpen(o => !o)}
+          className="h-11 rounded-full shadow-lg bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 flex items-center gap-1.5 px-4 active:scale-95 transition-all"
+          style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
+        >
+          {open ? <Icon name="X" size={16} className="text-white" /> : <Icon name="Bell" size={16} className="text-white" />}
+          <span className="text-white font-black text-xs whitespace-nowrap">{open ? "Закрыть" : "Подписаться"}</span>
+        </button>
+      </div>
+      {/* Десктопная — зависит от hidden и visible */}
       <div
-        className={`fixed bottom-5 right-5 z-50 flex flex-col items-end gap-1 transition-all duration-500
+        className={`fixed bottom-5 right-5 z-50 flex-col items-end gap-1 transition-all duration-500 hidden md:flex
           ${visible && !hidden ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
         `}
       >
@@ -171,14 +185,8 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
           className="h-11 rounded-full shadow-lg bg-gradient-to-br from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 flex items-center gap-1.5 px-4 hover:scale-105 active:scale-95 transition-all"
           style={{ boxShadow: "0 4px 20px rgba(251,146,60,0.5)" }}
         >
-          {open ? (
-            <Icon name="X" size={16} className="text-white" />
-          ) : (
-            <Icon name="Bell" size={16} className="text-white" />
-          )}
-          <span className="text-white font-black text-xs whitespace-nowrap">
-            {open ? "Закрыть" : "Подписаться"}
-          </span>
+          {open ? <Icon name="X" size={16} className="text-white" /> : <Icon name="Bell" size={16} className="text-white" />}
+          <span className="text-white font-black text-xs whitespace-nowrap">{open ? "Закрыть" : "Подписаться"}</span>
         </button>
       </div>
     </>
