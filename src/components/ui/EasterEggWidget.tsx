@@ -102,17 +102,23 @@ export default function EasterEggWidget({ onDone }: Props) {
         }
       `}</style>
 
-      {/* Обёртка — фиксированная, bottom-left, только для позиционирования */}
+      {/* Внешний div — только position:fixed, без transform */}
       <div
         style={{
           position: "fixed",
           bottom: 20,
           left: 20,
           zIndex: 9998,
-          transform: `translateY(${slideY})`,
-          transition: "transform 0.7s cubic-bezier(0.34,1.56,0.64,1)",
         }}
       >
+        {/* Внутренний div — только transform для анимации слайда */}
+        <div
+          style={{
+            transform: `translateY(${slideY})`,
+            transition: "transform 0.7s cubic-bezier(0.34,1.56,0.64,1)",
+            position: "relative",
+          }}
+        >
         {/* Надпись над яйцом */}
         {phase === "visible" && (
           <div style={{
@@ -154,6 +160,7 @@ export default function EasterEggWidget({ onDone }: Props) {
             fontFamily: "sans-serif",
             animation: "eaw-sign-show 0.4s ease forwards",
             zIndex: 1,
+            pointerEvents: "none",
           }}>
             🐣 Тут есть полезности<br />к Пасхе. Ищи в разделах.
             <div style={{
@@ -169,13 +176,11 @@ export default function EasterEggWidget({ onDone }: Props) {
         {/* Кликабельное яйцо */}
         <div
           onClick={dismiss}
-          onTouchStart={() => {}}
-          onTouchEnd={(e) => { e.preventDefault(); dismiss(); }}
+          onTouchEnd={(e) => { e.stopPropagation(); e.preventDefault(); dismiss(); }}
           style={{
             cursor: "pointer",
             userSelect: "none",
             WebkitTapHighlightColor: "transparent",
-            touchAction: "manipulation",
             display: "inline-block",
           }}
         >
@@ -279,6 +284,7 @@ export default function EasterEggWidget({ onDone }: Props) {
               </g>
             </svg>
           </div>
+        </div>
         </div>
       </div>
     </>
