@@ -24,6 +24,8 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (typeof (window as any).ym === "function") (window as any).ym(undefined, "reachGoal", "booking_submit");
     } catch {
       setSendError("Не удалось отправить заявку. Попробуйте ещё раз.");
     } finally {
