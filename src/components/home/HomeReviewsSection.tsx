@@ -51,6 +51,8 @@ function ReviewForm() {
     });
     setSent(true);
     setSending(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof (window as any).ym === "function") (window as any).ym(108285412, "reachGoal", "review_submit");
   };
 
   if (sent) return (
