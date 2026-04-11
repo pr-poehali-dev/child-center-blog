@@ -40,6 +40,8 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
       if (res.status === 409) { setStatus("exists"); return; }
       if (!res.ok) { setStatus("error"); return; }
       setStatus("success");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (typeof (window as any).ym === "function") (window as any).ym(108285412, "reachGoal", "subscribe_submit");
       setName("");
       setEmail("");
     } catch {
