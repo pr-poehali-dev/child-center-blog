@@ -43,6 +43,8 @@ export interface MediaItem {
   type: "image" | "video" | "document";
   url: string;
   name?: string;
+  alt?: string;
+  caption?: string;
 }
 
 export interface Post {

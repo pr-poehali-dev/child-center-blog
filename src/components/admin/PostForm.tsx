@@ -239,17 +239,35 @@ export default function PostForm({
           </button>
           <input ref={fileRef} type="file" multiple accept="image/*" className="hidden" onChange={handleFileAdd} />
           {mediaItems.filter(m => m.type === "image").length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
+            <div className="flex flex-col gap-3 mt-3">
               {mediaItems.map((m, i) => m.type === "image" && (
-                <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 group">
-                  <img src={m.url} alt="" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => removeMedia(i)}
-                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Icon name="X" size={12} />
-                  </button>
+                <div key={i} className="flex gap-3 items-start bg-orange-50 border border-orange-100 rounded-2xl p-3">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 group shrink-0">
+                    <img src={m.url} alt={m.alt || ""} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeMedia(i)}
+                      className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Icon name="X" size={12} />
+                    </button>
+                  </div>
+                  <div className="flex-1 flex flex-col gap-2">
+                    <input
+                      type="text"
+                      placeholder="Alt-текст: что изображено + для кого + ключ (для SEO)"
+                      value={m.alt || ""}
+                      onChange={e => setMediaItems(prev => prev.map((item, idx) => idx === i ? { ...item, alt: e.target.value } : item))}
+                      className="w-full border border-orange-200 bg-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-400"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Подпись под фото (необязательно)"
+                      value={m.caption || ""}
+                      onChange={e => setMediaItems(prev => prev.map((item, idx) => idx === i ? { ...item, caption: e.target.value } : item))}
+                      className="w-full border border-orange-200 bg-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-orange-400"
+                    />
+                  </div>
                 </div>
               ))}
             </div>

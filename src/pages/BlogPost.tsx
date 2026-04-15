@@ -17,7 +17,7 @@ const CATEGORIES: Record<string, { label: string; emoji: string; color: string; 
   masters:     { label: "Мастера вдохновения",              emoji: "🎨", color: "bg-pink-50",   border: "border-pink-200",   tag: "bg-pink-100 text-pink-700"     },
 };
 
-interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; }
+interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; alt?: string; caption?: string; }
 interface Post {
   id: number; category: string; title: string; content: string;
   media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string; sticker?: string;
@@ -207,21 +207,30 @@ export default function BlogPost() {
             )}
 
             {/* Медиа (фото и видео) */}
-            {post.media?.filter(m => m.type !== "document").length > 0 && (
-              <div className={`grid gap-3 mb-6 ${post.media.filter(m => m.type !== "document").length === 1 ? "grid-cols-1" : post.media.filter(m => m.type !== "document").length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
-                {post.media.filter(m => m.type !== "document").map((m, i) =>
-                  m.type === "video" ? (
-                    <div key={i} className={post.media.filter(x => x.type !== "document").length === 1 ? "" : "aspect-square overflow-hidden rounded-2xl"}>
-                      <VideoThumb url={m.url} />
-                    </div>
-                  ) : (
-                    <div key={i} className={`rounded-2xl overflow-hidden cursor-pointer ${post.media.filter(x => x.type !== "document").length === 1 ? "" : "aspect-square"}`} onClick={() => setLightbox(m.url)}>
-                      <img src={m.url} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
-                    </div>
-                  )
-                )}
-              </div>
-            )}
+            {post.media?.filter(m => m.type !== "document").length > 0 && (() => {
+              const visMedia = post.media.filter(m => m.type !== "document");
+              const cols = visMedia.length === 1 ? "grid-cols-1" : visMedia.length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3";
+              return (
+                <div className={`grid gap-3 mb-6 ${cols}`}>
+                  {visMedia.map((m, i) =>
+                    m.type === "video" ? (
+                      <div key={i} className={visMedia.length === 1 ? "" : "aspect-square overflow-hidden rounded-2xl"}>
+                        <VideoThumb url={m.url} />
+                      </div>
+                    ) : (
+                      <div key={i} className="flex flex-col gap-1">
+                        <div className={`rounded-2xl overflow-hidden cursor-pointer ${visMedia.length === 1 ? "" : "aspect-square"}`} onClick={() => setLightbox(m.url)}>
+                          <img src={m.url} alt={m.alt || ""} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                        </div>
+                        {m.caption && (
+                          <p className="text-xs text-gray-500 text-center px-1 leading-snug">{m.caption}</p>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Документы */}
             {post.media?.filter(m => m.type === "document").length > 0 && (
@@ -251,6 +260,29 @@ export default function BlogPost() {
               </div>
             )}
 
+            {/* Блок-призыв */}
+            <div className="my-8 rounded-3xl overflow-hidden bg-gradient-to-br from-orange-400 to-rose-400 p-6 text-white text-center">
+              <div className="text-4xl mb-3">🐟</div>
+              <h3 className="font-black text-xl mb-2 leading-tight">Хотите записать ребёнка к нам?</h3>
+              <p className="text-white/85 text-sm mb-5 leading-relaxed">Приходите на пробное занятие — познакомимся, покажем центр и подберём программу для вашего ребёнка</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href="/#booking"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-orange-500 font-black px-6 py-3 rounded-2xl text-sm hover:bg-orange-50 transition-colors"
+                >
+                  Записаться на занятие
+                </a>
+                <a
+                  href="https://t.me/irinadolli"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-bold px-6 py-3 rounded-2xl text-sm transition-colors"
+                >
+                  ✈️ Написать в Telegram
+                </a>
+              </div>
+            </div>
+
             {/* Поделиться */}
             <div className="border-t border-gray-100 pt-6 flex items-center justify-between">
               <span className="text-sm text-gray-400">Понравилось? Поделитесь!</span>
@@ -268,14 +300,20 @@ export default function BlogPost() {
       </div>
 
       {/* Lightbox */}
-      {lightbox && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
-          <button className="absolute top-4 right-4 text-white" onClick={() => setLightbox(null)}>
-            <Icon name="X" size={32} />
-          </button>
-          <img src={lightbox} alt="" className="max-w-full max-h-full object-contain rounded-xl" onClick={e => e.stopPropagation()} />
-        </div>
-      )}
+      {lightbox && (() => {
+        const lbItem = post?.media?.find(m => m.url === lightbox);
+        return (
+          <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
+            <button className="absolute top-4 right-4 text-white" onClick={() => setLightbox(null)}>
+              <Icon name="X" size={32} />
+            </button>
+            <div className="flex flex-col items-center gap-3" onClick={e => e.stopPropagation()}>
+              <img src={lightbox} alt={lbItem?.alt || ""} className="max-w-full max-h-[85vh] object-contain rounded-xl" />
+              {lbItem?.caption && <p className="text-white/80 text-sm text-center">{lbItem.caption}</p>}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
