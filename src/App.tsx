@@ -12,6 +12,7 @@ import QA from "./pages/QA";
 import NotFound from "./pages/NotFound";
 import Contacts from "./pages/Contacts";
 import Unsubscribe from "./pages/Unsubscribe";
+import QRCode from "./pages/QRCode";
 import FloatingSubscribe from "@/components/ui/FloatingSubscribe";
 import EasterEggWidget from "@/components/ui/EasterEggWidget";
 
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
+            <Route path="/qr" element={<QRCode />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
