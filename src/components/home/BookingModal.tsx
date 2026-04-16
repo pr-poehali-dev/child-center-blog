@@ -76,12 +76,25 @@ export default function BookingModal({ open, onClose }: BookingModalProps) {
             </form>
           </>
         ) : (
-          <div className="text-center py-6">
+          <div className="text-center py-4">
             <div className="text-6xl mb-4">🎉</div>
             <h3 className="font-black text-2xl text-gray-800 mb-3">Заявка принята!</h3>
-            <p className="text-gray-500 leading-relaxed mb-6">Мы свяжемся с вами в ближайшее время!</p>
-            <button onClick={handleClose} className="bg-orange-400 hover:bg-orange-500 text-white font-bold px-8 py-3 rounded-2xl transition-colors">
-              Отлично, спасибо!
+            <p className="text-gray-500 leading-relaxed mb-5">Мы свяжемся с вами в ближайшее время!</p>
+            <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 mb-5 text-left">
+              <p className="text-xs font-bold text-orange-500 mb-1 uppercase tracking-wide">🎁 Подарок для вас</p>
+              <p className="text-sm text-gray-700 font-semibold mb-3 leading-snug">Чек-лист: как помочь ребёнку понять прочитанное</p>
+              <a
+                href="https://disk.yandex.ru/i/IAc_t1vpQQ61qA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-orange-400 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors w-full justify-center"
+              >
+                <Icon name="Download" size={16} />
+                Скачать чек-лист
+              </a>
+            </div>
+            <button onClick={handleClose} className="text-gray-400 hover:text-gray-600 text-sm font-semibold transition-colors">
+              Закрыть
             </button>
           </div>
         )}
