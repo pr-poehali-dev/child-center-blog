@@ -30,6 +30,24 @@ CORS = {
 }
 
 
+def ping_sitemap_yandex():
+    """Отправляет весь sitemap.xml в Яндекс.Вебмастер на переиндексацию."""
+    token = os.environ.get('YANDEX_WEBMASTER_TOKEN', '')
+    if not token:
+        return False
+    sitemap_url = f'{BASE_URL}/sitemap.xml'
+    url = f'https://api.webmaster.yandex.net/v4/user/{YANDEX_USER_ID}/hosts/{YANDEX_HOST_ID}/sitemaps'
+    data = json.dumps({'url': sitemap_url}).encode('utf-8')
+    req = urllib.request.Request(url, data=data, method='POST')
+    req.add_header('Authorization', f'OAuth {token}')
+    req.add_header('Content-Type', 'application/json')
+    try:
+        urllib.request.urlopen(req, timeout=10)
+        return True
+    except Exception:
+        return False
+
+
 def ping_yandex(post_id: int):
     """Отправляет URL новой статьи в Яндекс.Вебмастер на индексацию."""
     token = os.environ.get('YANDEX_WEBMASTER_TOKEN', '')
@@ -59,6 +77,10 @@ def handler(event: dict, context) -> dict:
         if post_id:
             ping_yandex(int(post_id))
         return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True})}
+
+    if method == 'POST' and params.get('action') == 'ping-sitemap':
+        ok = ping_sitemap_yandex()
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': ok})}
 
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
