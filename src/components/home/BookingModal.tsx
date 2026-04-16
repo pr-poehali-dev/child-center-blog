@@ -12,6 +12,16 @@ export default function BookingModal({ open, onClose, checklistUrl }: BookingMod
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
+  const [formTouched, setFormTouched] = useState(false);
+
+  const handleFieldChange = (field: string, value: string) => {
+    if (!formTouched && value.length > 0) {
+      setFormTouched(true);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (typeof (window as any).ym === "function") (window as any).ym(108285412, "reachGoal", "https://blogribkadolli.ru/");
+    }
+    setForm({ ...form, [field]: value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,19 +66,19 @@ export default function BookingModal({ open, onClose, checklistUrl }: BookingMod
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-1 block">Ваше имя</label>
-                <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Мама / папа" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Мама / папа" value={form.name} onChange={(e) => handleFieldChange("name", e.target.value)} />
               </div>
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-1 block">Телефон</label>
-                <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="+7 (___) ___-__-__" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="+7 (___) ___-__-__" value={form.phone} onChange={(e) => handleFieldChange("phone", e.target.value)} />
               </div>
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-1 block">Имя и возраст ребёнка</label>
-                <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Маша, 5 лет" value={form.child} onChange={(e) => setForm({ ...form, child: e.target.value })} />
+                <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Маша, 5 лет" value={form.child} onChange={(e) => handleFieldChange("child", e.target.value)} />
               </div>
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-1 block">Что интересует (необязательно)</label>
-                <input className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Рисование, логика..." value={form.cls} onChange={(e) => setForm({ ...form, cls: e.target.value })} />
+                <input className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Рисование, логика..." value={form.cls} onChange={(e) => handleFieldChange("cls", e.target.value)} />
               </div>
               {sendError && <p className="text-red-500 text-sm text-center">{sendError}</p>}
               <button type="submit" disabled={sending} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
