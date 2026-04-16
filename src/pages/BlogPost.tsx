@@ -20,7 +20,7 @@ const CATEGORIES: Record<string, { label: string; emoji: string; color: string; 
 interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; alt?: string; caption?: string; }
 interface Post {
   id: number; category: string; title: string; content: string;
-  media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string; sticker?: string;
+  media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string; sticker?: string; checklist_url?: string;
 }
 
 function VideoThumb({ url }: { url: string }) {
@@ -268,6 +268,7 @@ export default function BlogPost() {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <a
                   href="/#booking"
+                  onClick={() => { if (post?.checklist_url) sessionStorage.setItem("booking_checklist_url", post.checklist_url); else sessionStorage.removeItem("booking_checklist_url"); }}
                   className="inline-flex items-center justify-center gap-2 bg-white text-orange-500 font-black px-6 py-3 rounded-2xl text-sm hover:bg-orange-50 transition-colors"
                 >
                   Записаться на занятие

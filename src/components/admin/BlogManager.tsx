@@ -21,6 +21,7 @@ export default function BlogManager() {
   const [teacherName, setTeacherName] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [postSticker, setPostSticker] = useState<string>("");
+  const [checklistUrl, setChecklistUrl] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
   const [stickers, setStickers] = useState<Record<string, string>>({});
@@ -107,6 +108,7 @@ export default function BlogManager() {
     setTeacherName("");
     setVideoUrl("");
     setPostSticker("");
+    setChecklistUrl("");
     setShowEmoji(false);
   };
 
@@ -120,6 +122,7 @@ export default function BlogManager() {
     setTeacherName(post.teacher_name || "");
     setVideoUrl(videoItem?.url || "");
     setPostSticker(post.sticker || "");
+    setChecklistUrl(post.checklist_url || "");
     setShowForm(true);
     setShowEmoji(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -138,7 +141,7 @@ export default function BlogManager() {
       const res = await fetch(BLOG_API, {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker }),
+        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker, checklist_url: checklistUrl }),
       });
       if (!res.ok) {
         alert("Ошибка при сохранении. Попробуйте ещё раз.");
@@ -228,6 +231,8 @@ export default function BlogManager() {
               setVideoUrl={setVideoUrl}
               postSticker={postSticker}
               setPostSticker={setPostSticker}
+              checklistUrl={checklistUrl}
+              setChecklistUrl={setChecklistUrl}
               showEmoji={showEmoji}
               setShowEmoji={setShowEmoji}
               emojiTarget={emojiTarget}

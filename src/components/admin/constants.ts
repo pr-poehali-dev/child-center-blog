@@ -57,4 +57,5 @@ export interface Post {
   teacher_photo?: string;
   teacher_name?: string;
   sticker?: string;
+  checklist_url?: string;
 }

@@ -163,7 +163,7 @@ def handler(event: dict, context) -> dict:
 
         if post_id:
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker FROM {SCHEMA}.blog_posts WHERE id = {int(post_id)}"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url FROM {SCHEMA}.blog_posts WHERE id = {int(post_id)}"
             )
             row = cur.fetchone()
             cur.close()
@@ -174,18 +174,18 @@ def handler(event: dict, context) -> dict:
                 'id': row[0], 'category': row[1], 'title': row[2], 'content': row[3],
                 'media': row[4], 'created_at': row[5].isoformat(),
                 'teacher_photo': row[6], 'teacher_name': row[7] or '',
-                'sticker': row[8] or '',
+                'sticker': row[8] or '', 'checklist_url': row[9] or '',
             }
             return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'post': post}, ensure_ascii=False)}
 
         if category and category != 'all':
             cat_escaped = escape(category)
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}' ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}' ORDER BY created_at DESC"
             )
         else:
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
             )
         rows = cur.fetchall()
         cur.close()
@@ -195,7 +195,7 @@ def handler(event: dict, context) -> dict:
                 'id': r[0], 'category': r[1], 'title': r[2], 'content': r[3],
                 'media': r[4], 'created_at': r[5].isoformat(),
                 'teacher_photo': r[6], 'teacher_name': r[7] or '',
-                'sticker': r[8] or '',
+                'sticker': r[8] or '', 'checklist_url': r[9] or '',
             }
             for r in rows
         ]
@@ -213,6 +213,7 @@ def handler(event: dict, context) -> dict:
         teacher_photo_data = body.get('teacher_photo', '')
         teacher_name = escape(body.get('teacher_name', ''))
         sticker = escape(body.get('sticker', ''))
+        checklist_url = escape(body.get('checklist_url', ''))
 
         s3 = get_s3()
         uploaded = []
@@ -233,7 +234,7 @@ def handler(event: dict, context) -> dict:
         teacher_photo_escaped = escape(teacher_photo_url)
 
         cur.execute(
-            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name, sticker) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}', '{sticker}') RETURNING id, created_at"
+            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name, sticker, checklist_url) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}', '{sticker}', '{checklist_url}') RETURNING id, created_at"
         )
         row = cur.fetchone()
         conn.commit()
@@ -256,6 +257,7 @@ def handler(event: dict, context) -> dict:
         teacher_photo_data = body.get('teacher_photo', '')
         teacher_name = escape(body.get('teacher_name', ''))
         sticker = escape(body.get('sticker', ''))
+        checklist_url = escape(body.get('checklist_url', ''))
 
         s3 = get_s3()
         uploaded = []
@@ -276,7 +278,7 @@ def handler(event: dict, context) -> dict:
         teacher_photo_escaped = escape(teacher_photo_url)
 
         cur.execute(
-            f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}', sticker='{sticker}' WHERE id={post_id}"
+            f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}', sticker='{sticker}', checklist_url='{checklist_url}' WHERE id={post_id}"
         )
         conn.commit()
         cur.close()

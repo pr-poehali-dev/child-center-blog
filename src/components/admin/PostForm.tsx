@@ -18,6 +18,8 @@ interface PostFormProps {
   setVideoUrl: (v: string) => void;
   postSticker: string;
   setPostSticker: (v: string) => void;
+  checklistUrl: string;
+  setChecklistUrl: (v: string) => void;
   showEmoji: boolean;
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
   emojiTarget: "title" | "content";
@@ -39,6 +41,7 @@ export default function PostForm({
   teacherName, setTeacherName,
   videoUrl, setVideoUrl,
   postSticker, setPostSticker,
+  checklistUrl, setChecklistUrl,
   showEmoji, setShowEmoji,
   emojiTarget, setEmojiTarget,
   uploadingMedia, saving,
@@ -353,6 +356,28 @@ export default function PostForm({
               <StickerTag text={postSticker.trim()} />
             </div>
           )}
+        </div>
+
+        {/* CHECKLIST */}
+        <div className="bg-teal-50 border border-teal-100 rounded-2xl p-4">
+          <label className="text-xs font-bold text-gray-500 mb-1.5 block flex items-center gap-1.5">
+            <span>📋</span> Чек-лист после заявки (необязательно)
+          </label>
+          <div className="relative">
+            <input
+              type="url"
+              value={checklistUrl}
+              onChange={e => setChecklistUrl(e.target.value)}
+              placeholder="https://disk.yandex.ru/..."
+              className="w-full border border-teal-200 bg-white rounded-xl px-4 py-2.5 pr-10 text-sm focus:outline-none focus:border-teal-400 focus:ring-2 focus:ring-teal-100"
+            />
+            {checklistUrl && (
+              <button type="button" onClick={() => setChecklistUrl("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                <Icon name="X" size={16} />
+              </button>
+            )}
+          </div>
+          <p className="text-xs text-gray-400 mt-1.5">Ссылка на чек-лист появится читателю после отправки заявки на занятие</p>
         </div>
 
         <button

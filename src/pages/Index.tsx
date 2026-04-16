@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HomeNavbar from "@/components/home/HomeNavbar";
 import HomeHero from "@/components/home/HomeHero";
@@ -11,6 +11,7 @@ export default function Index() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("home");
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingChecklistUrl, setBookingChecklistUrl] = useState("");
 
   usePageMeta({
     title: "Детский центр «Рыбка Долли» — Керчь | Развитие, английский, продлёнка",
@@ -30,8 +31,17 @@ export default function Index() {
   };
 
   const openBooking = () => {
+    const url = sessionStorage.getItem("booking_checklist_url") || "";
+    setBookingChecklistUrl(url);
     setBookingOpen(true);
   };
+
+  useEffect(() => {
+    if (window.location.hash === "#booking") {
+      openBooking();
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#fffdf8] font-nunito text-gray-700">
@@ -40,7 +50,7 @@ export default function Index() {
       <EasterBanner />
       <HomeHero onFormClick={openBooking} onScrollTo={scrollTo} />
       <HomeSections onFormClick={openBooking} />
-      <BookingModal open={bookingOpen} onClose={() => setBookingOpen(false)} />
+      <BookingModal open={bookingOpen} onClose={() => { setBookingOpen(false); sessionStorage.removeItem("booking_checklist_url"); }} checklistUrl={bookingChecklistUrl} />
       </div>
     </div>
   );
