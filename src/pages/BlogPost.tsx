@@ -54,8 +54,15 @@ export default function BlogPost() {
         if (d.post) {
           setPost(d.post);
           const title = `${d.post.title} | Блог детского центра «Рыбка Долли»`;
-          const desc = d.post.content.slice(0, 160).replace(/\n/g, " ");
-          const firstImg = d.post.media?.find((m: MediaItem) => m.type === "image")?.url;
+          const rawDesc = d.post.content.replace(/\n/g, " ").trim();
+          const desc = rawDesc.length > 160
+            ? (rawDesc.slice(0, 160).lastIndexOf(" ") > 100
+                ? rawDesc.slice(0, rawDesc.slice(0, 160).lastIndexOf(" ")) + "..."
+                : rawDesc.slice(0, 160) + "...")
+            : rawDesc || d.post.title;
+          const FALLBACK_IMG = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png";
+          const firstImgItem = d.post.media?.find((m: MediaItem) => m.type === "image");
+          const firstImg = firstImgItem?.url || FALLBACK_IMG;
           document.title = title;
           const setMeta = (name: string, content: string) => {
             let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
@@ -72,7 +79,7 @@ export default function BlogPost() {
           setOg("og:description", desc);
           setOg("og:type", "article");
           setOg("og:url", `https://blogribkadolli.ru/blog/${id}`);
-          if (firstImg) setOg("og:image", firstImg);
+          setOg("og:image", firstImg);
 
           const schema: Record<string, unknown> = {
             "@context": "https://schema.org",
@@ -220,7 +227,7 @@ export default function BlogPost() {
                     ) : (
                       <div key={i} className="flex flex-col gap-1">
                         <div className={`rounded-2xl overflow-hidden cursor-pointer ${visMedia.length === 1 ? "" : "aspect-square"}`} onClick={() => setLightbox(m.url)}>
-                          <img src={m.url} alt={m.alt || ""} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                          <img src={m.url} alt={m.alt || post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
                         </div>
                         {m.caption && (
                           <p className="text-xs text-gray-500 text-center px-1 leading-snug">{m.caption}</p>
