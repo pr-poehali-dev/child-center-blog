@@ -17,7 +17,7 @@ export default function Blog() {
     title: "Блог детского центра «Рыбка Долли» — Керчь",
     description: "Блог педагогов детского центра «Рыбка Долли» в Керчи: советы по воспитанию, развитию речи и подготовке к школе, новости центра, летний клуб, английский для детей. Читайте бесплатно.",
   };
-  usePageMeta({ title: seo.title, description: seo.description, url: `https://blogribkadolli.ru/blog`, type: "website" });
+  usePageMeta({ title: seo.title, description: seo.description, url: `https://blogribkadolli.ru/blog?category=${activeTab}`, type: "website" });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [stickers, setStickers] = useState<Record<string, string>>({});

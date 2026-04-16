@@ -37,7 +37,7 @@ export function VideoThumb({ url, onClick }: { url: string; onClick: () => void 
   );
 }
 
-export function MediaGallery({ media }: { media: MediaItem[] }) {
+export function MediaGallery({ media, fallbackAlt = "" }: { media: MediaItem[]; fallbackAlt?: string }) {
   const [active, setActive] = useState<MediaItem | null>(null);
   const visibleMedia = media?.filter(m => m.type !== "document") || [];
   if (visibleMedia.length === 0) return null;
@@ -53,7 +53,7 @@ export function MediaGallery({ media }: { media: MediaItem[] }) {
               {m.type === "video" ? (
                 <VideoThumb url={m.url} onClick={() => setActive(m)} />
               ) : (
-                <img src={m.url} alt={m.alt || ""} className={`w-full transition-transform duration-500 group-hover:scale-105 ${visibleMedia.length === 1 ? "h-auto object-contain" : "h-full object-cover"}`} />
+                <img src={m.url} alt={m.alt || fallbackAlt} className={`w-full transition-transform duration-500 group-hover:scale-105 ${visibleMedia.length === 1 ? "h-auto object-contain" : "h-full object-cover"}`} />
               )}
             </div>
             {m.caption && (
@@ -68,7 +68,7 @@ export function MediaGallery({ media }: { media: MediaItem[] }) {
             <Icon name="X" size={28} />
           </button>
           <div className="flex flex-col items-center gap-3" onClick={e => e.stopPropagation()}>
-            <img src={active.url} alt={active.alt || ""} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
+            <img src={active.url} alt={active.alt || fallbackAlt} className="max-w-full max-h-[85vh] rounded-2xl object-contain" />
             {active.caption && <p className="text-white/80 text-sm text-center">{active.caption}</p>}
           </div>
         </div>

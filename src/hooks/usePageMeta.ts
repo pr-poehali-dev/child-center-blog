@@ -32,6 +32,8 @@ export function usePageMeta({ title, description, url, image, type = "website" }
     setOg("og:type", type);
     setOg("og:url", url || window.location.href);
     setOg("og:image", image || LOGO);
+    setOg("og:image:width", "800");
+    setOg("og:image:height", "800");
 
     return () => { document.title = prevTitle; };
   }, [title, description, url, image, type]);

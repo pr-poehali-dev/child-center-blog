@@ -198,7 +198,7 @@ export function PostCard({ post, categoryStickerText }: { post: Post; categorySt
           )}
         </div>
       )}
-      <MediaGallery media={post.media} />
+      <MediaGallery media={post.media} fallbackAlt={post.title} />
       <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-2 flex-wrap">
         <a
           href={`/blog/${post.id}`}
