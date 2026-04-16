@@ -74,6 +74,7 @@ export default function Blog() {
           {CATEGORIES.map(cat => (
             <button
               key={cat.id}
+              id={cat.id === "summer" ? "summer-blog" : undefined}
               onClick={() => setActiveTab(cat.id)}
               className={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${
                 activeTab === cat.id

@@ -87,7 +87,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
         <div className="text-center max-w-2xl mx-auto w-full">
           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xl mx-auto">
             <BookingDropdown onFormClick={onFormClick} className="flex-1" />
-            <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" wrapperClassName="flex-1" />
+            <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" wrapperClassName="flex-1" id="summer-booking" />
           </div>
           <div className="flex flex-wrap justify-center gap-3 mt-3">
             <a
@@ -99,6 +99,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               Подробнее о садике
             </a>
             <a
+              id="summer-details"
               href="https://vk.com/app6379730_-179759189#l=8"
               target="_blank"
               rel="noopener noreferrer"

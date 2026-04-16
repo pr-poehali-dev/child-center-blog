@@ -116,7 +116,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
               <div className="text-5xl mb-4">🌟</div>
               <h3 className="font-black text-2xl mb-3">Запишитесь сейчас</h3>
               <p className="opacity-90 mb-6 leading-relaxed">Познакомьтесь с педагогом и оцените атмосферу центра.</p>
-              <button onClick={onFormClick} className="bg-white text-orange-500 font-black px-8 py-4 rounded-2xl hover:bg-orange-50 transition-colors text-lg shadow-lg">
+              <button id="booking-form" onClick={onFormClick} className="bg-white text-orange-500 font-black px-8 py-4 rounded-2xl hover:bg-orange-50 transition-colors text-lg shadow-lg">
                 Записаться
               </button>
             </div>

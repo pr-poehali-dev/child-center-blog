@@ -42,7 +42,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
   );
 }
 
-export function ContactDropdown({ label, className, wrapperClassName }: { label: string; className: string; wrapperClassName?: string }) {
+export function ContactDropdown({ label, className, wrapperClassName, id }: { label: string; className: string; wrapperClassName?: string; id?: string }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,7 +55,7 @@ export function ContactDropdown({ label, className, wrapperClassName }: { label:
   }, []);
 
   return (
-    <div ref={ref} className={`relative ${wrapperClassName || ""}`}>
+    <div ref={ref} id={id} className={`relative ${wrapperClassName || ""}`}>
       <button
         onClick={() => setOpen(!open)}
         className={`flex items-center justify-center gap-2 w-full font-bold px-8 py-4 rounded-full text-lg transition-all hover:shadow-lg hover:-translate-y-0.5 ${className}`}
