@@ -9,15 +9,18 @@ YANDEX_USER_ID = '1462613238'
 YANDEX_HOST_ID = 'http:blogribkadolli.ru:80'
 
 STATIC_URLS = [
-    (BASE_URL + '/',                          'weekly',  '1.0'),
-    (BASE_URL + '/blog',                      'daily',   '0.9'),
-    (BASE_URL + '/blog?category=tips',        'weekly',  '0.8'),
-    (BASE_URL + '/blog?category=life',        'weekly',  '0.8'),
-    (BASE_URL + '/blog?category=detail',      'weekly',  '0.8'),
-    (BASE_URL + '/blog?category=summer',      'weekly',  '0.7'),
-    (BASE_URL + '/blog?category=afterschool', 'weekly',  '0.7'),
-    (BASE_URL + '/blog?category=english',     'weekly',  '0.7'),
-    (BASE_URL + '/blog/qa',                   'monthly', '0.6'),
+    (BASE_URL + '/',                               'weekly',  '1.0'),
+    (BASE_URL + '/blog',                           'daily',   '0.9'),
+    (BASE_URL + '/blog?category=tips',             'weekly',  '0.8'),
+    (BASE_URL + '/blog?category=life',             'weekly',  '0.8'),
+    (BASE_URL + '/blog?category=detail',           'weekly',  '0.8'),
+    (BASE_URL + '/blog?category=summer',           'weekly',  '0.7'),
+    (BASE_URL + '/blog?category=afterschool',      'weekly',  '0.7'),
+    (BASE_URL + '/blog?category=english',          'weekly',  '0.7'),
+    (BASE_URL + '/blog?category=experiments',      'weekly',  '0.6'),
+    (BASE_URL + '/blog?category=chefs',            'weekly',  '0.6'),
+    (BASE_URL + '/blog?category=masters',          'weekly',  '0.6'),
+    (BASE_URL + '/blog/qa',                        'monthly', '0.5'),
 ]
 
 CORS = {
@@ -59,8 +62,8 @@ def handler(event: dict, context) -> dict:
 
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
-    cur.execute(f"SELECT id FROM {SCHEMA}.blog_posts ORDER BY id")
-    post_ids = [row[0] for row in cur.fetchall()]
+    cur.execute(f"SELECT id, created_at FROM {SCHEMA}.blog_posts ORDER BY id")
+    posts = [(row[0], row[1].strftime('%Y-%m-%d')) for row in cur.fetchall()]
     cur.close()
     conn.close()
 
@@ -68,8 +71,8 @@ def handler(event: dict, context) -> dict:
     for loc, freq, priority in STATIC_URLS:
         urls.append(f'  <url><loc>{loc}</loc><changefreq>{freq}</changefreq><priority>{priority}</priority></url>')
 
-    for pid in post_ids:
-        urls.append(f'  <url><loc>{BASE_URL}/blog/{pid}</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>')
+    for pid, lastmod in posts:
+        urls.append(f'  <url><loc>{BASE_URL}/blog/{pid}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>')
 
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
