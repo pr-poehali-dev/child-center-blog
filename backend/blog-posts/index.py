@@ -222,7 +222,11 @@ def handler(event: dict, context) -> dict:
             mtype = item.get('type', 'image')
             if url.startswith('data:'):
                 url = upload_media(s3, url)
-            uploaded.append({'type': mtype, 'url': url})
+            entry = {'type': mtype, 'url': url}
+            if item.get('alt'): entry['alt'] = item['alt']
+            if item.get('caption'): entry['caption'] = item['caption']
+            if item.get('name'): entry['name'] = item['name']
+            uploaded.append(entry)
 
         teacher_photo_url = ''
         if teacher_photo_data.startswith('data:'):
@@ -266,7 +270,11 @@ def handler(event: dict, context) -> dict:
             mtype = item.get('type', 'image')
             if url.startswith('data:'):
                 url = upload_media(s3, url)
-            uploaded.append({'type': mtype, 'url': url})
+            entry = {'type': mtype, 'url': url}
+            if item.get('alt'): entry['alt'] = item['alt']
+            if item.get('caption'): entry['caption'] = item['caption']
+            if item.get('name'): entry['name'] = item['name']
+            uploaded.append(entry)
 
         teacher_photo_url = ''
         if teacher_photo_data.startswith('data:'):
