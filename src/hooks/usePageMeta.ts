@@ -25,6 +25,11 @@ export function usePageMeta({ title, description, url, image, type = "website" }
       if (!el) { el = document.createElement("meta"); el.setAttribute("property", prop); document.head.appendChild(el); }
       el.content = content;
     };
+    const setCanonical = (href: string) => {
+      let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+      if (!el) { el = document.createElement("link"); el.setAttribute("rel", "canonical"); document.head.appendChild(el); }
+      el.href = href;
+    };
 
     setMeta("description", description);
     setOg("og:title", title);
@@ -34,6 +39,7 @@ export function usePageMeta({ title, description, url, image, type = "website" }
     setOg("og:image", image || LOGO);
     setOg("og:image:width", "800");
     setOg("og:image:height", "800");
+    setCanonical(url || window.location.href);
 
     return () => { document.title = prevTitle; };
   }, [title, description, url, image, type]);
