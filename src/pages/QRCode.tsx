@@ -1,17 +1,10 @@
-const SITE_URL = "https://blogribkadolli.ru/";
-const QR_API = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(SITE_URL)}&bgcolor=ffffff&color=1a1a1a&margin=20&qzone=2`;
+import { useState } from "react";
 
-export default function QRCode() {
-  const handleDownload = async () => {
-    const res = await fetch(QR_API);
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "qr-ribkadolli.png";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+const SITE_URL = "https://blogribkadolli.ru/";
+const QR_URL = `https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${encodeURIComponent(SITE_URL)}&choe=UTF-8&chld=M|2`;
+
+export default function QRCodePage() {
+  const [imgError, setImgError] = useState(false);
 
   return (
     <div className="min-h-screen bg-orange-50 flex items-center justify-center p-6">
@@ -21,14 +14,22 @@ export default function QRCode() {
           <h1 className="font-black text-2xl text-gray-800">«Рыбка Долли»</h1>
         </div>
 
-        <div className="rounded-2xl overflow-hidden border-4 border-orange-100 shadow-md">
-          <img
-            src={QR_API}
-            alt="QR-код сайта Рыбка Долли"
-            width={280}
-            height={280}
-            className="block"
-          />
+        <div className="rounded-2xl overflow-hidden border-4 border-orange-100 shadow-md bg-white p-2">
+          {imgError ? (
+            <div className="w-[260px] h-[260px] flex flex-col items-center justify-center text-gray-400 text-center text-sm gap-2">
+              <span className="text-4xl">⚠️</span>
+              <span>Не удалось загрузить QR-код.<br />Проверьте интернет и обновите страницу.</span>
+            </div>
+          ) : (
+            <img
+              src={QR_URL}
+              alt="QR-код сайта Рыбка Долли"
+              width={260}
+              height={260}
+              className="block"
+              onError={() => setImgError(true)}
+            />
+          )}
         </div>
 
         <p className="text-gray-400 text-sm text-center">
@@ -44,12 +45,15 @@ export default function QRCode() {
           {SITE_URL}
         </a>
 
-        <button
-          onClick={handleDownload}
-          className="w-full bg-orange-400 hover:bg-orange-500 text-white font-black py-3 rounded-2xl text-base transition-all hover:shadow-lg"
+        <a
+          href={QR_URL}
+          download="qr-ribkadolli.png"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full bg-orange-400 hover:bg-orange-500 text-white font-black py-3 rounded-2xl text-base transition-all hover:shadow-lg text-center block"
         >
           Скачать PNG
-        </button>
+        </a>
       </div>
     </div>
   );
