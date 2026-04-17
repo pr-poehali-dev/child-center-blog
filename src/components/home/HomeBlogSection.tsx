@@ -184,6 +184,14 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
                 </button>
               </div>
             </div>
+            <div className="relative bg-green-50 border border-green-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=plate")}>
+              {stickers["plate"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["plate"]} size="md" /></div>}
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-green-200 shadow">
+                <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/a38122a6-c5a0-4af0-8d9c-04b98222be22.jpg" alt="Тарелка для всех" className="w-full h-full object-cover object-center" />
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Тарелка для всех</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей.</p>
+            </div>
             <div className="bg-rose-50 border border-rose-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog/qa")}>
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-rose-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/15744313-9270-4292-bb6b-c44dc00a492a.png" alt="Спрашивали — Отвечаем" className="w-full h-full object-cover object-top" />
