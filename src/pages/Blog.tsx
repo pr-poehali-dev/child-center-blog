@@ -98,6 +98,12 @@ export default function Blog() {
 
       {/* CONTENT */}
       <div ref={postsRef} className="max-w-3xl mx-auto px-4 py-8">
+        {activeCat.subtitle && (
+          <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 mb-6 flex items-start gap-3">
+            <span className="text-2xl mt-0.5">{activeCat.emoji}</span>
+            <p className="text-green-800 font-semibold text-sm leading-relaxed">{activeCat.subtitle}</p>
+          </div>
+        )}
         {activeTab === "summer" && (
           <ContactDropdown label="Забронировать смену летнего клуба" emoji="☀️" colorClass="bg-yellow-400 hover:bg-yellow-500" />
         )}

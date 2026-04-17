@@ -15,6 +15,7 @@ export const CATEGORIES = [
   { id: "experiments", label: "Экспериментаторы",         emoji: "🔬", color: "bg-purple-50",  border: "border-purple-200",  tag: "bg-purple-100 text-purple-700"  },
   { id: "chefs",       label: "Шеф-повара",               emoji: "👨‍🍳", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700"  },
   { id: "masters",     label: "Мастера вдохновения",      emoji: "🎨", color: "bg-pink-50",    border: "border-pink-200",    tag: "bg-pink-100 text-pink-700"      },
+  { id: "plate",       label: "Тарелка для всех",         emoji: "🥗", color: "bg-green-50",   border: "border-green-200",   tag: "bg-green-100 text-green-700",  subtitle: "Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей" },
 ];
 
 export const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = {
@@ -53,6 +54,10 @@ export const SEO_BY_CATEGORY: Record<string, { title: string; description: strin
   masters: {
     title: "Мастера вдохновения — Творим с детьми | «Рыбка Долли» Керчь",
     description: "Творческие мастер-классы и арт-занятия для детей в центре «Рыбка Долли» в Керчи. Рисуем, лепим, создаём шедевры и вдохновляем друг друга.",
+  },
+  plate: {
+    title: "Тарелка для всех — безглютеновое питание для детей | «Рыбка Долли» Керчь",
+    description: "Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей. Рецепты, советы и забота о здоровье вашего ребёнка от центра «Рыбка Долли».",
   },
 };
 

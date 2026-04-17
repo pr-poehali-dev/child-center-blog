@@ -27,6 +27,7 @@ export const BLOG_CATEGORIES = [
   { id: "experiments", label: "Экспериментаторы",            emoji: "🔬" },
   { id: "chefs",       label: "Шеф-повара",                  emoji: "👨‍🍳" },
   { id: "masters",     label: "Мастера вдохновения",         emoji: "🎨" },
+  { id: "plate",       label: "Тарелка для всех",            emoji: "🥗" },
 ];
 
 export interface Booking {
