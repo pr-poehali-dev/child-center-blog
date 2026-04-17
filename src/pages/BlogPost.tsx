@@ -15,6 +15,7 @@ const CATEGORIES: Record<string, { label: string; emoji: string; color: string; 
   experiments: { label: "Экспериментаторы",                emoji: "🔬", color: "bg-purple-50", border: "border-purple-200", tag: "bg-purple-100 text-purple-700" },
   chefs:       { label: "Шеф-повара",                      emoji: "👨‍🍳", color: "bg-orange-50", border: "border-orange-200", tag: "bg-orange-100 text-orange-700" },
   masters:     { label: "Мастера вдохновения",              emoji: "🎨", color: "bg-pink-50",   border: "border-pink-200",   tag: "bg-pink-100 text-pink-700"     },
+  plate:       { label: "Тарелка для всех",                 emoji: "🥗", color: "bg-green-50",  border: "border-green-200",  tag: "bg-green-100 text-green-700"   },
 };
 
 interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; alt?: string; caption?: string; }
@@ -53,7 +54,10 @@ export default function BlogPost() {
       .then(d => {
         if (d.post) {
           setPost(d.post);
-          const title = `${d.post.title} | Блог детского центра «Рыбка Долли»`;
+          const isPlate = d.post.category === "plate";
+          const title = isPlate
+            ? `${d.post.title} | Рецепт за подписку`
+            : `${d.post.title} | Блог детского центра «Рыбка Долли»`;
           const rawDesc = d.post.content.replace(/\n/g, " ").trim();
           const desc = rawDesc.length > 160
             ? (rawDesc.slice(0, 160).lastIndexOf(" ") > 100
@@ -126,6 +130,48 @@ export default function BlogPost() {
             document.head.appendChild(ldEl);
           }
           ldEl.textContent = JSON.stringify(schema);
+
+          // Schema.org Recipe для постов категории «Тарелка для всех»
+          if (isPlate) {
+            const recipe: Record<string, unknown> = {
+              "@context": "https://schema.org",
+              "@type": "Recipe",
+              "name": d.post.title,
+              "description": desc,
+              "url": `https://blogribkadolli.ru/blog/${id}`,
+              "datePublished": d.post.created_at,
+              "inLanguage": "ru-RU",
+              "recipeCategory": "Безглютеновая выпечка",
+              "keywords": "безглютеновые блины, рецепты без молока для детей, безлактозное питание, рецепты при целиакии, выпечка для аллергиков, зеленая гречка рецепты",
+              "suitableForDiet": ["https://schema.org/GlutenFreeDiet", "https://schema.org/LowLactoseDiet"],
+              "author": {
+                "@type": "Organization",
+                "name": "Детский центр «Рыбка Долли»",
+                "url": "https://blogribkadolli.ru/"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "Детский центр «Рыбка Долли»",
+                "url": "https://blogribkadolli.ru/",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png"
+                }
+              }
+            };
+            if (firstImg) recipe["image"] = firstImg;
+            if (d.post.teacher_name) {
+              recipe["author"] = { "@type": "Person", "name": d.post.teacher_name };
+            }
+            let recipeEl = document.querySelector('script[data-schema="recipe"]') as HTMLScriptElement | null;
+            if (!recipeEl) {
+              recipeEl = document.createElement("script");
+              recipeEl.setAttribute("type", "application/ld+json");
+              recipeEl.setAttribute("data-schema", "recipe");
+              document.head.appendChild(recipeEl);
+            }
+            recipeEl.textContent = JSON.stringify(recipe);
+          }
         }
       })
       .catch(() => {})
@@ -139,7 +185,10 @@ export default function BlogPost() {
 
   const shareVk = () => {
     if (!post) return;
-    const url = `https://vk.com/share.php?url=${encodeURIComponent(`https://blogribkadolli.ru/blog/${post.id}`)}&title=${encodeURIComponent(post.title)}`;
+    const shareTitle = post.category === "plate"
+      ? `Поделитесь с подругой, у которой ребенок на диете БГБЛ! ${post.title}`
+      : post.title;
+    const url = `https://vk.com/share.php?url=${encodeURIComponent(`https://blogribkadolli.ru/blog/${post.id}`)}&title=${encodeURIComponent(shareTitle)}`;
     window.open(url, "_blank");
   };
 
@@ -293,7 +342,11 @@ export default function BlogPost() {
 
             {/* Поделиться */}
             <div className="border-t border-gray-100 pt-6 flex items-center justify-between">
-              <span className="text-sm text-gray-400">Понравилось? Поделитесь!</span>
+              <span className="text-sm text-gray-400">
+                {post.category === "plate"
+                  ? "Поделитесь с подругой, у которой ребёнок на диете БГБЛ!"
+                  : "Понравилось? Поделитесь!"}
+              </span>
               <button
                 onClick={shareVk}
                 className="flex items-center gap-2 px-5 py-2 rounded-full text-white text-sm font-bold transition-opacity hover:opacity-80"
