@@ -4,6 +4,7 @@ import Icon from "@/components/ui/icon";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { BLOG_API, STICKERS_API, CATEGORIES, SEO_BY_CATEGORY, Post } from "./blog-types";
 import { PostCard, ContactDropdown, SubscribeForm } from "./BlogPostCard";
+import PlateChecklists from "./PlateChecklists";
 
 export default function Blog() {
   const navigate = useNavigate();
@@ -113,6 +114,7 @@ export default function Blog() {
         {activeTab === "english" && (
           <ContactDropdown label="Записаться в группу английского" emoji="🇬🇧" colorClass="bg-sky-500 hover:bg-sky-600" />
         )}
+        {activeTab === "plate" && <PlateChecklists />}
         {loading ? (
           <div className="flex items-center justify-center py-24 text-gray-300">
             <Icon name="Loader2" size={36} className="animate-spin" />

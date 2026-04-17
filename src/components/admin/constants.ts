@@ -8,7 +8,7 @@ export const UPLOAD_VIDEO_API = "https://functions.poehali.dev/2b11cad0-8e9c-445
 export const QA_API = "https://functions.poehali.dev/dbf8090e-245f-45dd-9b83-298fcdf8b666";
 export const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 export const SUBSCRIBERS_API = "https://functions.poehali.dev/ad0992ef-212b-47b2-9265-aedfd9a33c3f";
-export const UPLOAD_GIFT_API = "https://functions.poehali.dev/39b04abb-07a3-4ca2-b63b-bc8755d2991e";
+export const PLATE_CHECKLISTS_API = "https://functions.poehali.dev/654937a6-cde9-49df-ba82-e36b291807c7";
 export const TOKEN_KEY = "admin_token";
 
 export const STATUS_CONFIG: Record<string, { label: string; color: string; next: string; nextLabel: string }> = {

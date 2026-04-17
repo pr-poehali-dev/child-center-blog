@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "GET checklists with unknown email - not subscribed",
+      "method": "GET",
+      "path": "/?email=notexist@example.com",
+      "expectedStatus": 403,
+      "expectedBody": {"error": "not_subscribed"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import BookingsManager from "@/components/admin/BookingsManager";
 import ReviewsManager from "@/components/admin/ReviewsManager";
 import QAManager from "@/components/admin/QAManager";
 import SubscribersManager from "@/components/admin/SubscribersManager";
+import PlateManager from "@/components/admin/PlateManager";
 
 export default function Admin() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
@@ -14,7 +15,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [updating, setUpdating] = useState<number | null>(null);
-  const [tab, setTab] = useState<"bookings" | "blog" | "reviews" | "qa" | "subscribers">("bookings");
+  const [tab, setTab] = useState<"bookings" | "blog" | "reviews" | "qa" | "subscribers" | "plate">("bookings");
 
   const load = async () => {
     setLoading(true);
@@ -85,10 +86,11 @@ export default function Admin() {
             { key: "reviews",     label: "Отзывы",       emoji: "⭐" },
             { key: "qa",          label: "Q&A",          emoji: "💬" },
             { key: "subscribers", label: "Подписчики",   emoji: "📬" },
+            { key: "plate",       label: "Тарелка",       emoji: "🥗" },
           ].map(t => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key as "bookings" | "blog" | "reviews" | "qa" | "subscribers")}
+              onClick={() => setTab(t.key as "bookings" | "blog" | "reviews" | "qa" | "subscribers" | "plate")}
               className={`flex items-center gap-1.5 px-5 py-3 text-sm font-bold border-b-2 transition-colors ${
                 tab === t.key
                   ? "border-orange-400 text-orange-500"
@@ -117,6 +119,7 @@ export default function Admin() {
         {tab === "reviews" && <ReviewsManager />}
         {tab === "qa" && <QAManager />}
         {tab === "subscribers" && <SubscribersManager />}
+        {tab === "plate" && <PlateManager />}
       </div>
     </div>
   );
