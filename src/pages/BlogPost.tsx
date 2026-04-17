@@ -59,11 +59,14 @@ export default function BlogPost() {
             ? `${d.post.title} | Рецепт за подписку`
             : `${d.post.title} | Блог детского центра «Рыбка Долли»`;
           const rawDesc = d.post.content.replace(/\n/g, " ").trim();
-          const desc = rawDesc.length > 160
+          const autoDesc = rawDesc.length > 160
             ? (rawDesc.slice(0, 160).lastIndexOf(" ") > 100
                 ? rawDesc.slice(0, rawDesc.slice(0, 160).lastIndexOf(" ")) + "..."
                 : rawDesc.slice(0, 160) + "...")
             : rawDesc || d.post.title;
+          const desc = isPlate
+            ? `${d.post.title} — нежные и вкусные! Скачайте пошаговый рецепт-чеклист за подписку. Подходит детям с аллергией и целиакией.`
+            : autoDesc;
           const FALLBACK_IMG = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png";
           const firstImgItem = d.post.media?.find((m: MediaItem) => m.type === "image");
           const firstImg = firstImgItem?.url || FALLBACK_IMG;
