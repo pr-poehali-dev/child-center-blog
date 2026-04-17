@@ -83,6 +83,7 @@ export default function BookingsManager({ bookings, loading, filter, updating, o
                     <div>
                       <div className="text-xs text-gray-400 font-semibold mb-0.5">Дата</div>
                       <div className="text-gray-500 text-sm">{formatDate(b.created_at)}</div>
+                      {b.source && <div className="text-xs text-blue-500 font-semibold mt-0.5">📍 {b.source}</div>}
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">

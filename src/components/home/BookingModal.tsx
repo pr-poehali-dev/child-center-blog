@@ -5,9 +5,10 @@ interface BookingModalProps {
   open: boolean;
   onClose: () => void;
   checklistUrl?: string;
+  source?: string;
 }
 
-export default function BookingModal({ open, onClose, checklistUrl }: BookingModalProps) {
+export default function BookingModal({ open, onClose, checklistUrl, source = "" }: BookingModalProps) {
   const [form, setForm] = useState({ name: "", phone: "", child: "", cls: "" });
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
@@ -31,7 +32,7 @@ export default function BookingModal({ open, onClose, checklistUrl }: BookingMod
       const res = await fetch("https://functions.poehali.dev/a38028da-1fda-42f8-8c38-6c5bc5522662", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, source }),
       });
       if (!res.ok) throw new Error();
       setSubmitted(true);

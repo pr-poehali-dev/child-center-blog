@@ -26,13 +26,14 @@ def handler(event: dict, context) -> dict:
     phone = body.get('phone', '')
     child = body.get('child', '')
     cls = body.get('cls', '')
+    source = body.get('source', '')
 
     # Сохраняем в БД
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
     cur.execute(
-        "INSERT INTO bookings (name, phone, child, cls) VALUES (%s, %s, %s, %s)",
-        (name, phone, child, cls)
+        "INSERT INTO bookings (name, phone, child, cls, source) VALUES (%s, %s, %s, %s, %s)",
+        (name, phone, child, cls, source)
     )
     conn.commit()
     cur.close()
@@ -69,8 +70,12 @@ def handler(event: dict, context) -> dict:
                     <td style="padding: 10px 0; border-bottom: 1px solid #ffe8d6; color: #1f2937; font-weight: bold;">{child}</td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px 0; color: #9ca3af; font-size: 13px;">Занятие</td>
-                    <td style="padding: 10px 0; color: #fb923c; font-weight: bold;">{cls or 'Не выбрано'}</td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #ffe8d6; color: #9ca3af; font-size: 13px;">Занятие</td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #ffe8d6; color: #fb923c; font-weight: bold;">{cls or 'Не выбрано'}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; color: #9ca3af; font-size: 13px;">Источник</td>
+                    <td style="padding: 10px 0; color: #6b7280; font-weight: bold;">{source or 'Сайт'}</td>
                 </tr>
             </table>
             <div style="margin-top: 20px; background: #fff7ed; border-radius: 12px; padding: 16px; text-align: center; color: #9a3412; font-size: 13px;">

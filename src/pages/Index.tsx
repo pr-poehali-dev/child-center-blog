@@ -12,6 +12,7 @@ export default function Index() {
   const [activeSection, setActiveSection] = useState("home");
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingChecklistUrl, setBookingChecklistUrl] = useState("");
+  const [bookingSource, setBookingSource] = useState("");
 
   usePageMeta({
     title: "Детский центр «Рыбка Долли» — Керчь | Развитие, английский, продлёнка",
@@ -32,7 +33,9 @@ export default function Index() {
 
   const openBooking = () => {
     const url = sessionStorage.getItem("booking_checklist_url") || "";
+    const params = new URLSearchParams(window.location.search);
     setBookingChecklistUrl(url);
+    setBookingSource(params.get("utm_source") || "");
     setBookingOpen(true);
   };
 
@@ -50,7 +53,7 @@ export default function Index() {
       <EasterBanner />
       <HomeHero onFormClick={openBooking} onScrollTo={scrollTo} />
       <HomeSections onFormClick={openBooking} />
-      <BookingModal open={bookingOpen} onClose={() => { setBookingOpen(false); sessionStorage.removeItem("booking_checklist_url"); }} checklistUrl={bookingChecklistUrl} />
+      <BookingModal open={bookingOpen} onClose={() => { setBookingOpen(false); sessionStorage.removeItem("booking_checklist_url"); }} checklistUrl={bookingChecklistUrl} source={bookingSource} />
       </div>
     </div>
   );

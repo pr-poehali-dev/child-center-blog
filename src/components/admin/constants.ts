@@ -37,6 +37,7 @@ export interface Booking {
   cls: string;
   status: string;
   created_at: string;
+  source?: string;
 }
 
 export interface MediaItem {
