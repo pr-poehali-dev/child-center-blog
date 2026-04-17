@@ -37,9 +37,9 @@ export default function Index() {
   };
 
   useEffect(() => {
-    if (window.location.hash === "#booking") {
+    if (window.location.hash === "#booking" || window.location.pathname === "/zapis") {
       openBooking();
-      window.history.replaceState(null, "", window.location.pathname);
+      window.history.replaceState(null, "", "/");
     }
   }, []);
 

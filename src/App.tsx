@@ -43,6 +43,7 @@ const App = () => {
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="/qr" element={<QRCode />} />
+            <Route path="/zapis" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
