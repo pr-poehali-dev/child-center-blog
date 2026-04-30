@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 import { BLOG_CATEGORIES, Post } from "./constants";
 
@@ -14,6 +15,15 @@ interface PostsListProps {
 export default function PostsList({
   posts, loading, activeTab, setActiveTab, deleting, onEdit, onDelete,
 }: PostsListProps) {
+  const [copied, setCopied] = useState<number | null>(null);
+
+  const copyLink = (postId: number) => {
+    const url = `${window.location.origin}/blog/${postId}`;
+    navigator.clipboard.writeText(url);
+    setCopied(postId);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
   const formatDate = (iso: string) => {
     const d = new Date(iso);
     return d.toLocaleDateString("ru-RU", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
@@ -80,6 +90,13 @@ export default function PostsList({
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => copyLink(post.id)}
+                    className={`transition-colors ${copied === post.id ? "text-green-500" : "text-gray-300 hover:text-blue-400"}`}
+                    title="Скопировать ссылку для рекламы"
+                  >
+                    <Icon name={copied === post.id ? "Check" : "Link"} size={16} />
+                  </button>
                   <button
                     onClick={() => onEdit(post)}
                     className="text-gray-300 hover:text-orange-400 transition-colors"
