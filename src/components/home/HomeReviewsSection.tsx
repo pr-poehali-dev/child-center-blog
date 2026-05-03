@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { REVIEWS } from "./constants";
 
 const REVIEWS_API = "https://functions.poehali.dev/1c662b6b-5f56-4e25-b517-f6fdfc24912b";
@@ -38,6 +39,7 @@ function LiveReviews() {
 
 function ReviewForm() {
   const [form, setForm] = useState({ name: "", child: "", text: "", stars: 5 });
+  const [agreed, setAgreed] = useState(false);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -89,7 +91,22 @@ function ReviewForm() {
           <label className="text-xs font-bold text-gray-500 mb-1 block">Ваш отзыв</label>
           <textarea required rows={4} className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 bg-white resize-none" placeholder="Расскажите о вашем опыте..." value={form.text} onChange={e => setForm({...form, text: e.target.value})} />
         </div>
-        <button type="submit" disabled={sending} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-3.5 rounded-2xl transition-colors">
+        <label className="flex items-start gap-2.5 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={e => setAgreed(e.target.checked)}
+            required
+            className="mt-0.5 accent-orange-400 w-4 h-4 shrink-0"
+          />
+          <span className="text-xs text-gray-500 leading-relaxed">
+            Согласен(а) с{" "}
+            <Link to="/privacy" target="_blank" className="text-orange-500 underline hover:text-orange-600">
+              обработкой персональных данных
+            </Link>
+          </span>
+        </label>
+        <button type="submit" disabled={sending || !agreed} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-3.5 rounded-2xl transition-colors">
           {sending ? "Отправляем..." : "Отправить отзыв"}
         </button>
       </div>

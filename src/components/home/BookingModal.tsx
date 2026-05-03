@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 interface BookingModalProps {
@@ -10,6 +11,7 @@ interface BookingModalProps {
 
 export default function BookingModal({ open, onClose, checklistUrl, source = "" }: BookingModalProps) {
   const [form, setForm] = useState({ name: "", phone: "", child: "", cls: "" });
+  const [agreed, setAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
@@ -81,8 +83,23 @@ export default function BookingModal({ open, onClose, checklistUrl, source = "" 
                 <label className="text-xs font-bold text-gray-500 mb-1 block">Что интересует (необязательно)</label>
                 <input className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Рисование, логика..." value={form.cls} onChange={(e) => handleFieldChange("cls", e.target.value)} />
               </div>
+              <label className="flex items-start gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={e => setAgreed(e.target.checked)}
+                  required
+                  className="mt-0.5 accent-orange-400 w-4 h-4 shrink-0"
+                />
+                <span className="text-xs text-gray-500 leading-relaxed">
+                  Согласен(а) с{" "}
+                  <Link to="/privacy" target="_blank" className="text-orange-500 underline hover:text-orange-600">
+                    обработкой персональных данных
+                  </Link>
+                </span>
+              </label>
               {sendError && <p className="text-red-500 text-sm text-center">{sendError}</p>}
-              <button type="submit" disabled={sending} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
+              <button type="submit" disabled={sending || !agreed} className="w-full bg-orange-400 hover:bg-orange-500 disabled:opacity-60 text-white font-black py-4 rounded-2xl transition-colors text-base mt-2">
                 {sending ? "Отправляем..." : "Отправить заявку"}
               </button>
             </form>

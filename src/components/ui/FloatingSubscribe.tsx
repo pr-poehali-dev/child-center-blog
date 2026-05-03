@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
 const SUBSCRIBERS_API = "https://functions.poehali.dev/ad0992ef-212b-47b2-9265-aedfd9a33c3f";
@@ -15,6 +15,7 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
   const [visible, setVisible] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "exists">("idle");
 
   const isAdmin = location.pathname.startsWith("/admin");
@@ -54,6 +55,7 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
     setStatus("idle");
     setName("");
     setEmail("");
+    setAgreed(false);
   };
 
   if (isAdmin) return null;
@@ -136,9 +138,24 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
                 {status === "error" && (
                   <p className="text-red-500 text-xs">Ошибка. Попробуйте ещё раз.</p>
                 )}
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={e => setAgreed(e.target.checked)}
+                    required
+                    className="mt-0.5 accent-orange-400 w-3.5 h-3.5 shrink-0"
+                  />
+                  <span className="text-[11px] text-gray-500 leading-relaxed">
+                    Согласен(а) с{" "}
+                    <Link to="/privacy" target="_blank" className="text-orange-500 underline hover:text-orange-600">
+                      обработкой персональных данных
+                    </Link>
+                  </span>
+                </label>
                 <button
                   type="submit"
-                  disabled={status === "loading"}
+                  disabled={status === "loading" || !agreed}
                   className="flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 disabled:opacity-60 text-white font-black py-2.5 rounded-xl text-sm transition-all"
                 >
                   {status === "loading" ? (
