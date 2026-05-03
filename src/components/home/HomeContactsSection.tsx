@@ -166,9 +166,15 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
         <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Рыбка Долли</div>
         <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
         <VisitCounter />
-        <a href="/admin" className="mt-4 inline-block text-xs text-gray-600 hover:text-gray-400 transition-colors">
-          Вход для администратора
-        </a>
+        <div className="mt-3 flex items-center justify-center gap-3">
+          <a href="/privacy" className="text-xs text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2">
+            Политика конфиденциальности
+          </a>
+          <span className="text-gray-600">·</span>
+          <a href="/admin" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
+            Вход для администратора
+          </a>
+        </div>
       </footer>
     </>
   );
