@@ -4,8 +4,6 @@ import Icon from "@/components/ui/icon";
 const SHOW_FROM = new Date("2026-05-09T00:00:00");
 const HIDE_AFTER = new Date("2026-05-12T00:00:00");
 
-const FLOWERS_URL = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/154bc063-f0d5-461d-bede-6ada2896bb66.jpg";
-
 export default function MayDayBanner() {
   const [closed, setClosed] = useState(false);
 
@@ -15,17 +13,53 @@ export default function MayDayBanner() {
   return (
     <>
       <style>{`
-        @keyframes mb-float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
-        @keyframes mb-pulse { 0%,100% { opacity:1; } 50% { opacity:0.75; } }
+        @keyframes mb-shimmer {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes mb-float  { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-4px); } }
+        @keyframes mb-pulse  { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+        .mb-banner {
+          background: linear-gradient(120deg, #c0392b, #d4603a, #c0392b, #a93226, #c9563a, #b83c2e, #c0392b);
+          background-size: 400% 400%;
+          animation: mb-shimmer 6s ease infinite;
+          border-bottom: 3px solid #e8a838;
+        }
         .mb-float  { animation: mb-float 3s ease-in-out infinite; }
         .mb-float2 { animation: mb-float 3.5s ease-in-out 0.4s infinite; }
         .mb-star   { animation: mb-pulse 2s ease-in-out infinite; }
+        .mb-badge {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          border: 3px solid #e8a838;
+          background: rgba(0,0,0,0.22);
+          flex-shrink: 0;
+        }
+        .mb-badge-num {
+          font-family: 'Nunito', sans-serif;
+          font-weight: 900;
+          font-size: 30px;
+          color: #ffd54f;
+          line-height: 1;
+          text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+        }
+        .mb-badge-label {
+          font-family: 'Nunito', sans-serif;
+          font-weight: 700;
+          font-size: 13px;
+          color: #fff;
+          line-height: 1;
+          margin-top: 2px;
+        }
       `}</style>
 
-      <div style={{
-        background: "linear-gradient(90deg, #b71c1c 0%, #c62828 40%, #b71c1c 100%)",
-        borderBottom: "3px solid #ff8f00",
-      }}>
+      <div className="mb-banner">
         <div style={{
           maxWidth: 900,
           margin: "0 auto",
@@ -36,9 +70,12 @@ export default function MayDayBanner() {
           position: "relative",
         }}>
 
-          {/* Картинка слева */}
-          <div className="mb-float hidden sm:block" style={{ flexShrink: 0 }}>
-            <img src={FLOWERS_URL} alt="гвоздики" style={{ height: 90, width: 90, objectFit: "cover", borderRadius: "50%", border: "2px solid #ff8f00", display: "block" }} />
+          {/* Медаль слева */}
+          <div className="mb-float hidden sm:block">
+            <div className="mb-badge">
+              <span className="mb-badge-num">81</span>
+              <span className="mb-badge-label">год</span>
+            </div>
           </div>
 
           {/* Центр */}
@@ -57,18 +94,17 @@ export default function MayDayBanner() {
               </span>
               <span className="mb-star" style={{ fontSize: 22 }}>⭐</span>
             </div>
-            <div style={{
-              color: "#ffcc80",
-              fontSize: "clamp(12px, 2vw, 15px)",
-              fontWeight: 600,
-            }}>
+            <div style={{ color: "#ffcc80", fontSize: "clamp(12px, 2vw, 15px)", fontWeight: 600 }}>
               Поздравляем всех с великим праздником! 9 мая 🕊️
             </div>
           </div>
 
-          {/* Картинка справа */}
-          <div className="mb-float hidden sm:block" style={{ flexShrink: 0 }}>
-            <img src={FLOWERS_URL} alt="гвоздики" style={{ height: 90, width: 90, objectFit: "cover", borderRadius: "50%", border: "2px solid #ff8f00", display: "block", transform: "scaleX(-1)" }} />
+          {/* Медаль справа */}
+          <div className="mb-float hidden sm:block">
+            <div className="mb-badge">
+              <span className="mb-badge-num">81</span>
+              <span className="mb-badge-label">год</span>
+            </div>
           </div>
 
           {/* Кнопка закрыть */}
