@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import HomeNavbar from "@/components/home/HomeNavbar";
 import HomeHero from "@/components/home/HomeHero";
 import EasterBanner from "@/components/home/EasterBanner";
+import MayDayBanner from "@/components/home/MayDayBanner";
 import HomeSections from "@/components/home/HomeSections";
 import BookingModal from "@/components/home/BookingModal";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -51,6 +52,7 @@ export default function Index() {
       <HomeNavbar activeSection={activeSection} onFormClick={openBooking} />
       <div className="pt-16">
       <EasterBanner />
+      <MayDayBanner />
       <HomeHero onFormClick={openBooking} onScrollTo={scrollTo} />
       <HomeSections onFormClick={openBooking} />
       <BookingModal open={bookingOpen} onClose={() => { setBookingOpen(false); sessionStorage.removeItem("booking_checklist_url"); }} checklistUrl={bookingChecklistUrl} source={bookingSource} />
