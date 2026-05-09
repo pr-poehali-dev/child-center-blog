@@ -28,6 +28,13 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isAdmin]);
 
+  useEffect(() => {
+    if (location.hash === "#subscribe") {
+      setOpen(true);
+      setVisible(true);
+    }
+  }, [location.hash]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
