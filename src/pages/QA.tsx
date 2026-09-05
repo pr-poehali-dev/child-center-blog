@@ -235,7 +235,7 @@ export default function QA() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito text-gray-700">
+    <div className="min-h-screen bg-[#FFF9F3] font-nunito text-gray-700">
       {/* HEADER */}
       <div className="bg-white border-b border-orange-100 sticky top-0 z-40">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-4">

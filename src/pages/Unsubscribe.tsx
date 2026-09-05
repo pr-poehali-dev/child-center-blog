@@ -22,7 +22,7 @@ export default function Unsubscribe() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#FFF9F3] flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
         {status === "loading" && (
           <div className="flex flex-col items-center gap-4">

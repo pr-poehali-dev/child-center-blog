@@ -24,6 +24,14 @@ export default {
 		},
 		extend: {
 			colors: {
+				brand: {
+					peach: '#FFE9D8',
+					mint: '#DFF3EA',
+					sky: '#E1F0FA',
+					cream: '#FFF9F3',
+					navy: '#175064',
+					orange: '#F26B2E',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',

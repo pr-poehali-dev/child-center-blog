@@ -10,7 +10,7 @@ export const CATEGORIES = [
   { id: "life", label: "Наша жизнь на ладони", emoji: "🌈", color: "bg-rose-50", border: "border-rose-200", tag: "bg-rose-100 text-rose-700" },
   { id: "detail", label: "Подробно о важном", emoji: "📖", color: "bg-teal-50", border: "border-teal-200", tag: "bg-teal-100 text-teal-700" },
   { id: "summer",      label: "Лето с нами. Новости летнего клуба", emoji: "☀️", color: "bg-yellow-50",  border: "border-yellow-200",  tag: "bg-yellow-100 text-yellow-700"  },
-  { id: "afterschool", label: "Группа продлённого дня",    emoji: "📚", color: "bg-indigo-50",  border: "border-indigo-200",  tag: "bg-indigo-100 text-indigo-700"  },
+  { id: "afterschool", label: "Продлёнка",    emoji: "📚", color: "bg-indigo-50",  border: "border-indigo-200",  tag: "bg-indigo-100 text-indigo-700"  },
   { id: "english",     label: "Группа английского языка", emoji: "🇬🇧", color: "bg-sky-50",    border: "border-sky-200",    tag: "bg-sky-100 text-sky-700"        },
   { id: "experiments", label: "Экспериментаторы",         emoji: "🔬", color: "bg-purple-50",  border: "border-purple-200",  tag: "bg-purple-100 text-purple-700"  },
   { id: "chefs",       label: "Шеф-повара",               emoji: "👨‍🍳", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700"  },

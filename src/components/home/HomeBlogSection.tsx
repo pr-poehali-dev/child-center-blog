@@ -5,12 +5,12 @@ import StickerTag from "@/components/ui/sticker-tag";
 const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
 const POPULAR_POSTS = [
-  { id: 43, title: "Кулич творожный", category: "recipes", emoji: "🍰", color: "bg-orange-50", border: "border-orange-200", tag: "bg-orange-100 text-orange-700", label: "Рецепты" },
-  { id: 33, title: "Космические пончики⭐", category: "recipes", emoji: "🍩", color: "bg-purple-50", border: "border-purple-200", tag: "bg-purple-100 text-purple-700", label: "Рецепты" },
-  { id: 16, title: "Гаджеты. Польза или вред?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
-  { id: 40, title: "Как выбрать летний лагерь для ребенка?", category: "summer", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб" },
-  { id: 44, title: "Пасхальный декупаж яиц", category: "creative", emoji: "🎨", color: "bg-pink-50", border: "border-pink-200", tag: "bg-pink-100 text-pink-700", label: "Творчество" },
-  { id: 39, title: "Как успокоить истерику ребенка?", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 63, title: "Лето-2026 в «Рыбке Долли»: больше 100 детей, море и мастер-классы", category: "summer", emoji: "☀️", color: "bg-yellow-50", border: "border-yellow-200", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб" },
+  { id: 64, title: "Продленка снова полная — и к нам вернулись пятиклассники", category: "afterschool", emoji: "📚", color: "bg-indigo-50", border: "border-indigo-200", tag: "bg-indigo-100 text-indigo-700", label: "Продлёнка" },
+  { id: 65, title: "Ни одной лишней слёзки: как устроена адаптация в «Рыбке Долли»", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 66, title: "«Не хочу в садик!» Что отвечать и как помочь ребёнку", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 61, title: "Мамина забота в каждом дне: открываем набор в ясельную группу!", category: "tips", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога" },
+  { id: 67, title: "Морковные маффины без сахара (БГБК)", category: "plate", emoji: "🥗", color: "bg-green-50", border: "border-green-200", tag: "bg-green-100 text-green-700", label: "Тарелка для всех" },
 ];
 
 function PopularPosts() {
@@ -28,8 +28,8 @@ function PopularPosts() {
     <>
       <style>{`
         @keyframes glow-pulse {
-          0%, 100% { box-shadow: 0 14px 0 #a855f7aa, 0 0 32px 10px #f472b688, 0 20px 48px 0 #fb923c44; }
-          50% { box-shadow: 0 14px 0 #a855f7cc, 0 0 60px 20px #f472b6cc, 0 24px 64px 0 #fb923c77; }
+          0%, 100% { box-shadow: 0 14px 0 #17506488, 0 0 32px 10px #ffcda688, 0 20px 48px 0 #dff3ea66; }
+          50% { box-shadow: 0 14px 0 #175064aa, 0 0 60px 20px #ffcda6cc, 0 24px 64px 0 #dff3eaaa; }
         }
         @keyframes splat-bounce {
           0%, 100% { transform: translateY(0px) rotate(-3deg) scale(1); }
@@ -44,7 +44,7 @@ function PopularPosts() {
           92%, 98% { ry: 1; }
         }
         .popular-btn { animation: glow-pulse 2.4s ease-in-out infinite; }
-        .popular-btn:hover { animation: none; box-shadow: 0 8px 0 #a855f7, 0 0 80px 28px #f472b6cc, 0 24px 64px 0 #fb923c99; transform: translateY(-4px) scale(1.05); }
+        .popular-btn:hover { animation: none; box-shadow: 0 8px 0 #175064, 0 0 80px 28px #ffcda6cc, 0 24px 64px 0 #dff3eaaa; transform: translateY(-4px) scale(1.05); }
         .splat-wrap { animation: splat-bounce 2.6s ease-in-out infinite; display: inline-block; filter: drop-shadow(0 12px 24px rgba(168,85,247,0.5)); }
         .eye-left { animation: wink-left 4s ease-in-out infinite; }
         .eye-right { animation: wink-right 5.5s ease-in-out 1.2s infinite; }
@@ -56,21 +56,21 @@ function PopularPosts() {
           onClick={toggle}
           className="popular-btn relative font-black px-14 py-8 rounded-[2.5rem] transition-all duration-300 flex items-center gap-8 cursor-pointer"
           style={{
-            background: "linear-gradient(135deg, #fde68a 0%, #fb923c 35%, #f472b6 70%, #a78bfa 100%)",
+            background: "linear-gradient(135deg, #ffe9d8 0%, #ffcda6 35%, #dff3ea 70%, #e1f0fa 100%)",
             border: "4px solid rgba(255,255,255,0.7)",
           }}
         >
           <div className="splat-wrap relative flex-shrink-0" style={{ width: 160, height: 160 }}>
             <img
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
-              alt="клякса"
+              src="/dolli-mascot.png"
+              alt="рыбка Долли"
               style={{ width: 160, height: 160, objectFit: "contain", display: "block" }}
             />
           </div>
           <div className="text-left">
-            <div className="text-sm font-bold text-white/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
-            <div className="text-4xl font-black text-white leading-tight drop-shadow-lg">Статьи в топе</div>
-            <div className="text-white/70 text-base font-semibold mt-1">{open ? "Свернуть ↑" : "Нажми — увидишь ↓"}</div>
+            <div className="text-sm font-bold text-[#175064]/70 tracking-widest uppercase mb-1">Читают чаще всего</div>
+            <div className="text-4xl font-black text-[#175064] leading-tight">Статьи в топе</div>
+            <div className="text-[#175064]/70 text-base font-semibold mt-1">{open ? "Свернуть ↑" : "Нажми — увидишь ↓"}</div>
           </div>
         </button>
       </section>
@@ -107,11 +107,11 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
 
   return (
     <>
-      <section id="blog-promo" className="py-24 bg-white">
+      <section id="blog-promo" className="py-24" style={{ background: "#DFF3EA" }}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-14">
             <div className="font-caveat text-orange-400 text-2xl mb-2">Блог</div>
-            <h2 className="font-black text-4xl text-gray-800">Наш блог</h2>
+            <h2 className="font-black text-4xl text-[#175064]">Наш блог</h2>
             <p className="text-gray-500 mt-3 text-lg">Живые истории, советы и важные мысли от педагогов центра</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mb-10">

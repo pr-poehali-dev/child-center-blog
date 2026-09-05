@@ -33,7 +33,7 @@ export default function LoginScreen({ onLogin }: { onLogin: (token: string) => v
   };
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#FFF9F3] font-nunito flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🌟</div>

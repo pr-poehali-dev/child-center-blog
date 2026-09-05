@@ -116,11 +116,11 @@ function ReviewForm() {
 
 export default function HomeReviewsSection() {
   return (
-    <section id="reviews" className="py-24 bg-white">
+    <section id="reviews" className="py-24 bg-[#FFF9F3]">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-14">
           <div className="font-caveat text-orange-400 text-2xl mb-2">Отзывы</div>
-          <h2 className="font-black text-4xl text-gray-800">Говорят родители</h2>
+          <h2 className="font-black text-4xl text-[#175064]">Говорят родители</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           {REVIEWS.map((r) => (

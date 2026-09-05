@@ -3,7 +3,7 @@ import Icon from "@/components/ui/icon";
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito">
+    <div className="min-h-screen bg-[#FFF9F3] font-nunito">
       <div className="max-w-3xl mx-auto px-4 py-12">
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-orange-500 font-bold mb-8 hover:text-orange-600 transition-colors">
           <Icon name="ArrowLeft" size={16} />

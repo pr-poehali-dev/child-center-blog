@@ -49,7 +49,7 @@ export default function Admin() {
   if (!token) return <LoginScreen onLogin={setToken} />;
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito">
+    <div className="min-h-screen bg-[#FFF9F3] font-nunito">
       {/* Header */}
       <div className="bg-white border-b border-orange-100 px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">

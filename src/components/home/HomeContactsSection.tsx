@@ -41,11 +41,11 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
   return (
     <>
       {/* CONTACTS */}
-      <section id="contacts" className="py-24 bg-gradient-to-b from-orange-50 to-amber-50">
+      <section id="contacts" className="py-24" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-14">
             <div className="font-caveat text-orange-400 text-2xl mb-2">Контакты</div>
-            <h2 className="font-black text-4xl text-gray-800">Мы всегда на связи</h2>
+            <h2 className="font-black text-4xl text-[#175064]">Мы всегда на связи</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white rounded-3xl p-8 shadow-sm">

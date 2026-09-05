@@ -48,7 +48,7 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito text-gray-700">
+    <div className="min-h-screen bg-[#FFF9F3] font-nunito text-gray-700">
       <HomeNavbar activeSection={activeSection} onFormClick={openBooking} />
       <div className="pt-16">
       <EasterBanner />

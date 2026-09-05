@@ -3,11 +3,11 @@ import { TEAM } from "./constants";
 
 export default function HomeTeamSection() {
   return (
-    <section id="team" className="py-24 bg-gradient-to-b from-rose-50 to-orange-50">
+    <section id="team" className="py-24" style={{ background: "#E1F0FA" }}>
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-14">
           <div className="font-caveat text-orange-400 text-2xl mb-2">Команда</div>
-          <h2 className="font-black text-4xl text-gray-800">Наши педагоги</h2>
+          <h2 className="font-black text-4xl text-[#175064]">Наши педагоги</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <video

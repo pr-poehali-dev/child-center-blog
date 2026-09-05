@@ -45,6 +45,10 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
               {l.label}
             </button>
           ))}
+          <a href="tel:+79881521698" className="flex items-center gap-1.5 text-sm font-bold text-[#175064] hover:text-orange-500 transition-colors">
+            <Icon name="Phone" size={16} />
+            +7 (988) 152-16-98
+          </a>
           <NavBookingDropdown onFormClick={onFormClick} />
         </div>
         <button className="md:hidden text-gray-600" onClick={() => setMenuOpen(!menuOpen)}>
@@ -58,15 +62,19 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
               {l.label}
             </button>
           ))}
+          <a href="tel:+79881521698" className="flex items-center gap-1.5 text-sm font-bold text-[#175064] py-1">
+            <Icon name="Phone" size={16} />
+            +7 (988) 152-16-98
+          </a>
           <NavBookingDropdown onFormClick={onFormClick} />
           <button
             onClick={() => { setMenuOpen(false); document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="flex items-center gap-2 font-black px-4 py-2 rounded-full text-sm w-fit text-white"
-            style={{ background: "linear-gradient(135deg, #fb923c, #f472b6, #a78bfa)", boxShadow: "0 4px 0 #a855f788" }}
+            className="flex items-center gap-2 font-black px-4 py-2 rounded-full text-sm w-fit text-[#175064]"
+            style={{ background: "linear-gradient(135deg, #ffe9d8, #dff3ea, #e1f0fa)", boxShadow: "0 4px 0 #17506433" }}
           >
             <img
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
-              alt="клякса"
+              src="/dolli-mascot.png"
+              alt="рыбка Долли"
               className="w-6 h-6 object-contain"
             />
             Статьи в топе

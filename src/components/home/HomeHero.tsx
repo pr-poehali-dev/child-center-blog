@@ -11,7 +11,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
   const [videoOpen, setVideoOpen] = useState(false);
 
   return (
-    <section id="home" className="pt-20 min-h-screen flex items-center relative overflow-hidden">
+    <section id="home" className="pt-20 min-h-screen flex items-center relative overflow-hidden" style={{ background: "linear-gradient(180deg, #FFE9D8 0%, #FFF9F3 65%)" }}>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-40 h-40 bg-orange-100 rounded-full opacity-60 blur-2xl" />
         <div className="absolute bottom-20 right-20 w-56 h-56 bg-yellow-100 rounded-full opacity-60 blur-2xl" />
@@ -41,8 +41,8 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
                 }}
               >
                 <img
-                  src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/541fd8a8-5245-4d70-8595-dad96bdd5912.png"
-                  alt="клякса"
+                  src="/dolli-mascot.png"
+                  alt="рыбка Долли"
                   className="w-full h-full object-contain"
                 />
               </button>
@@ -87,7 +87,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
         <div className="text-center max-w-2xl mx-auto w-full">
           <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xl mx-auto">
             <BookingDropdown onFormClick={onFormClick} className="flex-1" />
-            <ContactDropdown label="Забронировать смену летнего клуба" className="bg-yellow-400 hover:bg-yellow-500 text-white" wrapperClassName="flex-1" id="summer-booking" />
+            <ContactDropdown label="Записаться в продлёнку" className="bg-[#175064] hover:bg-[#123e4d] text-white" wrapperClassName="flex-1" id="afterschool-booking" />
           </div>
           <div className="flex flex-wrap justify-center gap-3 mt-3">
             <a
@@ -97,15 +97,6 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
               className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-3 rounded-full text-base border-2 border-orange-200 transition-all"
             >
               Подробнее о садике
-            </a>
-            <a
-              id="summer-details"
-              href="https://vk.com/app6379730_-179759189#l=8"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white hover:bg-orange-50 text-orange-500 font-bold px-8 py-3 rounded-full text-base border-2 border-orange-200 transition-all"
-            >
-              Подробнее о летнем клубе
             </a>
           </div>
           <div className="flex flex-wrap justify-center gap-6 mt-8">

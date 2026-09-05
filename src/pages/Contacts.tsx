@@ -12,7 +12,7 @@ export default function Contacts() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#fffdf8] font-nunito">
+    <div className="min-h-screen bg-[#FFF9F3] font-nunito">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm border-b border-orange-100">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-4">

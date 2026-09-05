@@ -1,0 +1,1 @@
+UPDATE t_p99892216_child_center_blog.category_stickers SET sticker_text = '', updated_at = NOW() WHERE category_id = 'summer';
