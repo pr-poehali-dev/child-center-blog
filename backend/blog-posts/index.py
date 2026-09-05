@@ -161,9 +161,11 @@ def handler(event: dict, context) -> dict:
         post_id = params.get('id')
         category = params.get('category')
 
+        RECIPE_FIELDS = "recipe_time, recipe_servings, recipe_calories, recipe_proteins, recipe_fats, recipe_carbs, recipe_ingredients, recipe_steps"
+
         if post_id:
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url FROM {SCHEMA}.blog_posts WHERE id = {int(post_id)}"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS} FROM {SCHEMA}.blog_posts WHERE id = {int(post_id)}"
             )
             row = cur.fetchone()
             cur.close()
@@ -176,17 +178,21 @@ def handler(event: dict, context) -> dict:
                 'teacher_photo': row[6], 'teacher_name': row[7] or '',
                 'sticker': row[8] or '', 'checklist_url': row[9] or '',
                 'cta_text': row[10] or '', 'cta_url': row[11] or '',
+                'recipe_time': row[12] or '', 'recipe_servings': row[13] or '',
+                'recipe_calories': row[14] or '', 'recipe_proteins': row[15] or '',
+                'recipe_fats': row[16] or '', 'recipe_carbs': row[17] or '',
+                'recipe_ingredients': row[18] or '', 'recipe_steps': row[19] or '',
             }
             return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'post': post}, ensure_ascii=False)}
 
         if category and category != 'all':
             cat_escaped = escape(category)
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}' ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS} FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}' ORDER BY created_at DESC"
             )
         else:
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS} FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
             )
         rows = cur.fetchall()
         cur.close()
@@ -198,6 +204,10 @@ def handler(event: dict, context) -> dict:
                 'teacher_photo': r[6], 'teacher_name': r[7] or '',
                 'sticker': r[8] or '', 'checklist_url': r[9] or '',
                 'cta_text': r[10] or '', 'cta_url': r[11] or '',
+                'recipe_time': r[12] or '', 'recipe_servings': r[13] or '',
+                'recipe_calories': r[14] or '', 'recipe_proteins': r[15] or '',
+                'recipe_fats': r[16] or '', 'recipe_carbs': r[17] or '',
+                'recipe_ingredients': r[18] or '', 'recipe_steps': r[19] or '',
             }
             for r in rows
         ]
@@ -218,6 +228,14 @@ def handler(event: dict, context) -> dict:
         checklist_url = escape(body.get('checklist_url', ''))
         cta_text = escape(body.get('cta_text', ''))
         cta_url = escape(body.get('cta_url', ''))
+        recipe_time = escape(body.get('recipe_time', ''))
+        recipe_servings = escape(body.get('recipe_servings', ''))
+        recipe_calories = escape(body.get('recipe_calories', ''))
+        recipe_proteins = escape(body.get('recipe_proteins', ''))
+        recipe_fats = escape(body.get('recipe_fats', ''))
+        recipe_carbs = escape(body.get('recipe_carbs', ''))
+        recipe_ingredients = escape(body.get('recipe_ingredients', ''))
+        recipe_steps = escape(body.get('recipe_steps', ''))
 
         s3 = get_s3()
         uploaded = []
@@ -242,7 +260,7 @@ def handler(event: dict, context) -> dict:
         teacher_photo_escaped = escape(teacher_photo_url)
 
         cur.execute(
-            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}', '{sticker}', '{checklist_url}', '{cta_text}', '{cta_url}') RETURNING id, created_at"
+            f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, recipe_time, recipe_servings, recipe_calories, recipe_proteins, recipe_fats, recipe_carbs, recipe_ingredients, recipe_steps) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}', '{sticker}', '{checklist_url}', '{cta_text}', '{cta_url}', '{recipe_time}', '{recipe_servings}', '{recipe_calories}', '{recipe_proteins}', '{recipe_fats}', '{recipe_carbs}', '{recipe_ingredients}', '{recipe_steps}') RETURNING id, created_at"
         )
         row = cur.fetchone()
         conn.commit()
@@ -268,6 +286,14 @@ def handler(event: dict, context) -> dict:
         checklist_url = escape(body.get('checklist_url', ''))
         cta_text = escape(body.get('cta_text', ''))
         cta_url = escape(body.get('cta_url', ''))
+        recipe_time = escape(body.get('recipe_time', ''))
+        recipe_servings = escape(body.get('recipe_servings', ''))
+        recipe_calories = escape(body.get('recipe_calories', ''))
+        recipe_proteins = escape(body.get('recipe_proteins', ''))
+        recipe_fats = escape(body.get('recipe_fats', ''))
+        recipe_carbs = escape(body.get('recipe_carbs', ''))
+        recipe_ingredients = escape(body.get('recipe_ingredients', ''))
+        recipe_steps = escape(body.get('recipe_steps', ''))
 
         s3 = get_s3()
         uploaded = []
@@ -292,7 +318,7 @@ def handler(event: dict, context) -> dict:
         teacher_photo_escaped = escape(teacher_photo_url)
 
         cur.execute(
-            f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}', sticker='{sticker}', checklist_url='{checklist_url}', cta_text='{cta_text}', cta_url='{cta_url}' WHERE id={post_id}"
+            f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}', sticker='{sticker}', checklist_url='{checklist_url}', cta_text='{cta_text}', cta_url='{cta_url}', recipe_time='{recipe_time}', recipe_servings='{recipe_servings}', recipe_calories='{recipe_calories}', recipe_proteins='{recipe_proteins}', recipe_fats='{recipe_fats}', recipe_carbs='{recipe_carbs}', recipe_ingredients='{recipe_ingredients}', recipe_steps='{recipe_steps}' WHERE id={post_id}"
         )
         conn.commit()
         cur.close()

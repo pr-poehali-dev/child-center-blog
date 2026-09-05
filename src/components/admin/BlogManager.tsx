@@ -24,6 +24,14 @@ export default function BlogManager() {
   const [checklistUrl, setChecklistUrl] = useState<string>("");
   const [ctaText, setCtaText] = useState<string>("");
   const [ctaUrl, setCtaUrl] = useState<string>("");
+  const [recipeTime, setRecipeTime] = useState<string>("");
+  const [recipeServings, setRecipeServings] = useState<string>("");
+  const [recipeCalories, setRecipeCalories] = useState<string>("");
+  const [recipeProteins, setRecipeProteins] = useState<string>("");
+  const [recipeFats, setRecipeFats] = useState<string>("");
+  const [recipeCarbs, setRecipeCarbs] = useState<string>("");
+  const [recipeIngredients, setRecipeIngredients] = useState<string>("");
+  const [recipeSteps, setRecipeSteps] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
   const [stickers, setStickers] = useState<Record<string, string>>({});
@@ -113,6 +121,14 @@ export default function BlogManager() {
     setChecklistUrl("");
     setCtaText("");
     setCtaUrl("");
+    setRecipeTime("");
+    setRecipeServings("");
+    setRecipeCalories("");
+    setRecipeProteins("");
+    setRecipeFats("");
+    setRecipeCarbs("");
+    setRecipeIngredients("");
+    setRecipeSteps("");
     setShowEmoji(false);
   };
 
@@ -129,6 +145,14 @@ export default function BlogManager() {
     setChecklistUrl(post.checklist_url || "");
     setCtaText(post.cta_text || "");
     setCtaUrl(post.cta_url || "");
+    setRecipeTime(post.recipe_time || "");
+    setRecipeServings(post.recipe_servings || "");
+    setRecipeCalories(post.recipe_calories || "");
+    setRecipeProteins(post.recipe_proteins || "");
+    setRecipeFats(post.recipe_fats || "");
+    setRecipeCarbs(post.recipe_carbs || "");
+    setRecipeIngredients(post.recipe_ingredients || "");
+    setRecipeSteps(post.recipe_steps || "");
     setShowForm(true);
     setShowEmoji(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -147,7 +171,15 @@ export default function BlogManager() {
       const res = await fetch(BLOG_API, {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker, checklist_url: checklistUrl, cta_text: ctaText, cta_url: ctaUrl }),
+        body: JSON.stringify({
+          ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia,
+          teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker,
+          checklist_url: checklistUrl, cta_text: ctaText, cta_url: ctaUrl,
+          recipe_time: recipeTime, recipe_servings: recipeServings,
+          recipe_calories: recipeCalories, recipe_proteins: recipeProteins,
+          recipe_fats: recipeFats, recipe_carbs: recipeCarbs,
+          recipe_ingredients: recipeIngredients, recipe_steps: recipeSteps,
+        }),
       });
       if (!res.ok) {
         alert("Ошибка при сохранении. Попробуйте ещё раз.");
@@ -243,6 +275,22 @@ export default function BlogManager() {
               setCtaText={setCtaText}
               ctaUrl={ctaUrl}
               setCtaUrl={setCtaUrl}
+              recipeTime={recipeTime}
+              setRecipeTime={setRecipeTime}
+              recipeServings={recipeServings}
+              setRecipeServings={setRecipeServings}
+              recipeCalories={recipeCalories}
+              setRecipeCalories={setRecipeCalories}
+              recipeProteins={recipeProteins}
+              setRecipeProteins={setRecipeProteins}
+              recipeFats={recipeFats}
+              setRecipeFats={setRecipeFats}
+              recipeCarbs={recipeCarbs}
+              setRecipeCarbs={setRecipeCarbs}
+              recipeIngredients={recipeIngredients}
+              setRecipeIngredients={setRecipeIngredients}
+              recipeSteps={recipeSteps}
+              setRecipeSteps={setRecipeSteps}
               showEmoji={showEmoji}
               setShowEmoji={setShowEmoji}
               emojiTarget={emojiTarget}

@@ -62,4 +62,12 @@ export interface Post {
   checklist_url?: string;
   cta_text?: string;
   cta_url?: string;
+  recipe_time?: string;
+  recipe_servings?: string;
+  recipe_calories?: string;
+  recipe_proteins?: string;
+  recipe_fats?: string;
+  recipe_carbs?: string;
+  recipe_ingredients?: string;
+  recipe_steps?: string;
 }
