@@ -170,6 +170,22 @@ export default function BlogPost() {
             if (d.post.teacher_name) {
               recipe["author"] = { "@type": "Person", "name": d.post.teacher_name };
             }
+            const recipeIngredientsArr: string[] = (d.post.recipe_ingredients || "").split("\n").map((s: string) => s.trim()).filter(Boolean);
+            const recipeStepsArr: string[] = (d.post.recipe_steps || "").split("\n").map((s: string) => s.trim()).filter(Boolean);
+            if (recipeIngredientsArr.length) recipe["recipeIngredient"] = recipeIngredientsArr;
+            if (recipeStepsArr.length) {
+              recipe["recipeInstructions"] = recipeStepsArr.map((step: string) => ({ "@type": "HowToStep", "text": step }));
+            }
+            if (d.post.recipe_servings?.trim()) recipe["recipeYield"] = d.post.recipe_servings.trim();
+            if (d.post.recipe_time?.trim()) recipe["totalTime"] = d.post.recipe_time.trim();
+            if (d.post.recipe_calories?.trim() || d.post.recipe_proteins?.trim() || d.post.recipe_fats?.trim() || d.post.recipe_carbs?.trim()) {
+              const nutrition: Record<string, unknown> = { "@type": "NutritionInformation" };
+              if (d.post.recipe_calories?.trim()) nutrition["calories"] = `${d.post.recipe_calories.trim()} ккал`;
+              if (d.post.recipe_proteins?.trim()) nutrition["proteinContent"] = d.post.recipe_proteins.trim();
+              if (d.post.recipe_fats?.trim()) nutrition["fatContent"] = d.post.recipe_fats.trim();
+              if (d.post.recipe_carbs?.trim()) nutrition["carbohydrateContent"] = d.post.recipe_carbs.trim();
+              recipe["nutrition"] = nutrition;
+            }
             let recipeEl = document.querySelector('script[data-schema="recipe"]') as HTMLScriptElement | null;
             if (!recipeEl) {
               recipeEl = document.createElement("script");
