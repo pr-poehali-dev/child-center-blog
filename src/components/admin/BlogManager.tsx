@@ -1,9 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { BLOG_API, UPLOAD_API, TOKEN_KEY, STICKERS_API, Post, MediaItem } from "./constants";
 import PostForm from "./PostForm";
 import PostsList from "./PostsList";
 import StickersPanel from "./StickersPanel";
+
+const DRAFT_KEY = "blog_post_draft";
+
+interface Draft {
+  form: { category: string; title: string; content: string };
+  mediaItems: MediaItem[];
+  teacherPhoto: string; teacherName: string; videoUrl: string; postSticker: string;
+  checklistUrl: string; ctaText: string; ctaUrl: string;
+  recipeTime: string; recipeServings: string; recipeCalories: string; recipeProteins: string;
+  recipeFats: string; recipeCarbs: string; recipeIngredients: string; recipeSteps: string;
+}
 
 export default function BlogManager() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -37,6 +48,65 @@ export default function BlogManager() {
   const [stickers, setStickers] = useState<Record<string, string>>({});
   const [stickerEdits, setStickerEdits] = useState<Record<string, string>>({});
   const [savingSticker, setSavingSticker] = useState<string | null>(null);
+  const [draftRestored, setDraftRestored] = useState(false);
+  const draftLoadedRef = useRef(false);
+
+  // Восстановление черновика поста при открытии (например, после случайной перезагрузки страницы)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (raw) {
+        const d: Draft = JSON.parse(raw);
+        if (d.form && (d.form.title || d.form.content)) {
+          setForm(d.form);
+          setMediaItems(d.mediaItems || []);
+          setTeacherPhoto(d.teacherPhoto || "");
+          setTeacherName(d.teacherName || "");
+          setVideoUrl(d.videoUrl || "");
+          setPostSticker(d.postSticker || "");
+          setChecklistUrl(d.checklistUrl || "");
+          setCtaText(d.ctaText || "");
+          setCtaUrl(d.ctaUrl || "");
+          setRecipeTime(d.recipeTime || "");
+          setRecipeServings(d.recipeServings || "");
+          setRecipeCalories(d.recipeCalories || "");
+          setRecipeProteins(d.recipeProteins || "");
+          setRecipeFats(d.recipeFats || "");
+          setRecipeCarbs(d.recipeCarbs || "");
+          setRecipeIngredients(d.recipeIngredients || "");
+          setRecipeSteps(d.recipeSteps || "");
+          setShowForm(true);
+          setDraftRestored(true);
+        }
+      }
+    } catch {
+      /* ignore corrupted draft */
+    } finally {
+      draftLoadedRef.current = true;
+    }
+  }, []);
+
+  // Автосохранение черновика поста, чтобы текст не терялся при случайной перезагрузке страницы
+  useEffect(() => {
+    if (!draftLoadedRef.current) return;
+    if (!showForm) return;
+    const draft: Draft = {
+      form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker,
+      checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings,
+      recipeCalories, recipeProteins, recipeFats, recipeCarbs,
+      recipeIngredients, recipeSteps,
+    };
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch {
+      /* localStorage может быть недоступен (приватный режим) — черновик просто не сохранится */
+    }
+  }, [showForm, form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker, checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings, recipeCalories, recipeProteins, recipeFats, recipeCarbs, recipeIngredients, recipeSteps]);
+
+  const clearDraft = () => {
+    try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
+    setDraftRestored(false);
+  };
 
   const loadPosts = async (cat: string) => {
     setLoading(true);
@@ -130,11 +200,13 @@ export default function BlogManager() {
     setRecipeIngredients("");
     setRecipeSteps("");
     setShowEmoji(false);
+    clearDraft();
   };
 
   const startEdit = (post: Post) => {
     const videoItem = post.media?.find(m => m.type === "video");
     const imageItems = (post.media || []).filter(m => m.type === "image" || m.type === "document");
+    clearDraft();
     setEditingPost(post);
     setForm({ category: post.category, title: post.title, content: post.content });
     setMediaItems(imageItems);
@@ -255,6 +327,21 @@ export default function BlogManager() {
 
       {managerTab === "posts" && (
         <>
+          {showForm && draftRestored && (
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3 mb-4 flex items-center justify-between gap-3">
+              <p className="text-sm text-amber-700 flex items-center gap-2">
+                <Icon name="RotateCcw" size={16} />
+                Мы восстановили черновик — ничего не потерялось
+              </p>
+              <button
+                type="button"
+                onClick={() => setDraftRestored(false)}
+                className="text-amber-500 hover:text-amber-700"
+              >
+                <Icon name="X" size={16} />
+              </button>
+            </div>
+          )}
           {showForm && (
             <PostForm
               form={form}
