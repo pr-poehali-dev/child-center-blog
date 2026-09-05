@@ -213,6 +213,9 @@ export default function PostForm({
             <label className="text-xs font-bold text-gray-500 mb-1.5 block flex items-center gap-1.5">
               <span>🥗</span> Оформление рецепта (необязательно)
             </label>
+            <div className="bg-white/70 border border-green-200 rounded-xl px-3 py-2.5 text-[11px] text-gray-500 leading-relaxed">
+              <span className="font-bold text-green-700">Как заполнять:</span> время — «20 минут»; порции — «4 порции»; КБЖУ — числами без единиц; ингредиенты и шаги — каждый пункт с новой строки, без нумерации (цифры добавятся сами).
+            </div>
 
             <div className="grid grid-cols-2 gap-2">
               <input
