@@ -22,6 +22,8 @@ export default function BlogManager() {
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [postSticker, setPostSticker] = useState<string>("");
   const [checklistUrl, setChecklistUrl] = useState<string>("");
+  const [ctaText, setCtaText] = useState<string>("");
+  const [ctaUrl, setCtaUrl] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
   const [stickers, setStickers] = useState<Record<string, string>>({});
@@ -109,6 +111,8 @@ export default function BlogManager() {
     setVideoUrl("");
     setPostSticker("");
     setChecklistUrl("");
+    setCtaText("");
+    setCtaUrl("");
     setShowEmoji(false);
   };
 
@@ -123,6 +127,8 @@ export default function BlogManager() {
     setVideoUrl(videoItem?.url || "");
     setPostSticker(post.sticker || "");
     setChecklistUrl(post.checklist_url || "");
+    setCtaText(post.cta_text || "");
+    setCtaUrl(post.cta_url || "");
     setShowForm(true);
     setShowEmoji(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -141,7 +147,7 @@ export default function BlogManager() {
       const res = await fetch(BLOG_API, {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker, checklist_url: checklistUrl }),
+        body: JSON.stringify({ ...(isEdit ? { id: editingPost!.id } : {}), ...form, media: allMedia, teacher_photo: teacherPhoto, teacher_name: teacherName, sticker: postSticker, checklist_url: checklistUrl, cta_text: ctaText, cta_url: ctaUrl }),
       });
       if (!res.ok) {
         alert("Ошибка при сохранении. Попробуйте ещё раз.");
@@ -233,6 +239,10 @@ export default function BlogManager() {
               setPostSticker={setPostSticker}
               checklistUrl={checklistUrl}
               setChecklistUrl={setChecklistUrl}
+              ctaText={ctaText}
+              setCtaText={setCtaText}
+              ctaUrl={ctaUrl}
+              setCtaUrl={setCtaUrl}
               showEmoji={showEmoji}
               setShowEmoji={setShowEmoji}
               emojiTarget={emojiTarget}

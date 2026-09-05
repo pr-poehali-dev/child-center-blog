@@ -60,4 +60,6 @@ export interface Post {
   teacher_name?: string;
   sticker?: string;
   checklist_url?: string;
+  cta_text?: string;
+  cta_url?: string;
 }

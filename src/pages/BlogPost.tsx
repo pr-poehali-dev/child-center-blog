@@ -22,6 +22,7 @@ interface MediaItem { type: "image" | "video" | "document"; url: string; name?: 
 interface Post {
   id: number; category: string; title: string; content: string;
   media: MediaItem[]; created_at: string; teacher_photo?: string; teacher_name?: string; sticker?: string; checklist_url?: string;
+  cta_text?: string; cta_url?: string;
 }
 
 function VideoThumb({ url }: { url: string }) {
@@ -316,6 +317,21 @@ export default function BlogPost() {
                     </a>
                   );
                 })}
+              </div>
+            )}
+
+            {/* Кастомная кнопка-призыв */}
+            {post.cta_text?.trim() && post.cta_url?.trim() && (
+              <div className="mb-6 flex justify-center">
+                <a
+                  href={post.cta_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 text-white font-black px-8 py-4 rounded-2xl text-base shadow-md transition-all"
+                >
+                  {post.cta_text}
+                  <Icon name="ArrowRight" size={18} />
+                </a>
               </div>
             )}
 
