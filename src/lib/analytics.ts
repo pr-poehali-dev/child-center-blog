@@ -12,7 +12,7 @@ export function trackGoal(goal: string): void {
 }
 
 /** Домены, на которые ведут внутренние переходы блога и которым нужна UTM-метка. */
-const UTM_TARGET_HOSTS = ["ribkadollli.ru", "www.ribkadollli.ru"];
+const UTM_TARGET_HOSTS = ["ribkadollilend.ru", "www.ribkadollilend.ru"];
 
 /**
  * Добавляет к ссылке UTM-метки блога, если ссылка ведёт на основной сайт центра.

@@ -95,7 +95,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
                   </div>
                 </div>
                 <a
-                  href={withBlogUtm("https://ribkadollli.ru")}
+                  href={withBlogUtm("https://ribkadollilend.ru")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-3 hover:shadow-md transition-all hover:-translate-y-0.5 w-full"
@@ -108,7 +108,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
                   </svg>
                   <div>
                     <div className="text-xs text-gray-400 font-semibold">Основной сайт</div>
-                    <div className="text-gray-700 font-semibold text-sm">ribkadollli.ru</div>
+                    <div className="text-gray-700 font-semibold text-sm">ribkadollilend.ru</div>
                   </div>
                 </a>
               </div>
