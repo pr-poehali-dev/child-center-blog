@@ -38,7 +38,7 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
         <div className="hidden md:flex items-center gap-6">
           {NAV_LINKS.map((l) => (
             <button
-              key={l.id}
+              key={l.label}
               onClick={() => scrollTo(l.id)}
               className={`text-sm font-semibold transition-colors hover:text-orange-500 ${activeSection === l.id ? "text-orange-500" : "text-gray-600"}`}
             >
@@ -58,7 +58,7 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-orange-100 px-4 py-3 flex flex-col gap-3">
           {NAV_LINKS.map((l) => (
-            <button key={l.id} onClick={() => scrollTo(l.id)} className="text-left text-sm font-semibold text-gray-600 hover:text-orange-500 py-1">
+            <button key={l.label} onClick={() => scrollTo(l.id)} className="text-left text-sm font-semibold text-gray-600 hover:text-orange-500 py-1">
               {l.label}
             </button>
           ))}

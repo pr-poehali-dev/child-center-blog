@@ -3,7 +3,7 @@ export const TG_LINK = "https://t.me/irinadolli";
 
 export const NAV_LINKS = [
   { label: "Главная", id: "home" },
-  { label: "О центре", id: "about" },
+  { label: "О центре", id: "team" },
   { label: "Блог", id: "blog-link" },
   { label: "Команда", id: "team" },
   { label: "Отзывы", id: "reviews" },

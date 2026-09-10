@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
+import { trackGoal, withBlogUtm } from "@/lib/analytics";
 
 const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-264f6d13e325";
 
@@ -200,6 +201,22 @@ export default function BlogPost() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    if (!post) return;
+    let fired = false;
+    const handleScroll = () => {
+      if (fired) return;
+      const scrolled = window.scrollY + window.innerHeight;
+      const full = document.documentElement.scrollHeight;
+      if (full > 0 && scrolled / full >= 0.9) {
+        fired = true;
+        trackGoal("read_end");
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [post]);
 
   const cat = post ? CATEGORIES[post.category] : null;
   const ingredientsList = (post?.recipe_ingredients || "").split("\n").map(s => s.trim()).filter(Boolean);
@@ -425,7 +442,7 @@ export default function BlogPost() {
             {post.cta_text?.trim() && post.cta_url?.trim() && (
               <div className="mb-6 flex justify-center">
                 <a
-                  href={post.cta_url}
+                  href={withBlogUtm(post.cta_url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-400 to-rose-400 hover:from-orange-500 hover:to-rose-500 text-white font-black px-8 py-4 rounded-2xl text-base shadow-md transition-all"

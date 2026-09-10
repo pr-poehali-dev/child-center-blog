@@ -3,6 +3,7 @@ import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
 import { MediaGallery } from "./BlogMediaGallery";
 import { CATEGORIES, SUBSCRIBERS_API, MAX_LINK, TG_LINK, Post } from "./blog-types";
+import { trackGoal } from "@/lib/analytics";
 
 export function SubscribeForm() {
   const [name, setName] = useState("");
@@ -118,7 +119,7 @@ export function ContactDropdown({ label, emoji, colorClass }: { label: string; e
             href={MAX_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setOpen(false)}
+            onClick={() => { trackGoal("cta_max_click"); setOpen(false); }}
             className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700"
           >
             <span className="text-xl">💬</span>
@@ -129,7 +130,7 @@ export function ContactDropdown({ label, emoji, colorClass }: { label: string; e
             href={TG_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setOpen(false)}
+            onClick={() => { trackGoal("cta_tg_click"); setOpen(false); }}
             className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700"
           >
             <span className="text-xl">✈️</span>

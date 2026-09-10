@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { trackGoal } from "@/lib/analytics";
 
 const QA_API = "https://functions.poehali.dev/dbf8090e-245f-45dd-9b83-298fcdf8b666";
 
@@ -216,6 +217,7 @@ export default function QA() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+      trackGoal("qa_submit");
       setSent(true);
       setShowForm(false);
       setForm({ teacher_id: "", question: "", author_name: "", is_anonymous: false });

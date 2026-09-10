@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 import { MAX_LINK, TG_LINK } from "./constants";
+import { trackGoal } from "@/lib/analytics";
 
 function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormClick?: () => void }) {
   return (
@@ -8,7 +9,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
       {onFormClick && (
         <>
           <button
-            onClick={() => { onFormClick(); onClose(); }}
+            onClick={() => { trackGoal("cta_form_open"); onFormClick(); onClose(); }}
             className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full text-left"
           >
             <span className="text-xl">📋</span>
@@ -21,7 +22,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
         href={MAX_LINK}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={onClose}
+        onClick={() => { trackGoal("cta_max_click"); onClose(); }}
         className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full"
       >
         <span className="text-xl">💬</span>
@@ -32,7 +33,7 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
         href={TG_LINK}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={onClose}
+        onClick={() => { trackGoal("cta_tg_click"); onClose(); }}
         className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full"
       >
         <span className="text-xl">✈️</span>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
+import { withBlogUtm } from "@/lib/analytics";
 
 const VISIT_COUNTER_API = "https://functions.poehali.dev/7d977bf0-24cd-492c-aa4e-0c0324d97f97";
 
@@ -94,7 +95,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
                   </div>
                 </div>
                 <a
-                  href="https://ribkadollli.ru"
+                  href={withBlogUtm("https://ribkadollli.ru")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-3 hover:shadow-md transition-all hover:-translate-y-0.5 w-full"
