@@ -5,6 +5,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { BLOG_API, STICKERS_API, CATEGORIES, SEO_BY_CATEGORY, Post } from "./blog-types";
 import { PostCard, ContactDropdown, SubscribeForm } from "./BlogPostCard";
 import PlateChecklists from "./PlateChecklists";
+import BlogSiteBridges from "@/components/BlogSiteBridges";
 
 export default function Blog() {
   const navigate = useNavigate();
@@ -142,6 +143,7 @@ export default function Blog() {
           </div>
         )}
       </div>
+      <BlogSiteBridges />
       <SubscribeForm />
     </div>
   );

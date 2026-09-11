@@ -49,6 +49,26 @@ export default function BlogPostCTA({ post, onShareVk }: BlogPostCTAProps) {
         </div>
       </div>
 
+      {/* Мосты на сайты продлёнки и летнего клуба */}
+      <div className="grid sm:grid-cols-2 gap-3 mb-6">
+        <a
+          href={withBlogUtm("https://schooldolli.ru", "cta")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-black px-5 py-3.5 rounded-2xl text-sm transition-colors"
+        >
+          <span className="text-lg">📚</span> Записаться в продлёнку
+        </a>
+        <a
+          href={withBlogUtm("https://dolliklub.ru", "cta")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-black px-5 py-3.5 rounded-2xl text-sm transition-colors"
+        >
+          <span className="text-lg">☀️</span> Записаться в летний клуб
+        </a>
+      </div>
+
       {/* Поделиться */}
       <div className="border-t border-gray-100 pt-6 flex items-center justify-between">
         <span className="text-sm text-gray-400">
