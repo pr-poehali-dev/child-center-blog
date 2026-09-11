@@ -1,0 +1,1 @@
+UPDATE t_p99892216_child_center_blog.blog_posts SET category = 'experiments' WHERE id = 25;

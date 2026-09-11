@@ -1,0 +1,3 @@
+UPDATE t_p99892216_child_center_blog.blog_posts SET title = 'Как научить ребёнка считать в уме: пошаговая инструкция для родителей' WHERE id = 50;
+UPDATE t_p99892216_child_center_blog.blog_posts SET title = '«Прозрачно о питании: как и чем мы кормим детей в «Рыбка Долли»»' WHERE id = 55;
+UPDATE t_p99892216_child_center_blog.blog_posts SET title = 'Веселые каникулы в нашем летнем клубе!' WHERE id = 62;

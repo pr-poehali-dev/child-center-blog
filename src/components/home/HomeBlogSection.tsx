@@ -192,6 +192,22 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
               <h3 className="font-black text-lg text-gray-800 mb-3">Тарелка для всех</h3>
               <p className="text-gray-500 text-sm leading-relaxed">Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей.</p>
             </div>
+            <div className="relative bg-orange-50 border border-orange-100 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=yasli")}>
+              {stickers["yasli"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["yasli"]} size="md" /></div>}
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-orange-200 shadow flex items-center justify-center bg-orange-100 text-4xl">
+                🍼
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Ясли (1,5–3 года)</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Новости и советы ясельной группы: мягкая адаптация, забота и первые шаги к самостоятельности.</p>
+            </div>
+            <div className="relative bg-yellow-50 border border-yellow-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer overflow-visible" onClick={() => navigate("/blog?category=school")}>
+              {stickers["school"] && <div className="absolute -top-4 -right-3 z-10 rotate-[8deg]"><StickerTag text={stickers["school"]} size="md" /></div>}
+              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-yellow-300 shadow flex items-center justify-center bg-yellow-100 text-4xl">
+                🎒
+              </div>
+              <h3 className="font-black text-lg text-gray-800 mb-3">Подготовка к школе</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">Чтение, счёт, письмо и развитие мышления — всё, что нужно будущему первокласснику.</p>
+            </div>
             <div className="bg-rose-50 border border-rose-200 rounded-3xl p-8 text-center hover:shadow-md transition-all hover:-translate-y-1 cursor-pointer" onClick={() => navigate("/blog/qa")}>
               <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-4 border-4 border-rose-200 shadow">
                 <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/15744313-9270-4292-bb6b-c44dc00a492a.png" alt="Спрашивали — Отвечаем" className="w-full h-full object-cover object-top" />

@@ -1,0 +1,1 @@
+UPDATE t_p99892216_child_center_blog.blog_posts SET category = 'yasli' WHERE id IN (65,4,61,22,37);

@@ -20,6 +20,9 @@ STATIC_URLS = [
     (BASE_URL + '/blog?category=experiments',      'weekly',  '0.6'),
     (BASE_URL + '/blog?category=chefs',            'weekly',  '0.6'),
     (BASE_URL + '/blog?category=masters',          'weekly',  '0.6'),
+    (BASE_URL + '/blog?category=plate',            'weekly',  '0.6'),
+    (BASE_URL + '/blog?category=yasli',            'weekly',  '0.7'),
+    (BASE_URL + '/blog?category=school',           'weekly',  '0.7'),
     (BASE_URL + '/blog/qa',                        'monthly', '0.5'),
 ]
 

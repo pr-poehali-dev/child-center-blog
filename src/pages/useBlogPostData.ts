@@ -14,6 +14,8 @@ export const CATEGORIES: Record<string, { label: string; emoji: string; color: s
   chefs:       { label: "Шеф-повара",                      emoji: "👨‍🍳", color: "bg-orange-50", border: "border-orange-200", tag: "bg-orange-100 text-orange-700" },
   masters:     { label: "Мастера вдохновения",              emoji: "🎨", color: "bg-pink-50",   border: "border-pink-200",   tag: "bg-pink-100 text-pink-700"     },
   plate:       { label: "Тарелка для всех",                 emoji: "🥗", color: "bg-green-50",  border: "border-green-200",  tag: "bg-green-100 text-green-700"   },
+  yasli:       { label: "Ясли (1,5–3 года)",                emoji: "🍼", color: "bg-orange-50", border: "border-orange-200", tag: "bg-orange-100 text-orange-700" },
+  school:      { label: "Подготовка к школе",               emoji: "🎒", color: "bg-yellow-50", border: "border-yellow-300", tag: "bg-yellow-100 text-yellow-800" },
 };
 
 export interface MediaItem { type: "image" | "video" | "document"; url: string; name?: string; alt?: string; caption?: string; }

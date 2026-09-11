@@ -16,6 +16,8 @@ export const CATEGORIES = [
   { id: "chefs",       label: "Шеф-повара",               emoji: "👨‍🍳", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700"  },
   { id: "masters",     label: "Мастера вдохновения",      emoji: "🎨", color: "bg-pink-50",    border: "border-pink-200",    tag: "bg-pink-100 text-pink-700"      },
   { id: "plate",       label: "Тарелка для всех",         emoji: "🥗", color: "bg-green-50",   border: "border-green-200",   tag: "bg-green-100 text-green-700",  subtitle: "Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей" },
+  { id: "yasli",       label: "Ясли (1,5–3 года)",        emoji: "🍼", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700" },
+  { id: "school",      label: "Подготовка к школе",       emoji: "🎒", color: "bg-yellow-50",  border: "border-yellow-300",  tag: "bg-yellow-100 text-yellow-800" },
 ];
 
 export const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = {
@@ -58,6 +60,14 @@ export const SEO_BY_CATEGORY: Record<string, { title: string; description: strin
   plate: {
     title: "Тарелка для всех — безглютеновое питание для детей | «Рыбка Долли» Керчь",
     description: "Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей. Рецепты, советы и забота о здоровье вашего ребёнка от центра «Рыбка Долли».",
+  },
+  yasli: {
+    title: "Ясли для детей 1,5–3 года в Керчи — «Рыбка Долли» | Мягкая адаптация",
+    description: "Ясельная группа для детей от 1,5 до 3 лет в детском центре «Рыбка Долли» в Керчи: мягкая адаптация, опытные педагоги, забота и уют. Новости и советы группы.",
+  },
+  school: {
+    title: "Подготовка к школе в Керчи — «Рыбка Долли» | Занятия для дошкольников",
+    description: "Подготовка к школе для дошкольников в центре «Рыбка Долли» в Керчи: чтение, счёт, письмо и развитие мышления. Новости и советы от педагогов группы.",
   },
 };
 

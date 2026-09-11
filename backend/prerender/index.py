@@ -24,6 +24,9 @@ CATEGORIES = {
     'experiments': {'label': 'Экспериментаторы',         'emoji': '🔬'},
     'chefs':       {'label': 'Шеф-повара',               'emoji': '👨‍🍳'},
     'masters':     {'label': 'Мастера вдохновения',      'emoji': '🎨'},
+    'plate':       {'label': 'Тарелка для всех',         'emoji': '🥗'},
+    'yasli':       {'label': 'Ясли (1,5–3 года)',        'emoji': '🍼'},
+    'school':      {'label': 'Подготовка к школе',       'emoji': '🎒'},
 }
 
 
