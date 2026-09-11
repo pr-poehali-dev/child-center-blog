@@ -14,6 +14,7 @@ interface Draft {
   checklistUrl: string; ctaText: string; ctaUrl: string;
   recipeTime: string; recipeServings: string; recipeCalories: string; recipeProteins: string;
   recipeFats: string; recipeCarbs: string; recipeIngredients: string; recipeSteps: string;
+  slug: string; seoTitle: string; seoDescription: string;
 }
 
 export default function BlogManager() {
@@ -43,11 +44,17 @@ export default function BlogManager() {
   const [recipeCarbs, setRecipeCarbs] = useState<string>("");
   const [recipeIngredients, setRecipeIngredients] = useState<string>("");
   const [recipeSteps, setRecipeSteps] = useState<string>("");
+  const [slug, setSlug] = useState<string>("");
+  const [seoTitle, setSeoTitle] = useState<string>("");
+  const [seoDescription, setSeoDescription] = useState<string>("");
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
   const [stickers, setStickers] = useState<Record<string, string>>({});
   const [stickerEdits, setStickerEdits] = useState<Record<string, string>>({});
   const [savingSticker, setSavingSticker] = useState<string | null>(null);
+  const [descriptions, setDescriptions] = useState<Record<string, string>>({});
+  const [descriptionEdits, setDescriptionEdits] = useState<Record<string, string>>({});
+  const [savingDescription, setSavingDescription] = useState<string | null>(null);
   const [draftRestored, setDraftRestored] = useState(false);
   const draftLoadedRef = useRef(false);
 
@@ -75,6 +82,9 @@ export default function BlogManager() {
           setRecipeCarbs(d.recipeCarbs || "");
           setRecipeIngredients(d.recipeIngredients || "");
           setRecipeSteps(d.recipeSteps || "");
+          setSlug(d.slug || "");
+          setSeoTitle(d.seoTitle || "");
+          setSeoDescription(d.seoDescription || "");
           setShowForm(true);
           setDraftRestored(true);
         }
@@ -94,14 +104,14 @@ export default function BlogManager() {
       form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker,
       checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings,
       recipeCalories, recipeProteins, recipeFats, recipeCarbs,
-      recipeIngredients, recipeSteps,
+      recipeIngredients, recipeSteps, slug, seoTitle, seoDescription,
     };
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
     } catch {
       /* localStorage может быть недоступен (приватный режим) — черновик просто не сохранится */
     }
-  }, [showForm, form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker, checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings, recipeCalories, recipeProteins, recipeFats, recipeCarbs, recipeIngredients, recipeSteps]);
+  }, [showForm, form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker, checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings, recipeCalories, recipeProteins, recipeFats, recipeCarbs, recipeIngredients, recipeSteps, slug, seoTitle, seoDescription]);
 
   const clearDraft = () => {
     try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
@@ -125,8 +135,11 @@ export default function BlogManager() {
     const res = await fetch(STICKERS_API);
     const data = await res.json();
     const s = data.stickers || {};
+    const d = data.descriptions || {};
     setStickers(s);
     setStickerEdits(s);
+    setDescriptions(d);
+    setDescriptionEdits(d);
   };
 
   useEffect(() => { loadStickers(); }, []);
@@ -149,6 +162,18 @@ export default function BlogManager() {
     }
     await loadStickers();
     setSavingSticker(null);
+  };
+
+  const saveDescription = async (categoryId: string) => {
+    setSavingDescription(categoryId);
+    const text = (descriptionEdits[categoryId] || "").trim();
+    await fetch(STICKERS_API, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
+      body: JSON.stringify({ category_id: categoryId, description: text }),
+    });
+    await loadStickers();
+    setSavingDescription(null);
   };
 
   const compressImage = (dataUrl: string, maxSize = 900): Promise<string> => {
@@ -199,6 +224,9 @@ export default function BlogManager() {
     setRecipeCarbs("");
     setRecipeIngredients("");
     setRecipeSteps("");
+    setSlug("");
+    setSeoTitle("");
+    setSeoDescription("");
     setShowEmoji(false);
     clearDraft();
   };
@@ -225,6 +253,9 @@ export default function BlogManager() {
     setRecipeCarbs(post.recipe_carbs || "");
     setRecipeIngredients(post.recipe_ingredients || "");
     setRecipeSteps(post.recipe_steps || "");
+    setSlug(post.slug || "");
+    setSeoTitle(post.seo_title || "");
+    setSeoDescription(post.seo_description || "");
     setShowForm(true);
     setShowEmoji(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -251,10 +282,15 @@ export default function BlogManager() {
           recipe_calories: recipeCalories, recipe_proteins: recipeProteins,
           recipe_fats: recipeFats, recipe_carbs: recipeCarbs,
           recipe_ingredients: recipeIngredients, recipe_steps: recipeSteps,
+          slug, seo_title: seoTitle, seo_description: seoDescription,
         }),
       });
       if (!res.ok) {
-        alert("Ошибка при сохранении. Попробуйте ещё раз.");
+        if (res.status === 409) {
+          alert("Такой адрес статьи (slug) уже занят другой статьёй. Измените slug и попробуйте снова.");
+        } else {
+          alert("Ошибка при сохранении. Попробуйте ещё раз.");
+        }
         return;
       }
       resetForm();
@@ -322,6 +358,11 @@ export default function BlogManager() {
           setStickerEdits={setStickerEdits}
           savingSticker={savingSticker}
           onSave={saveSticker}
+          descriptions={descriptions}
+          descriptionEdits={descriptionEdits}
+          setDescriptionEdits={setDescriptionEdits}
+          savingDescription={savingDescription}
+          onSaveDescription={saveDescription}
         />
       )}
 
@@ -378,6 +419,12 @@ export default function BlogManager() {
               setRecipeIngredients={setRecipeIngredients}
               recipeSteps={recipeSteps}
               setRecipeSteps={setRecipeSteps}
+              slug={slug}
+              setSlug={setSlug}
+              seoTitle={seoTitle}
+              setSeoTitle={setSeoTitle}
+              seoDescription={seoDescription}
+              setSeoDescription={setSeoDescription}
               showEmoji={showEmoji}
               setShowEmoji={setShowEmoji}
               emojiTarget={emojiTarget}

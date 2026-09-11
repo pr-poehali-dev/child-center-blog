@@ -26,6 +26,7 @@ export interface Post {
   recipe_time?: string; recipe_servings?: string;
   recipe_calories?: string; recipe_proteins?: string; recipe_fats?: string; recipe_carbs?: string;
   recipe_ingredients?: string; recipe_steps?: string;
+  slug?: string; seo_title?: string; seo_description?: string;
 }
 
 export function useBlogPostData(id: string | undefined) {
@@ -35,24 +36,33 @@ export function useBlogPostData(id: string | undefined) {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`${BLOG_API}?id=${id}`)
+    const isNumeric = /^\d+$/.test(id);
+    const query = isNumeric ? `id=${id}` : `slug=${encodeURIComponent(id)}`;
+    fetch(`${BLOG_API}?${query}`)
       .then(r => r.json())
       .then(d => {
         if (d.post) {
           setPost(d.post);
           const isPlate = d.post.category === "plate";
-          const title = isPlate
-            ? `${d.post.title} | Рецепт за подписку`
-            : `${d.post.title} | Блог детского центра «Рыбка Долли»`;
+          const urlPath = d.post.slug || d.post.id;
+          const seoTitle = d.post.seo_title?.trim();
+          const title = seoTitle
+            ? `${seoTitle} | Блог детского центра «Рыбка Долли»`
+            : isPlate
+              ? `${d.post.title} | Рецепт за подписку`
+              : `${d.post.title} | Блог детского центра «Рыбка Долли»`;
           const rawDesc = d.post.content.replace(/\n/g, " ").trim();
           const autoDesc = rawDesc.length > 160
             ? (rawDesc.slice(0, 160).lastIndexOf(" ") > 100
                 ? rawDesc.slice(0, rawDesc.slice(0, 160).lastIndexOf(" ")) + "..."
                 : rawDesc.slice(0, 160) + "...")
             : rawDesc || d.post.title;
-          const desc = isPlate
-            ? `${d.post.title} — нежные и вкусные! Скачайте пошаговый рецепт-чеклист за подписку. Подходит детям с аллергией и целиакией.`
-            : autoDesc;
+          const seoDesc = d.post.seo_description?.trim();
+          const desc = seoDesc
+            ? seoDesc
+            : isPlate
+              ? `${d.post.title} — нежные и вкусные! Скачайте пошаговый рецепт-чеклист за подписку. Подходит детям с аллергией и целиакией.`
+              : autoDesc;
           const FALLBACK_IMG = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/badbdcbb-25d9-4f41-a4b9-b704f68d9351.png";
           const firstImgItem = d.post.media?.find((m: MediaItem) => m.type === "image");
           const firstImg = firstImgItem?.url || FALLBACK_IMG;
@@ -67,19 +77,25 @@ export function useBlogPostData(id: string | undefined) {
             if (!el) { el = document.createElement("meta"); el.setAttribute("property", prop); document.head.appendChild(el); }
             el.content = content;
           };
+          const setCanonical = (href: string) => {
+            let el = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+            if (!el) { el = document.createElement("link"); el.setAttribute("rel", "canonical"); document.head.appendChild(el); }
+            el.href = href;
+          };
           setMeta("description", desc);
           setOg("og:title", title);
           setOg("og:description", desc);
           setOg("og:type", "article");
-          setOg("og:url", `https://blogribkadolli.ru/blog/${id}`);
+          setOg("og:url", `https://blogribkadolli.ru/blog/${urlPath}`);
           setOg("og:image", firstImg);
+          setCanonical(`https://blogribkadolli.ru/blog/${urlPath}`);
 
           const schema: Record<string, unknown> = {
             "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": d.post.title,
+            "@type": "Article",
+            "headline": seoTitle || d.post.title,
             "description": desc,
-            "url": `https://blogribkadolli.ru/blog/${id}`,
+            "url": `https://blogribkadolli.ru/blog/${urlPath}`,
             "datePublished": d.post.created_at,
             "dateModified": d.post.created_at,
             "inLanguage": "ru-RU",
@@ -99,7 +115,7 @@ export function useBlogPostData(id: string | undefined) {
             }
           };
           if (d.post.teacher_name) {
-            schema["author"] = {
+            const authorSchema: Record<string, unknown> = {
               "@type": "Person",
               "name": d.post.teacher_name,
               "worksFor": {
@@ -107,6 +123,8 @@ export function useBlogPostData(id: string | undefined) {
                 "name": "Детский центр «Рыбка Долли»"
               }
             };
+            if (d.post.teacher_photo) authorSchema["image"] = d.post.teacher_photo;
+            schema["author"] = authorSchema;
           }
           if (firstImg) {
             schema["image"] = { "@type": "ImageObject", "url": firstImg };

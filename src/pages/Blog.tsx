@@ -22,6 +22,7 @@ export default function Blog() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [stickers, setStickers] = useState<Record<string, string>>({});
+  const [categoryDescriptions, setCategoryDescriptions] = useState<Record<string, string>>({});
 
   const loadPosts = async (cat: string) => {
     setLoading(true);
@@ -35,7 +36,10 @@ export default function Blog() {
   };
 
   useEffect(() => {
-    fetch(STICKERS_API).then(r => r.json()).then(d => setStickers(d.stickers || {})).catch(() => {});
+    fetch(STICKERS_API).then(r => r.json()).then(d => {
+      setStickers(d.stickers || {});
+      setCategoryDescriptions(d.descriptions || {});
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -99,6 +103,11 @@ export default function Blog() {
 
       {/* CONTENT */}
       <div ref={postsRef} className="max-w-3xl mx-auto px-4 py-8">
+        {categoryDescriptions[activeTab] && (
+          <div className={`${activeCat.color} border ${activeCat.border} rounded-2xl px-5 py-4 mb-6`}>
+            <p className="text-gray-700 text-sm leading-relaxed">{categoryDescriptions[activeTab]}</p>
+          </div>
+        )}
         {activeCat.subtitle && (
           <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 mb-6 flex items-start gap-3">
             <span className="text-2xl mt-0.5">{activeCat.emoji}</span>

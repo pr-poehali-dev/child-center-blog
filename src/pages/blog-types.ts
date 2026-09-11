@@ -89,4 +89,7 @@ export interface Post {
   teacher_photo?: string;
   teacher_name?: string;
   sticker?: string;
+  slug?: string;
+  seo_title?: string;
+  seo_description?: string;
 }

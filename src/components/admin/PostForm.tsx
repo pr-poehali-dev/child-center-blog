@@ -4,6 +4,7 @@ import CategoryPicker from "./CategoryPicker";
 import RecipeFields from "./RecipeFields";
 import PostMediaFields from "./PostMediaFields";
 import PostExtrasFields from "./PostExtrasFields";
+import PostSeoFields from "./PostSeoFields";
 
 const EMOJIS = ["😊","🌟","🎉","❤️","👏","🥳","🌈","🎈","🌺","🦋","🌸","✨","🎀","🍀","🌞","🎁","🐥","🦄","🌻","💫","🐾","🎶","🍓","🧡","💛","💚","💙","💜","🌙","⭐"];
 
@@ -42,6 +43,12 @@ interface PostFormProps {
   setRecipeIngredients: (v: string) => void;
   recipeSteps: string;
   setRecipeSteps: (v: string) => void;
+  slug: string;
+  setSlug: (v: string) => void;
+  seoTitle: string;
+  setSeoTitle: (v: string) => void;
+  seoDescription: string;
+  setSeoDescription: (v: string) => void;
   showEmoji: boolean;
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>;
   emojiTarget: "title" | "content";
@@ -74,6 +81,9 @@ export default function PostForm({
   recipeCarbs, setRecipeCarbs,
   recipeIngredients, setRecipeIngredients,
   recipeSteps, setRecipeSteps,
+  slug, setSlug,
+  seoTitle, setSeoTitle,
+  seoDescription, setSeoDescription,
   showEmoji, setShowEmoji,
   emojiTarget, setEmojiTarget,
   uploadingMedia, saving,
@@ -170,6 +180,12 @@ export default function PostForm({
           checklistUrl={checklistUrl} setChecklistUrl={setChecklistUrl}
           ctaText={ctaText} setCtaText={setCtaText}
           ctaUrl={ctaUrl} setCtaUrl={setCtaUrl}
+        />
+
+        <PostSeoFields
+          slug={slug} setSlug={setSlug}
+          seoTitle={seoTitle} setSeoTitle={setSeoTitle}
+          seoDescription={seoDescription} setSeoDescription={setSeoDescription}
         />
 
         <button

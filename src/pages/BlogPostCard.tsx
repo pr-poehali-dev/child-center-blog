@@ -202,14 +202,14 @@ export function PostCard({ post, categoryStickerText }: { post: Post; categorySt
       <MediaGallery media={post.media} fallbackAlt={post.title} />
       <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-2 flex-wrap">
         <a
-          href={`/blog/${post.id}`}
+          href={`/blog/${post.slug || post.id}`}
           className="text-orange-500 font-bold text-sm hover:underline flex items-center gap-1"
           onClick={e => e.stopPropagation()}
         >
           Открыть статью →
         </a>
         <a
-          href={`https://vk.com/share.php?url=${encodeURIComponent("https://blogribkadolli.ru/blog/" + post.id)}&title=${encodeURIComponent(post.title)}`}
+          href={`https://vk.com/share.php?url=${encodeURIComponent("https://blogribkadolli.ru/blog/" + (post.slug || post.id))}&title=${encodeURIComponent(post.title)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 px-4 py-1.5 rounded-full text-white text-xs font-bold transition-opacity hover:opacity-80"

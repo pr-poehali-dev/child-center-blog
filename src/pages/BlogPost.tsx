@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
@@ -12,6 +12,14 @@ export default function BlogPost() {
   const navigate = useNavigate();
   const { post, loading } = useBlogPostData(id);
   const [lightbox, setLightbox] = useState<string | null>(null);
+
+  // Если статья открыта по старому числовому id, а у неё уже есть человекочитаемый slug — 
+  // незаметно переводим адрес на канонический (для случаев когда SPA уже загружен, без перезагрузки страницы)
+  useEffect(() => {
+    if (post?.slug && id && id !== post.slug) {
+      navigate(`/blog/${post.slug}`, { replace: true });
+    }
+  }, [post?.slug, id, navigate]);
 
   const cat = post ? CATEGORIES[post.category] : null;
   const ingredientsList = (post?.recipe_ingredients || "").split("\n").map(s => s.trim()).filter(Boolean);
@@ -30,7 +38,8 @@ export default function BlogPost() {
     const shareTitle = post.category === "plate"
       ? `Поделитесь с подругой, у которой ребенок на диете БГБЛ! ${post.title}`
       : post.title;
-    const url = `https://vk.com/share.php?url=${encodeURIComponent(`https://blogribkadolli.ru/blog/${post.id}`)}&title=${encodeURIComponent(shareTitle)}`;
+    const urlPath = post.slug || post.id;
+    const url = `https://vk.com/share.php?url=${encodeURIComponent(`https://blogribkadolli.ru/blog/${urlPath}`)}&title=${encodeURIComponent(shareTitle)}`;
     window.open(url, "_blank");
   };
 

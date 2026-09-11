@@ -72,4 +72,7 @@ export interface Post {
   recipe_carbs?: string;
   recipe_ingredients?: string;
   recipe_steps?: string;
+  slug?: string;
+  seo_title?: string;
+  seo_description?: string;
 }

@@ -51,13 +51,14 @@ def ping_sitemap_yandex():
         return False
 
 
-def ping_yandex(post_id: int):
+def ping_yandex(post_id: int, slug: str = ''):
     """Отправляет URL новой статьи в Яндекс.Вебмастер на индексацию."""
     token = os.environ.get('YANDEX_WEBMASTER_TOKEN', '')
     if not token:
         return
+    path = slug if slug else post_id
     url = f'https://api.webmaster.yandex.net/v4/user/{YANDEX_USER_ID}/hosts/{YANDEX_HOST_ID}/reindex/tasks'
-    data = json.dumps({'data': [{'url': f'{BASE_URL}/blog/{post_id}'}]}).encode('utf-8')
+    data = json.dumps({'data': [{'url': f'{BASE_URL}/blog/{path}'}]}).encode('utf-8')
     req = urllib.request.Request(url, data=data, method='POST')
     req.add_header('Authorization', f'OAuth {token}')
     req.add_header('Content-Type', 'application/json')
@@ -87,8 +88,8 @@ def handler(event: dict, context) -> dict:
 
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
-    cur.execute(f"SELECT id, created_at FROM {SCHEMA}.blog_posts ORDER BY id")
-    posts = [(row[0], row[1].strftime('%Y-%m-%d')) for row in cur.fetchall()]
+    cur.execute(f"SELECT id, created_at, slug FROM {SCHEMA}.blog_posts ORDER BY id")
+    posts = [(row[0], row[1].strftime('%Y-%m-%d'), row[2] or '') for row in cur.fetchall()]
     cur.close()
     conn.close()
 
@@ -96,8 +97,9 @@ def handler(event: dict, context) -> dict:
     for loc, freq, priority in STATIC_URLS:
         urls.append(f'  <url><loc>{loc}</loc><changefreq>{freq}</changefreq><priority>{priority}</priority></url>')
 
-    for pid, lastmod in posts:
-        urls.append(f'  <url><loc>{BASE_URL}/blog/{pid}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>')
+    for pid, lastmod, slug in posts:
+        path = slug if slug else pid
+        urls.append(f'  <url><loc>{BASE_URL}/blog/{path}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>')
 
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

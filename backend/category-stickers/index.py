@@ -23,7 +23,7 @@ def escape(val: str) -> str:
 
 
 def handler(event: dict, context) -> dict:
-    """Управление стикерами для категорий блога: GET — получить все, PUT — сохранить стикер для категории, DELETE — удалить стикер"""
+    """Управление стикерами и описаниями категорий блога: GET — получить все, PUT — сохранить стикер/описание категории, DELETE — удалить стикер"""
 
     if event.get('httpMethod') == 'OPTIONS':
         return {'statusCode': 200, 'headers': CORS, 'body': ''}
@@ -33,12 +33,13 @@ def handler(event: dict, context) -> dict:
     cur = conn.cursor()
 
     if method == 'GET':
-        cur.execute(f"SELECT category_id, sticker_text FROM {SCHEMA}.category_stickers WHERE sticker_text != ''")
+        cur.execute(f"SELECT category_id, sticker_text, description FROM {SCHEMA}.category_stickers WHERE sticker_text != '' OR description != ''")
         rows = cur.fetchall()
         cur.close()
         conn.close()
-        stickers = {row[0]: row[1] for row in rows}
-        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'stickers': stickers}, ensure_ascii=False)}
+        stickers = {row[0]: row[1] for row in rows if row[1]}
+        descriptions = {row[0]: row[2] for row in rows if row[2]}
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'stickers': stickers, 'descriptions': descriptions}, ensure_ascii=False)}
 
     if method == 'PUT':
         if not check_auth(event):
@@ -46,14 +47,21 @@ def handler(event: dict, context) -> dict:
             return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
         category_id = escape(body.get('category_id', ''))
-        sticker_text = escape(body.get('sticker_text', ''))
         if not category_id:
             cur.close(); conn.close()
             return {'statusCode': 400, 'headers': CORS, 'body': json.dumps({'error': 'category_id required'})}
-        cur.execute(
-            f"INSERT INTO {SCHEMA}.category_stickers (category_id, sticker_text, updated_at) VALUES ('{category_id}', '{sticker_text}', NOW()) "
-            f"ON CONFLICT (category_id) DO UPDATE SET sticker_text = '{sticker_text}', updated_at = NOW()"
-        )
+        if 'description' in body:
+            description = escape(body.get('description', ''))
+            cur.execute(
+                f"INSERT INTO {SCHEMA}.category_stickers (category_id, description, updated_at) VALUES ('{category_id}', '{description}', NOW()) "
+                f"ON CONFLICT (category_id) DO UPDATE SET description = '{description}', updated_at = NOW()"
+            )
+        else:
+            sticker_text = escape(body.get('sticker_text', ''))
+            cur.execute(
+                f"INSERT INTO {SCHEMA}.category_stickers (category_id, sticker_text, updated_at) VALUES ('{category_id}', '{sticker_text}', NOW()) "
+                f"ON CONFLICT (category_id) DO UPDATE SET sticker_text = '{sticker_text}', updated_at = NOW()"
+            )
         conn.commit()
         cur.close()
         conn.close()

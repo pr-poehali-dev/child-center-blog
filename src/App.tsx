@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import Blog from "./pages/Blog";
@@ -42,6 +42,7 @@ const App = () => {
             <Route path="/blog/qa" element={<QA />} />
             <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/contacts" element={<Contacts />} />
+            <Route path="/kontakty" element={<Navigate to="/contacts" replace />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="/qr" element={<QRCode />} />
             <Route path="/privacy" element={<Privacy />} />

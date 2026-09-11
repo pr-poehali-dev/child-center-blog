@@ -59,14 +59,14 @@ def content_to_paragraphs(content: str) -> str:
     return '\n'.join(paragraphs)
 
 
-def build_schema(post: dict, desc: str, first_img: str) -> str:
-    """Строит JSON-LD для BlogPosting."""
+def build_schema(post: dict, desc: str, first_img: str, post_url: str) -> str:
+    """Строит JSON-LD для Article (BlogPosting) с автором Person."""
     schema = {
         '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        'headline': post['title'],
+        '@type': 'Article',
+        'headline': post.get('seo_title') or post['title'],
         'description': desc,
-        'url': f"{BASE_URL}/blog/{post['id']}",
+        'url': post_url,
         'datePublished': post['created_at'],
         'dateModified': post['created_at'],
         'inLanguage': 'ru-RU',
@@ -83,11 +83,14 @@ def build_schema(post: dict, desc: str, first_img: str) -> str:
         },
     }
     if post.get('teacher_name'):
-        schema['author'] = {
+        author = {
             '@type': 'Person',
             'name': post['teacher_name'],
             'worksFor': {'@type': 'Organization', 'name': 'Детский центр «Рыбка Долли»'},
         }
+        if post.get('teacher_photo'):
+            author['image'] = post['teacher_photo']
+        schema['author'] = author
     else:
         schema['author'] = {
             '@type': 'Organization',
@@ -102,7 +105,8 @@ def build_html(post: dict) -> str:
     """Генерирует полный HTML-документ с текстом статьи для поисковых роботов."""
     title_escaped = e(post['title'])
     content_text = post.get('content', '')
-    desc = content_text.replace('\n', ' ').strip()[:160]
+    auto_desc = content_text.replace('\n', ' ').strip()[:160]
+    desc = post.get('seo_description') or auto_desc
     desc_escaped = e(desc)
 
     cat_key = post.get('category', '')
@@ -131,11 +135,13 @@ def build_html(post: dict) -> str:
     images_html = ''
     for m in media:
         if m.get('type') == 'image' and m.get('url'):
-            images_html += f'<img src="{e(m["url"])}" alt="{title_escaped}" loading="lazy" style="max-width:100%;border-radius:12px;margin:8px 0;">\n'
+            img_alt = e(m.get('alt') or post['title'])
+            images_html += f'<img src="{e(m["url"])}" alt="{img_alt}" loading="lazy" style="max-width:100%;border-radius:12px;margin:8px 0;">\n'
 
-    schema_json = build_schema(post, desc, first_img)
-    post_url = f"{BASE_URL}/blog/{post['id']}"
-    page_title = f"{post['title']} | Блог детского центра «Рыбка Долли»"
+    post_url = f"{BASE_URL}/blog/{post.get('slug') or post['id']}"
+    schema_json = build_schema(post, desc, first_img, post_url)
+    seo_title = post.get('seo_title') or post['title']
+    page_title = f"{seo_title} | Блог детского центра «Рыбка Долли»"
     page_title_escaped = e(page_title)
 
     teacher_block = ''
@@ -225,35 +231,42 @@ def build_html(post: dict) -> str:
 
 def handler(event: dict, context) -> dict:
     """Prerender: возвращает HTML статьи с текстом в коде.
-    GET /?id=123  — HTML конкретной статьи
+    GET /?id=123  — HTML конкретной статьи по id
+    GET /?slug=adaptaciya — HTML конкретной статьи по slug
     """
     if event.get('httpMethod') == 'OPTIONS':
         return {'statusCode': 200, 'headers': CORS, 'body': ''}
 
     params = event.get('queryStringParameters') or {}
     post_id = params.get('id')
+    slug = params.get('slug')
 
-    if not post_id:
+    if not post_id and not slug:
         return {
             'statusCode': 400,
             'headers': {**CORS, 'Content-Type': 'application/json'},
-            'body': json.dumps({'error': 'id is required'}),
+            'body': json.dumps({'error': 'id or slug is required'}),
         }
 
-    try:
-        post_id_int = int(post_id)
-    except ValueError:
-        return {
-            'statusCode': 400,
-            'headers': {**CORS, 'Content-Type': 'application/json'},
-            'body': json.dumps({'error': 'id must be integer'}),
-        }
+    if post_id:
+        try:
+            post_id_int = int(post_id)
+        except ValueError:
+            return {
+                'statusCode': 400,
+                'headers': {**CORS, 'Content-Type': 'application/json'},
+                'body': json.dumps({'error': 'id must be integer'}),
+            }
+        where_clause = f"id = {post_id_int}"
+    else:
+        slug_escaped = slug.replace("'", "''")
+        where_clause = f"slug = '{slug_escaped}'"
 
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
     cur.execute(
-        f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker "
-        f"FROM {SCHEMA}.blog_posts WHERE id = {post_id_int}"
+        f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, slug, seo_title, seo_description "
+        f"FROM {SCHEMA}.blog_posts WHERE {where_clause}"
     )
     row = cur.fetchone()
     cur.close()
@@ -283,6 +296,9 @@ def handler(event: dict, context) -> dict:
         'teacher_photo': row[6] or '',
         'teacher_name': row[7] or '',
         'sticker': row[8] or '',
+        'slug': row[9] or '',
+        'seo_title': row[10] or '',
+        'seo_description': row[11] or '',
     }
 
     html_body = build_html(post)
