@@ -46,14 +46,13 @@ export default function HomePopularPosts() {
   return (
     <section id="popular-posts" className="py-16 md:py-20" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
       <div className="max-w-5xl mx-auto px-4">
-        <div className="flex items-center justify-center gap-4 mb-10">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 mb-10">
           <img
-            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/353a9c64-ff0b-4c31-a046-e8c8d8007a66.png"
+            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/c8351246-5e4f-45ed-9378-057c6fa25623.png"
             alt="рыбка Долли"
-            className="w-14 h-14 object-contain flex-shrink-0"
-            style={{ mixBlendMode: "multiply" }}
+            className="h-[110px] md:h-[190px] w-auto object-contain flex-shrink-0"
           />
-          <div className="text-center">
+          <div className="text-center md:text-left">
             <div className="text-xs font-bold text-orange-500/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
             <div className="text-3xl md:text-4xl font-black text-[#175064] leading-tight">Статьи в топе</div>
           </div>
