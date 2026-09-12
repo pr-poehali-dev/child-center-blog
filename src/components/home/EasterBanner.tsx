@@ -36,7 +36,7 @@ export default function EasterBanner() {
 
           {/* Цыплёнок слева */}
           <div className="eb-float hidden sm:block" style={{ flexShrink: 0 }}>
-            <img src={CHICK_URL} alt="цыплёнок" style={{ height: 110, width: "auto", display: "block" }} />
+            <img src={CHICK_URL} alt="цыплёнок" style={{ height: 110, width: "auto", display: "block", mixBlendMode: "multiply" }} />
           </div>
 
           {/* Центр — надпись и кнопка */}
@@ -63,7 +63,7 @@ export default function EasterBanner() {
 
           {/* Яйца в траве справа */}
           <div className="eb-float hidden sm:block" style={{ flexShrink: 0 }}>
-            <img src={EGGS_GRASS_URL} alt="пасхальные яйца" style={{ height: 110, width: "auto", display: "block" }} />
+            <img src={EGGS_GRASS_URL} alt="пасхальные яйца" style={{ height: 110, width: "auto", display: "block", mixBlendMode: "multiply" }} />
           </div>
 
           {/* Кнопка закрыть */}

@@ -48,9 +48,10 @@ export default function HomePopularPosts() {
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-center gap-4 mb-10">
           <img
-            src="/dolli-mascot.png"
+            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/353a9c64-ff0b-4c31-a046-e8c8d8007a66.png"
             alt="рыбка Долли"
             className="w-14 h-14 object-contain flex-shrink-0"
+            style={{ mixBlendMode: "multiply" }}
           />
           <div className="text-center">
             <div className="text-xs font-bold text-orange-500/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
