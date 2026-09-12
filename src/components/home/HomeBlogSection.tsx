@@ -109,7 +109,7 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
   const navigate = useNavigate();
 
   return (
-    <section id="blog-promo" className="py-24" style={{ background: "#DFF3EA" }}>
+    <section id="blog-promo" className="py-24" style={{ background: "#D3EDE1" }}>
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-14">
           <div className="font-caveat text-orange-400 text-2xl mb-2">Блог</div>
@@ -117,25 +117,32 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
           <p className="text-gray-500 mt-3 text-lg">Живые истории, советы и важные мысли от педагогов центра</p>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          {TILES.map(tile => {
+          {TILES.map((tile, i) => {
             const stickerText = tile.stickerKey ? stickers[tile.stickerKey] : undefined;
+            const tilt = i % 2 === 0 ? "-0.6deg" : "0.6deg";
             return (
               <div
                 key={tile.id}
                 onClick={() => tile.onClick(navigate)}
-                className="relative rounded-[18px] p-[5px] cursor-pointer transition-all duration-300 md:hover:-translate-y-1 shadow-[0_2px_8px_rgba(23,54,74,0.08),0_10px_30px_rgba(23,54,74,0.12)] md:hover:shadow-[0_6px_14px_rgba(23,54,74,0.12),0_18px_40px_rgba(23,54,74,0.18)]"
-                style={{ background: "#FBF6EE" }}
+                className="group relative rounded-[18px] p-[6px] cursor-pointer transition-transform duration-300 shadow-[0_6px_16px_rgba(23,54,74,0.14),0_16px_40px_rgba(23,54,74,0.16)] md:hover:shadow-[0_10px_22px_rgba(23,54,74,0.18),0_24px_52px_rgba(23,54,74,0.2)]"
+                style={{ background: "#FFFFFF", transform: `rotate(${tilt})` }}
+                onMouseEnter={e => { if (window.matchMedia("(hover: hover)").matches) e.currentTarget.style.transform = "rotate(0deg) translateY(-4px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = `rotate(${tilt})`; }}
               >
                 {stickerText && (
                   <div className="absolute -top-3 -right-2 z-20 rotate-[8deg]">
                     <StickerTag text={stickerText} size="md" />
                   </div>
                 )}
-                <div className="relative rounded-[14px] overflow-hidden h-[200px]">
+                <div
+                  className="relative rounded-[14px] overflow-hidden h-[200px]"
+                  style={{ boxShadow: "inset 0 0 0 1px rgba(217,164,65,0.35)" }}
+                >
                   <img
                     src={tile.image}
                     alt={tile.title}
                     className="absolute inset-0 w-full h-full object-cover"
+                    style={{ filter: "saturate(1.15) contrast(1.05)" }}
                   />
                   <div
                     className="absolute inset-x-0 bottom-0 h-[70%]"
