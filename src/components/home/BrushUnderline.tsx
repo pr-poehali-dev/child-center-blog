@@ -1,14 +1,15 @@
 interface BrushUnderlineProps {
   color?: string;
   className?: string;
+  height?: number;
 }
 
-export default function BrushUnderline({ color = "#D9A441", className = "" }: BrushUnderlineProps) {
+export default function BrushUnderline({ color = "#D9A441", className = "", height = 16 }: BrushUnderlineProps) {
   return (
     <svg
       className={`absolute -bottom-2 pointer-events-none ${className}`}
       style={{ left: -12, width: "calc(100% + 24px)" }}
-      height="16"
+      height={height}
       viewBox="0 0 200 16"
       preserveAspectRatio="none"
       aria-hidden="true"

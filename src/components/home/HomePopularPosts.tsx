@@ -47,35 +47,35 @@ export default function HomePopularPosts() {
 
   return (
     <section id="popular-posts" className="py-16 md:py-20" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="relative pt-10 md:pt-6 pb-4 mb-10">
-          <WaveBackdrop />
-          <div className="relative flex flex-col md:flex-row items-center justify-center">
-            <img
-              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/c8351246-5e4f-45ed-9378-057c6fa25623.png"
-              alt="рыбка Долли"
-              className="relative z-10 h-[110px] md:h-[190px] w-auto object-contain flex-shrink-0 md:mr-[-28px]"
-            />
-            <div className="relative z-20 text-center md:text-left">
-              <div
-                className="font-caveat text-2xl mb-1 lowercase inline-block"
-                style={{ color: "#D9A441", transform: "rotate(-2deg)" }}
+      <div className="relative mb-8" style={{ height: 190 }}>
+        <WaveBackdrop className="bottom-0" />
+        <div className="absolute inset-x-0 bottom-[38px] md:bottom-[30px] flex flex-col md:flex-row items-center md:items-end justify-center px-4">
+          <img
+            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/c8351246-5e4f-45ed-9378-057c6fa25623.png"
+            alt="рыбка Долли"
+            className="relative z-10 h-[100px] md:h-[155px] w-auto object-contain flex-shrink-0 md:mr-[-38px]"
+          />
+          <div className="relative z-20 text-center md:text-left mt-3 md:mt-0">
+            <div
+              className="font-caveat text-2xl md:text-[26px] mb-1 lowercase inline-block"
+              style={{ color: "#D9A441", transform: "rotate(-2deg)" }}
+            >
+              читают чаще всего
+            </div>
+            <div className="flex justify-center md:justify-start">
+              <h2
+                className="relative inline-block font-playfair font-bold leading-tight text-4xl md:text-[42px]"
+                style={{ color: "#17364A" }}
               >
-                читают чаще всего
-              </div>
-              <div className="flex justify-center md:justify-start">
-                <h2
-                  className="relative inline-block font-playfair font-extrabold leading-tight text-4xl md:text-[54px]"
-                  style={{ color: "#17364A" }}
-                >
-                  Статьи в топе
-                  <BrushUnderline />
-                </h2>
-              </div>
+                Статьи в топе
+                <BrushUnderline height={11} />
+              </h2>
             </div>
           </div>
         </div>
+      </div>
 
+      <div className="max-w-5xl mx-auto px-4">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
           {POPULAR_POSTS.map(post => (
             <div
