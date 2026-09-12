@@ -51,7 +51,7 @@ export default function EasterSection() {
               </span>
               <span className="es-sparkle text-2xl" style={{ animationDelay: "0.5s" }}>✨</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-800 leading-tight">
+            <h2 className="font-playfair text-3xl sm:text-4xl font-extrabold text-gray-800 leading-tight">
               🐥 Готовимся к Пасхе<br />
               <span style={{ color: "#db2777" }}>вместе с детьми</span>
             </h2>

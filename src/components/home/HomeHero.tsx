@@ -22,7 +22,7 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
 
         {/* ЗАГОЛОВОК */}
         <div className="text-center max-w-2xl mx-auto">
-          <h1 className="font-nunito text-4xl md:text-5xl font-black text-[#175064] leading-tight mb-4">
+          <h1 className="font-playfair text-4xl md:text-5xl font-extrabold text-[#175064] leading-tight mb-4">
             Блог детского центра «Рыбка Долли»
           </h1>
           <p className="text-gray-600 text-lg leading-relaxed">

@@ -22,6 +22,7 @@ export default {
 			nunito: ['Nunito', 'sans-serif'],
 			caveat: ['Caveat', 'cursive'],
 			marck: ['Marck Script', 'cursive'],
+			playfair: ['Playfair Display', 'serif'],
 		},
 		extend: {
 			colors: {

@@ -18,7 +18,7 @@ export default function SectionTitle({ overline, title, description, className =
       </div>
       <div className="flex justify-center">
         <h2
-          className="relative inline-block font-nunito font-extrabold leading-tight text-4xl md:text-[54px]"
+          className="relative inline-block font-playfair font-extrabold leading-tight text-4xl md:text-[54px]"
           style={{ color: "#17364A" }}
         >
           {title}
