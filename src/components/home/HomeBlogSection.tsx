@@ -57,7 +57,7 @@ const TILES: CategoryTile[] = [
     id: "english",
     title: "Группа английского языка",
     description: "Новости, материалы и анонсы группы английского языка.",
-    image: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/7cdc878c-d7c7-4f01-9ebf-54f1810638a0.png",
+    image: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/cde3cc15-0383-45e7-9c3a-943b8484a102.png",
     stickerKey: "english",
     onClick: nav => nav("/blog?category=english"),
   },
@@ -123,25 +123,28 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
               <div
                 key={tile.id}
                 onClick={() => tile.onClick(navigate)}
-                className="relative rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 h-[200px]"
+                className="relative rounded-[18px] p-[5px] cursor-pointer transition-all duration-300 md:hover:-translate-y-1 shadow-[0_2px_8px_rgba(23,54,74,0.08),0_10px_30px_rgba(23,54,74,0.12)] md:hover:shadow-[0_6px_14px_rgba(23,54,74,0.12),0_18px_40px_rgba(23,54,74,0.18)]"
+                style={{ background: "#FBF6EE" }}
               >
                 {stickerText && (
                   <div className="absolute -top-3 -right-2 z-20 rotate-[8deg]">
                     <StickerTag text={stickerText} size="md" />
                   </div>
                 )}
-                <img
-                  src={tile.image}
-                  alt={tile.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div
-                  className="absolute inset-x-0 bottom-0 h-[70%]"
-                  style={{ background: "linear-gradient(180deg, transparent 0%, rgba(251,246,238,0.55) 40%, #FBF6EE 100%)" }}
-                />
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <h3 className="font-black text-base text-gray-800 mb-1 leading-snug">{tile.title}</h3>
-                  <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">{tile.description}</p>
+                <div className="relative rounded-[14px] overflow-hidden h-[200px]">
+                  <img
+                    src={tile.image}
+                    alt={tile.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div
+                    className="absolute inset-x-0 bottom-0 h-[70%]"
+                    style={{ background: "linear-gradient(180deg, transparent 0%, rgba(251,246,238,0.55) 40%, #FBF6EE 100%)" }}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <h3 className="font-black text-base text-gray-800 mb-1 leading-snug">{tile.title}</h3>
+                    <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">{tile.description}</p>
+                  </div>
                 </div>
               </div>
             );
