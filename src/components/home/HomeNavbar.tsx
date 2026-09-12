@@ -68,7 +68,7 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
           </a>
           <NavBookingDropdown onFormClick={onFormClick} />
           <button
-            onClick={() => { setMenuOpen(false); document.getElementById("popular-posts-list")?.scrollIntoView({ behavior: "smooth" }); }}
+            onClick={() => { setMenuOpen(false); document.getElementById("popular-posts")?.scrollIntoView({ behavior: "smooth" }); }}
             className="flex items-center gap-2 font-black px-4 py-2 rounded-full text-sm w-fit text-[#175064]"
             style={{ background: "linear-gradient(135deg, #ffe9d8, #dff3ea, #e1f0fa)", boxShadow: "0 4px 0 #17506433" }}
           >
