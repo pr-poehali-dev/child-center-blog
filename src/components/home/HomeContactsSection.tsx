@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 import { withBlogUtm } from "@/lib/analytics";
+import SectionTitle from "./SectionTitle";
 
 const VISIT_COUNTER_API = "https://functions.poehali.dev/7d977bf0-24cd-492c-aa4e-0c0324d97f97";
 
@@ -44,10 +45,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
       {/* CONTACTS */}
       <section id="contacts" className="py-24" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
         <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-14">
-            <div className="font-caveat text-orange-400 text-2xl mb-2">Контакты</div>
-            <h2 className="font-black text-4xl text-[#175064]">Мы всегда на связи</h2>
-          </div>
+          <SectionTitle overline="контакты" title="Мы всегда на связи" />
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white rounded-3xl p-8 shadow-sm">
               <h3 className="font-black text-xl text-gray-800 mb-6">Как нас найти</h3>

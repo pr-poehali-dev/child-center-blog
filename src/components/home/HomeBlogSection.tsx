@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import StickerTag from "@/components/ui/sticker-tag";
+import SectionTitle from "./SectionTitle";
 
 const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
@@ -111,11 +112,11 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
   return (
     <section id="blog-promo" className="py-24" style={{ background: "#D3EDE1" }}>
       <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-14">
-          <div className="font-caveat text-orange-400 text-2xl mb-2">Блог</div>
-          <h2 className="font-black text-4xl text-[#175064]">Наш блог</h2>
-          <p className="text-gray-500 mt-3 text-lg">Живые истории, советы и важные мысли от педагогов центра</p>
-        </div>
+        <SectionTitle
+          overline="блог"
+          title="Наш блог"
+          description="Живые истории, советы и важные мысли от педагогов центра"
+        />
         <div className="grid md:grid-cols-3 gap-6">
           {TILES.map((tile, i) => {
             const stickerText = tile.stickerKey ? stickers[tile.stickerKey] : undefined;

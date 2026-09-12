@@ -1,14 +1,12 @@
 import Icon from "@/components/ui/icon";
 import { TEAM } from "./constants";
+import SectionTitle from "./SectionTitle";
 
 export default function HomeTeamSection() {
   return (
     <section id="team" className="py-24" style={{ background: "#E1F0FA" }}>
       <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-14">
-          <div className="font-caveat text-orange-400 text-2xl mb-2">Команда</div>
-          <h2 className="font-black text-4xl text-[#175064]">Наши педагоги</h2>
-        </div>
+        <SectionTitle overline="команда" title="Наши педагоги" />
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <video
             src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/8393d0ab-cc73-4e76-b85c-c3a4cf0b36dc.mp4"

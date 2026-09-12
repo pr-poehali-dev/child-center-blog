@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import WaveBackdrop from "./WaveBackdrop";
+import BrushUnderline from "./BrushUnderline";
 
 const POPULAR_POSTS = [
   {
@@ -46,15 +48,31 @@ export default function HomePopularPosts() {
   return (
     <section id="popular-posts" className="py-16 md:py-20" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
       <div className="max-w-5xl mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 mb-10">
-          <img
-            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/c8351246-5e4f-45ed-9378-057c6fa25623.png"
-            alt="рыбка Долли"
-            className="h-[110px] md:h-[190px] w-auto object-contain flex-shrink-0"
-          />
-          <div className="text-center md:text-left">
-            <div className="text-xs font-bold text-orange-500/80 tracking-widest uppercase mb-1">Читают чаще всего</div>
-            <div className="text-3xl md:text-4xl font-black text-[#175064] leading-tight">Статьи в топе</div>
+        <div className="relative pt-10 md:pt-6 pb-4 mb-10">
+          <WaveBackdrop />
+          <div className="relative flex flex-col md:flex-row items-center justify-center">
+            <img
+              src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/c8351246-5e4f-45ed-9378-057c6fa25623.png"
+              alt="рыбка Долли"
+              className="relative z-10 h-[110px] md:h-[190px] w-auto object-contain flex-shrink-0 md:mr-[-28px]"
+            />
+            <div className="relative z-20 text-center md:text-left">
+              <div
+                className="font-caveat text-2xl mb-1 lowercase inline-block"
+                style={{ color: "#D9A441", transform: "rotate(-2deg)" }}
+              >
+                читают чаще всего
+              </div>
+              <div className="flex justify-center md:justify-start">
+                <h2
+                  className="relative inline-block font-nunito font-extrabold leading-tight text-4xl md:text-[54px]"
+                  style={{ color: "#17364A" }}
+                >
+                  Статьи в топе
+                  <BrushUnderline />
+                </h2>
+              </div>
+            </div>
           </div>
         </div>
 

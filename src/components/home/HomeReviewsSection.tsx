@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { REVIEWS } from "./constants";
+import SectionTitle from "./SectionTitle";
 
 const REVIEWS_API = "https://functions.poehali.dev/1c662b6b-5f56-4e25-b517-f6fdfc24912b";
 const BG_COLORS = ["bg-rose-50", "bg-amber-50", "bg-violet-50", "bg-teal-50", "bg-sky-50", "bg-orange-50"];
@@ -118,10 +119,7 @@ export default function HomeReviewsSection() {
   return (
     <section id="reviews" className="py-24 bg-[#FFF9F3]">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="text-center mb-14">
-          <div className="font-caveat text-orange-400 text-2xl mb-2">Отзывы</div>
-          <h2 className="font-black text-4xl text-[#175064]">Говорят родители</h2>
-        </div>
+        <SectionTitle overline="отзывы" title="Говорят родители" />
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           {REVIEWS.map((r) => (
             <div key={r.name} className={`${r.color} rounded-3xl p-7 border border-white`}>
