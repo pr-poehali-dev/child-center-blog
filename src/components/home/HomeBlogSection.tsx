@@ -4,7 +4,7 @@ import SectionTitle from "./SectionTitle";
 
 const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
-interface CategoryTile {
+export interface CategoryTile {
   id: string;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ interface CategoryTile {
   onClick: (navigate: ReturnType<typeof useNavigate>) => void;
 }
 
-const TILES: CategoryTile[] = [
+export const TILES: CategoryTile[] = [
   {
     id: "tips",
     title: "Советы от педагога",

@@ -1,0 +1,3 @@
+INSERT INTO t_p99892216_child_center_blog.category_stickers (category_id, sticker_text, description, updated_at)
+VALUES ('plate', '', 'Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей: меню, проверенные рецепты и лайфхаки для мам на диете БГБК. Делимся блюдами, которые готовим на кухне «Рыбки Долли», и рассказываем, как сделать питание ребёнка вкусным и безопасным. Растим здоровых и довольных детей вместе.', NOW())
+ON CONFLICT (category_id) DO UPDATE SET description = EXCLUDED.description, updated_at = NOW();

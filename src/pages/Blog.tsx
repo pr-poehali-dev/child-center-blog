@@ -3,9 +3,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { BLOG_API, STICKERS_API, CATEGORIES, SEO_BY_CATEGORY, Post } from "./blog-types";
-import { PostCard, ContactDropdown, SubscribeForm } from "./BlogPostCard";
+import { ContactDropdown, SubscribeForm } from "./BlogPostCard";
+import BlogCompactCard from "./BlogCompactCard";
+import BlogHero from "./BlogHero";
+import BlogCategoryHeader, { getCategoryImage } from "./BlogCategoryHeader";
 import PlateChecklists from "./PlateChecklists";
 import BlogSiteBridges from "@/components/BlogSiteBridges";
+import BlogCategoryBridge from "@/components/BlogCategoryBridge";
 
 export default function Blog() {
   const navigate = useNavigate();
@@ -22,7 +26,6 @@ export default function Blog() {
   usePageMeta({ title: seo.title, description: seo.description, url: `https://blogribkadolli.ru/blog?category=${activeTab}`, type: "website" });
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [stickers, setStickers] = useState<Record<string, string>>({});
   const [categoryDescriptions, setCategoryDescriptions] = useState<Record<string, string>>({});
 
   const loadPosts = async (cat: string) => {
@@ -38,7 +41,6 @@ export default function Blog() {
 
   useEffect(() => {
     fetch(STICKERS_API).then(r => r.json()).then(d => {
-      setStickers(d.stickers || {});
       setCategoryDescriptions(d.descriptions || {});
     }).catch(() => {});
   }, []);
@@ -102,13 +104,17 @@ export default function Blog() {
         </div>
       </div>
 
+      {/* HERO */}
+      <BlogHero />
+
       {/* CONTENT */}
-      <div ref={postsRef} className="max-w-3xl mx-auto px-4 py-8">
-        {categoryDescriptions[activeTab] && (
-          <div className={`${activeCat.color} border ${activeCat.border} rounded-2xl px-5 py-4 mb-6`}>
-            <p className="text-gray-700 text-sm leading-relaxed">{categoryDescriptions[activeTab]}</p>
-          </div>
-        )}
+      <div ref={postsRef} className="max-w-5xl mx-auto px-4 py-4 md:py-6">
+        <BlogCategoryHeader
+          emoji={activeCat.emoji}
+          label={activeCat.label}
+          image={getCategoryImage(activeTab)}
+          description={categoryDescriptions[activeTab]}
+        />
         {activeCat.subtitle && (
           <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 mb-6 flex items-start gap-3">
             <span className="text-2xl mt-0.5">{activeCat.emoji}</span>
@@ -136,12 +142,13 @@ export default function Blog() {
             <div className="text-gray-400 text-sm">Скоро здесь появятся записи в разделе «{activeCat.label}»</div>
           </div>
         ) : (
-          <div className="flex flex-col gap-6">
-            {posts.map((post, idx) => (
-              <PostCard key={post.id} post={post} categoryStickerText={idx === 0 ? stickers[post.category] : undefined} />
+          <div className="grid md:grid-cols-2 gap-5">
+            {posts.map(post => (
+              <BlogCompactCard key={post.id} post={post} />
             ))}
           </div>
         )}
+        <BlogCategoryBridge categoryId={activeTab} />
       </div>
       <BlogSiteBridges />
       <SubscribeForm />
