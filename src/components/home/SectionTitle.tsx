@@ -1,4 +1,4 @@
-import BrushUnderline from "./BrushUnderline";
+import ThinUnderline from "./ThinUnderline";
 
 interface SectionTitleProps {
   overline: string;
@@ -22,7 +22,7 @@ export default function SectionTitle({ overline, title, description, className =
           style={{ color: "#17364A" }}
         >
           {title}
-          <BrushUnderline />
+          <ThinUnderline />
         </h2>
       </div>
       {description && (

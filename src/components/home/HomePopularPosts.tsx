@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
-import WaveBackdrop from "./WaveBackdrop";
-import BrushUnderline from "./BrushUnderline";
+import ThinUnderline from "./ThinUnderline";
 
 const POPULAR_POSTS = [
   {
@@ -46,31 +45,48 @@ export default function HomePopularPosts() {
   const navigate = useNavigate();
 
   return (
-    <section id="popular-posts" className="py-16 md:py-20" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
-      <div className="relative mb-8" style={{ height: 190 }}>
-        <WaveBackdrop className="bottom-0" />
-        <div className="absolute inset-x-0 bottom-[38px] md:bottom-[30px] flex flex-col md:flex-row items-center md:items-end justify-center px-4">
-          <img
-            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/c8351246-5e4f-45ed-9378-057c6fa25623.png"
-            alt="рыбка Долли"
-            className="relative z-10 h-[100px] md:h-[155px] w-auto object-contain flex-shrink-0 md:mr-[-38px]"
-          />
-          <div className="relative z-20 text-center md:text-left mt-3 md:mt-0">
-            <div
-              className="font-caveat text-2xl md:text-[26px] mb-1 lowercase inline-block"
-              style={{ color: "#D9A441", transform: "rotate(-2deg)" }}
-            >
-              читают чаще всего
-            </div>
-            <div className="flex justify-center md:justify-start">
-              <h2
-                className="relative inline-block font-playfair font-bold leading-tight text-4xl md:text-[42px]"
-                style={{ color: "#17364A" }}
+    <section id="popular-posts" className="py-16 md:py-20 overflow-hidden" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
+      <div className="flex flex-col md:flex-row md:items-end mb-8 md:mb-12">
+        <img
+          src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/0845422c-d192-468a-9aee-7606bb907e9e.png"
+          alt="рыбка Долли на волне"
+          className="w-full md:w-auto md:h-[270px] h-auto object-contain object-left flex-shrink-0"
+        />
+        <div className="flex-1 px-4 md:pl-7 md:pr-8 -mt-6 md:mt-0">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div className="text-center md:text-left">
+              <div
+                className="font-caveat text-2xl md:text-[26px] mb-1 lowercase inline-block"
+                style={{ color: "#D9A441" }}
               >
-                Статьи в топе
-                <BrushUnderline height={11} />
-              </h2>
+                читают чаще всего
+              </div>
+              <div className="flex justify-center md:justify-start">
+                <h2
+                  className="relative inline-block font-playfair font-bold leading-tight text-4xl md:text-[42px]"
+                  style={{ color: "#17364A" }}
+                >
+                  Статьи в топе
+                  <ThinUnderline />
+                </h2>
+              </div>
             </div>
+            <button
+              onClick={() => navigate("/blog")}
+              className="hidden md:inline-flex items-center gap-2 bg-white hover:bg-orange-50 border-2 border-orange-200 text-orange-500 font-bold px-6 py-2.5 rounded-full text-sm transition-all flex-shrink-0 mb-1"
+            >
+              Все статьи
+              <Icon name="ArrowRight" size={16} />
+            </button>
+          </div>
+          <div className="md:hidden text-center mt-6">
+            <button
+              onClick={() => navigate("/blog")}
+              className="inline-flex items-center gap-2 bg-white hover:bg-orange-50 border-2 border-orange-200 text-orange-500 font-bold px-8 py-3 rounded-full text-base transition-all"
+            >
+              Все статьи
+              <Icon name="ArrowRight" size={18} />
+            </button>
           </div>
         </div>
       </div>
@@ -102,16 +118,6 @@ export default function HomePopularPosts() {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="text-center mt-10">
-          <button
-            onClick={() => navigate("/blog")}
-            className="inline-flex items-center gap-2 bg-white hover:bg-orange-50 border-2 border-orange-200 text-orange-500 font-bold px-8 py-3 rounded-full text-base transition-all"
-          >
-            Все статьи
-            <Icon name="ArrowRight" size={18} />
-          </button>
         </div>
       </div>
     </section>
