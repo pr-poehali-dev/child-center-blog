@@ -53,8 +53,8 @@ export default function HomePopularPosts() {
           className="w-full md:w-auto md:h-[270px] h-auto object-contain object-left flex-shrink-0"
         />
         <div className="flex-1 px-4 md:pl-7 md:pr-8 -mt-6 md:mt-0">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div className="text-center md:text-left">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="text-center md:text-left md:flex-shrink-0">
               <div
                 className="font-caveat text-2xl md:text-[26px] mb-1 lowercase inline-block"
                 style={{ color: "#D9A441" }}
@@ -63,7 +63,7 @@ export default function HomePopularPosts() {
               </div>
               <div className="flex justify-center md:justify-start">
                 <h2
-                  className="relative inline-block font-playfair font-bold leading-tight text-4xl md:text-[42px]"
+                  className="relative inline-block font-playfair font-bold leading-tight text-4xl md:text-[40px] whitespace-nowrap"
                   style={{ color: "#17364A" }}
                 >
                   Статьи в топе
@@ -73,7 +73,7 @@ export default function HomePopularPosts() {
             </div>
             <button
               onClick={() => navigate("/blog")}
-              className="hidden md:inline-flex items-center gap-2 bg-white hover:bg-orange-50 border-2 border-orange-200 text-orange-500 font-bold px-6 py-2.5 rounded-full text-sm transition-all flex-shrink-0 mb-1"
+              className="hidden md:inline-flex items-center gap-2 bg-white hover:bg-orange-50 border-2 border-orange-200 text-orange-500 font-bold px-6 py-2.5 rounded-full text-sm transition-all flex-shrink-0"
             >
               Все статьи
               <Icon name="ArrowRight" size={16} />
