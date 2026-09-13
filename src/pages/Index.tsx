@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import HomeNavbar from "@/components/home/HomeNavbar";
 import HomeHero from "@/components/home/HomeHero";
 import HomePopularPosts from "@/components/home/HomePopularPosts";
+import HomePolaroidCollage from "@/components/home/HomePolaroidCollage";
+import ScrollReveal from "@/components/home/ScrollReveal";
 import EasterBanner from "@/components/home/EasterBanner";
 import MayDayBanner from "@/components/home/MayDayBanner";
 import HomeSections from "@/components/home/HomeSections";
@@ -54,8 +56,13 @@ export default function Index() {
       <div className="pt-16">
       <EasterBanner />
       <MayDayBanner />
-      <HomePopularPosts />
       <HomeHero onFormClick={openBooking} onScrollTo={scrollTo} />
+      <section className="bg-[#FBF6EE] py-14">
+        <ScrollReveal className="max-w-4xl mx-auto px-4">
+          <HomePolaroidCollage />
+        </ScrollReveal>
+      </section>
+      <HomePopularPosts />
       <HomeSections onFormClick={openBooking} />
       <BookingModal open={bookingOpen} onClose={() => { setBookingOpen(false); sessionStorage.removeItem("booking_checklist_url"); }} checklistUrl={bookingChecklistUrl} source={bookingSource} />
       </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { REVIEWS } from "./constants";
 import SectionTitle from "./SectionTitle";
+import honeyStar from "@/assets/honey-star.png";
 
 const REVIEWS_API = "https://functions.poehali.dev/1c662b6b-5f56-4e25-b517-f6fdfc24912b";
 const BG_COLORS = ["bg-rose-50", "bg-amber-50", "bg-violet-50", "bg-teal-50", "bg-sky-50", "bg-orange-50"];
@@ -22,7 +23,7 @@ function LiveReviews() {
       {reviews.map((r, i) => (
         <div key={r.id} className={`${BG_COLORS[i % BG_COLORS.length]} rounded-3xl p-7 border border-white`}>
           <div className="flex gap-1 mb-4">
-            {Array.from({ length: r.stars }).map((_, j) => <span key={j} className="text-yellow-400 text-lg">★</span>)}
+            {Array.from({ length: r.stars }).map((_, j) => <img key={j} src={honeyStar} alt="★" className="w-4 h-4" />)}
           </div>
           <p className="text-gray-600 leading-relaxed mb-5 italic">«{r.text}»</p>
           <div className="flex items-center gap-3">
@@ -117,14 +118,14 @@ function ReviewForm() {
 
 export default function HomeReviewsSection() {
   return (
-    <section id="reviews" className="py-24 bg-[#FFF9F3]">
+    <section id="reviews" className="py-14 bg-[#FFF9F3]">
       <div className="max-w-6xl mx-auto px-4">
         <SectionTitle overline="отзывы" title="Говорят родители" />
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           {REVIEWS.map((r) => (
             <div key={r.name} className={`${r.color} rounded-3xl p-7 border border-white`}>
               <div className="flex gap-1 mb-4">
-                {Array.from({ length: r.stars }).map((_, i) => <span key={i} className="text-yellow-400 text-lg">★</span>)}
+                {Array.from({ length: r.stars }).map((_, i) => <img key={i} src={honeyStar} alt="★" className="w-4 h-4" />)}
               </div>
               <p className="text-gray-600 leading-relaxed mb-5 italic">«{r.text}»</p>
               <div className="flex items-center gap-3">
@@ -143,10 +144,11 @@ export default function HomeReviewsSection() {
             href="https://yandex.ru/maps/org/rybka_dolli/1719871147/reviews/?add-review=true"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 w-full bg-[#FC3F1D] hover:bg-[#e5361a] text-white font-black py-4 rounded-2xl transition-colors text-base shadow-md"
+            className="flex items-center justify-center gap-3 w-full bg-[#17364A] hover:bg-[#0f2734] text-white font-black py-4 rounded-2xl transition-colors text-base shadow-md"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12.5 2C7.25 2 3 6.25 3 11.5C3 16.75 7.25 21 12.5 21C17.75 21 22 16.75 22 11.5C22 6.25 17.75 2 12.5 2ZM14 16H11V13H8L12.5 8L17 13H14V16Z" fill="white"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="12" fill="#FC3F1D"/>
+              <path d="M13.6 6H11.7C9.6 6 8.4 7.1 8.4 8.7C8.4 10.1 9.1 10.8 10.3 11.6L8.1 15H9.9L12 11.8H12.9V15H14.3V6H13.6ZM12.9 10.5H12C10.9 10.5 10.1 9.9 10.1 8.7C10.1 7.5 10.9 6.9 12 6.9H12.9V10.5Z" fill="white"/>
             </svg>
             Оставить отзыв на Яндексе
           </a>

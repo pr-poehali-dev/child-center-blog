@@ -4,7 +4,7 @@ import SectionTitle from "./SectionTitle";
 
 export default function HomeTeamSection() {
   return (
-    <section id="team" className="py-24" style={{ background: "#E1F0FA" }}>
+    <section id="team" className="py-14" style={{ background: "#E1F0FA" }}>
       <div className="max-w-6xl mx-auto px-4">
         <SectionTitle overline="команда" title="Наши педагоги" />
         <div className="grid md:grid-cols-2 gap-10 items-center">

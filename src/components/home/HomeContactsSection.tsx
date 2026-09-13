@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 import { withBlogUtm } from "@/lib/analytics";
 import SectionTitle from "./SectionTitle";
+import honeyStar from "@/assets/honey-star.png";
 
 const VISIT_COUNTER_API = "https://functions.poehali.dev/7d977bf0-24cd-492c-aa4e-0c0324d97f97";
 
@@ -43,7 +44,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
   return (
     <>
       {/* CONTACTS */}
-      <section id="contacts" className="py-24" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
+      <section id="contacts" className="py-14" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
         <div className="max-w-4xl mx-auto px-4">
           <SectionTitle overline="контакты" title="Мы всегда на связи" />
           <div className="grid md:grid-cols-2 gap-8">
@@ -112,7 +113,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
               </div>
             </div>
             <div className="bg-gradient-to-br from-orange-400 to-rose-400 rounded-3xl p-8 text-white flex flex-col justify-center text-center">
-              <div className="text-5xl mb-4">🌟</div>
+              <img src={honeyStar} alt="" className="w-14 h-14 mb-4 mx-auto" />
               <h3 className="font-black text-2xl mb-3">Запишитесь сейчас</h3>
               <p className="opacity-90 mb-6 leading-relaxed">Познакомьтесь с педагогом и оцените атмосферу центра.</p>
               <button id="booking-form" onClick={onFormClick} className="bg-white text-orange-500 font-black px-8 py-4 rounded-2xl hover:bg-orange-50 transition-colors text-lg shadow-lg">
@@ -161,7 +162,7 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
 
       {/* FOOTER */}
       <footer className="bg-gray-800 text-gray-300 py-10 text-center">
-        <div className="text-2xl mb-2">🌟</div>
+        <img src={honeyStar} alt="" className="w-8 h-8 mx-auto mb-2" />
         <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Рыбка Долли</div>
         <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
         <VisitCounter />

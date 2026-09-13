@@ -110,7 +110,7 @@ export default function HomeBlogSection({ stickers }: HomeBlogSectionProps) {
   const navigate = useNavigate();
 
   return (
-    <section id="blog-promo" className="py-24" style={{ background: "#D3EDE1" }}>
+    <section id="blog-promo" className="py-14" style={{ background: "#D3EDE1" }}>
       <div className="max-w-6xl mx-auto px-4">
         <SectionTitle
           overline="блог"

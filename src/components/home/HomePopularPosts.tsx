@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import ThinUnderline from "./ThinUnderline";
+import ScrollReveal from "./ScrollReveal";
 
 const POPULAR_POSTS = [
   {
@@ -45,14 +46,14 @@ export default function HomePopularPosts() {
   const navigate = useNavigate();
 
   return (
-    <section id="popular-posts" className="py-16 md:py-20 overflow-hidden" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
-      <div className="flex flex-col md:flex-row md:items-end mb-8 md:mb-12">
+    <section id="popular-posts" className="overflow-hidden" style={{ background: "linear-gradient(180deg, #FFF9F3 0%, #FFE9D8 100%)" }}>
+      <div className="flex flex-col md:flex-row md:items-center justify-center px-4" style={{ minHeight: "90vh" }}>
         <img
           src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/0845422c-d192-468a-9aee-7606bb907e9e.png"
           alt="рыбка Долли на волне"
           className="w-full md:w-auto md:h-[270px] h-auto object-contain object-left flex-shrink-0"
         />
-        <div className="flex-1 px-4 md:pl-7 md:pr-8 -mt-6 md:mt-0">
+        <div className="flex-1 md:pl-7 md:pr-8 -mt-6 md:mt-0 max-w-2xl">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="text-center md:text-left md:flex-shrink-0">
               <div
@@ -91,8 +92,8 @@ export default function HomePopularPosts() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+      <div className="max-w-5xl mx-auto px-4 pb-14">
+        <ScrollReveal className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
           {POPULAR_POSTS.map(post => (
             <div
               key={post.id}
@@ -118,7 +119,7 @@ export default function HomePopularPosts() {
               </div>
             </div>
           ))}
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

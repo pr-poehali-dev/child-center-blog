@@ -1,24 +1,24 @@
 import { BookingDropdown } from "./BookingDropdowns";
-import HomePolaroidCollage from "./HomePolaroidCollage";
 
 interface HomeHeroProps {
   onFormClick: () => void;
   onScrollTo: (id: string) => void;
 }
 
-export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
+export default function HomeHero({ onFormClick }: HomeHeroProps) {
   return (
     <section
       id="home"
-      className="pt-20 relative overflow-hidden"
+      className="relative overflow-hidden flex items-center"
       style={{
+        minHeight: "calc(100vh - 4rem)",
         backgroundColor: "#FBF6EE",
         backgroundImage: "url('https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/8a31947b-4071-467a-9597-b2a82c68f2ff.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="max-w-6xl mx-auto px-4 py-16 md:py-20 flex flex-col gap-10 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 py-16 flex flex-col gap-10 relative z-10 w-full">
 
         {/* ЗАГОЛОВОК */}
         <div className="text-center max-w-2xl mx-auto">
@@ -42,9 +42,6 @@ export default function HomeHero({ onFormClick, onScrollTo }: HomeHeroProps) {
             <BookingDropdown onFormClick={onFormClick} className="flex-1" />
           </div>
         </div>
-
-        {/* КОЛЛАЖ ЖИВЫХ ФОТО */}
-        <HomePolaroidCollage />
       </div>
     </section>
   );
