@@ -33,15 +33,7 @@ export default function BlogPost() {
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
 
-  const shareVk = () => {
-    if (!post) return;
-    const shareTitle = post.category === "plate"
-      ? `Поделитесь с подругой, у которой ребенок на диете БГБЛ! ${post.title}`
-      : post.title;
-    const urlPath = post.slug || post.id;
-    const url = `https://vk.com/share.php?url=${encodeURIComponent(`https://blogribkadolli.ru/blog/${urlPath}`)}&title=${encodeURIComponent(shareTitle)}`;
-    window.open(url, "_blank");
-  };
+  const shareUrl = post ? `https://blogribkadolli.ru/blog/${post.slug || post.id}` : "";
 
   return (
     <div className="min-h-screen bg-[#FFF9F3] font-nunito text-gray-700">
@@ -120,7 +112,7 @@ export default function BlogPost() {
 
             <BlogPostMedia post={post} onOpenLightbox={setLightbox} />
 
-            <BlogPostCTA post={post} onShareVk={shareVk} />
+            <BlogPostCTA post={post} shareUrl={shareUrl} />
           </article>
         )}
       </div>
