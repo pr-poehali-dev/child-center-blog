@@ -1,5 +1,4 @@
 export const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
-export const TG_LINK = "https://t.me/irinadolli";
 
 export const NAV_LINKS = [
   { label: "Главная", id: "home" },

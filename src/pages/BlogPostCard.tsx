@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
 import { MediaGallery } from "./BlogMediaGallery";
-import { CATEGORIES, SUBSCRIBERS_API, MAX_LINK, TG_LINK, Post } from "./blog-types";
+import { CATEGORIES, SUBSCRIBERS_API, MAX_LINK, Post } from "./blog-types";
 import { trackGoal } from "@/lib/analytics";
 
 export function SubscribeForm() {
@@ -124,17 +124,6 @@ export function ContactDropdown({ label, emoji, colorClass }: { label: string; e
           >
             <span className="text-xl">💬</span>
             Написать в MAX
-          </a>
-          <div className="border-t border-gray-100" />
-          <a
-            href={TG_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => { trackGoal("cta_tg_click"); setOpen(false); }}
-            className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700"
-          >
-            <span className="text-xl">✈️</span>
-            Написать в Telegram
           </a>
         </div>
       )}

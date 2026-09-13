@@ -73,27 +73,6 @@ export default function Contacts() {
             </div>
           </div>
 
-          {/* Telegram */}
-          <div className="bg-white rounded-3xl p-8 border border-orange-100 shadow-sm">
-            <div className="flex items-start gap-4">
-              <div className="bg-sky-100 rounded-2xl w-12 h-12 flex items-center justify-center flex-shrink-0">
-                <Icon name="Send" size={22} className="text-sky-500" />
-              </div>
-              <div>
-                <h2 className="font-black text-gray-800 text-lg mb-1">Telegram</h2>
-                <a
-                  href="https://t.me/irinadolli"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sky-500 font-bold text-lg hover:text-sky-600 transition-colors"
-                >
-                  @irinadolli
-                </a>
-                <p className="text-gray-400 text-sm mt-1">Напишите нам в Telegram</p>
-              </div>
-            </div>
-          </div>
-
           {/* Режим работы */}
           <div className="bg-white rounded-3xl p-8 border border-orange-100 shadow-sm">
             <div className="flex items-start gap-4">

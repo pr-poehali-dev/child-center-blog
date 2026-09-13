@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import Icon from "@/components/ui/icon";
-import { MAX_LINK, TG_LINK } from "./constants";
+import { MAX_LINK } from "./constants";
 import { trackGoal } from "@/lib/analytics";
 
 function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormClick?: () => void }) {
@@ -27,17 +27,6 @@ function DropdownMenu({ onClose, onFormClick }: { onClose: () => void; onFormCli
       >
         <span className="text-xl">💬</span>
         Написать в MAX
-      </a>
-      <div className="border-t border-gray-100" />
-      <a
-        href={TG_LINK}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => { trackGoal("cta_tg_click"); onClose(); }}
-        className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700 w-full"
-      >
-        <span className="text-xl">✈️</span>
-        Написать в Telegram
       </a>
     </div>
   );

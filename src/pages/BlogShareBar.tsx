@@ -60,16 +60,6 @@ export default function BlogShareBar({ url, title }: BlogShareBarProps) {
       </a>
 
       <a
-        href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Поделиться в Telegram"
-        className={btnClass}
-      >
-        <Icon name="Send" className={`w-7 h-7 md:w-5 md:h-5 ${iconClass}`} />
-      </a>
-
-      <a
         href={MAX_LINK}
         target="_blank"
         rel="noopener noreferrer"

@@ -3,7 +3,6 @@ export const BLOG_API = "https://functions.poehali.dev/d84b54ca-2906-4a84-be8b-2
 export const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95b0-c6cafb4e4e0f";
 
 export const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
-export const TG_LINK = "https://t.me/irinadolli";
 
 export const CATEGORIES = [
   { id: "tips", label: "Советы от педагога", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700" },
