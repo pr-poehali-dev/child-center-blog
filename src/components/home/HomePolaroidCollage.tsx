@@ -7,33 +7,57 @@ interface PolaroidPhoto {
   rotate: number;
 }
 
-const PHOTOS: PolaroidPhoto[] = [
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/70a2a26d-bffd-47c7-8466-d29f71f92424.jpg", caption: "Творческие занятия", rotate: -3 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/addf9831-3918-418d-8071-96e54aa59a9e.jpg", caption: "Готовимся рисовать", rotate: 2 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/6d3f772d-660e-4191-88af-fcb3a2257ad3.jpg", caption: "Полдник с пользой", rotate: -2 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/302ac75a-effe-4be7-b6b3-9e4d635da9fd.jpg", caption: "Собираемся на занятия", rotate: 3 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/files/ff78c37d-3c1d-430c-86be-7890fe9f13d6.jpg", caption: "Любимые игрушки", rotate: -2 },
+const ROW_PHOTOS: PolaroidPhoto[] = [
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/886d25b8-fb6a-49da-884e-b62ebb14ebd8.jpg", caption: "утро начинается с игры", rotate: -2 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/43e91a93-d4c3-43ee-960f-a1a72f443355.jpg", caption: "осень акварелью", rotate: 1.5 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/468fe139-9a79-4ff7-9dc0-7416d0179edd.jpg", caption: "обед по расписанию", rotate: -1.5 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/66ff53cc-a574-4fa5-ba0a-cc50bd4b7baa.jpg", caption: "собираемся на занятия", rotate: 2 },
 ];
+
+const CENTER_PHOTO: PolaroidPhoto = {
+  url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/0642eab1-46f3-4016-86f5-2358ac7185ef.jpg",
+  caption: "тихий час бережёт сны",
+  rotate: -1,
+};
+
+function Polaroid({ photo, onClick }: { photo: PolaroidPhoto; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="bg-white p-3 pb-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:z-10 transition-all duration-200 relative"
+      style={{
+        transform: `rotate(${photo.rotate}deg)`,
+        width: "180px",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.12), 0 12px 22px rgba(0,0,0,0.14)",
+      }}
+    >
+      <div className="w-full overflow-hidden bg-gray-100" style={{ aspectRatio: "3 / 4" }}>
+        <img src={photo.url} alt={photo.caption} className="w-full h-full object-cover" />
+      </div>
+      <div
+        className="font-caveat text-center mt-2 leading-none"
+        style={{ color: "#D9A441", fontSize: 19 }}
+      >
+        {photo.caption}
+      </div>
+    </button>
+  );
+}
 
 export default function HomePolaroidCollage() {
   const [lightbox, setLightbox] = useState<PolaroidPhoto | null>(null);
 
   return (
     <div className="max-w-4xl mx-auto w-full">
-      <div className="flex flex-wrap items-start justify-center gap-4 md:gap-6">
-        {PHOTOS.map((photo, i) => (
-          <button
-            key={i}
-            onClick={() => setLightbox(photo)}
-            className="bg-white p-3 pb-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:z-10 transition-all duration-200 relative"
-            style={{ transform: `rotate(${photo.rotate}deg)`, width: "180px" }}
-          >
-            <div className="w-full aspect-square overflow-hidden bg-gray-100">
-              <img src={photo.url} alt={photo.caption} className="w-full h-full object-cover" />
-            </div>
-            <div className="font-caveat text-lg text-gray-700 text-center mt-2 leading-none">{photo.caption}</div>
-          </button>
+      <div className="grid grid-cols-2 md:flex md:flex-wrap items-start justify-center gap-4 md:gap-6">
+        {ROW_PHOTOS.map((photo, i) => (
+          <div key={i} className="flex justify-center">
+            <Polaroid photo={photo} onClick={() => setLightbox(photo)} />
+          </div>
         ))}
+      </div>
+      <div className="flex justify-center mt-4 md:mt-6">
+        <Polaroid photo={CENTER_PHOTO} onClick={() => setLightbox(CENTER_PHOTO)} />
       </div>
 
       {lightbox && (
