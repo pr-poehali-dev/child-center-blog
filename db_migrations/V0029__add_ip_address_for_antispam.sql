@@ -1,0 +1,2 @@
+ALTER TABLE t_p99892216_child_center_blog.subscribers ADD COLUMN IF NOT EXISTS ip_address VARCHAR(64);
+ALTER TABLE t_p99892216_child_center_blog.reviews ADD COLUMN IF NOT EXISTS ip_address VARCHAR(64);
