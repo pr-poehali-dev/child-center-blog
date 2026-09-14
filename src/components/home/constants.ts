@@ -9,11 +9,46 @@ export const NAV_LINKS = [
   { label: "Контакты", id: "contacts-link" },
 ];
 
-export const TEAM = [
-  { name: "Анна Смирнова", role: "Директор центра", emoji: "👩‍🏫", desc: "15 лет в детском образовании. Любит йогу и путешествия.", color: "bg-rose-100" },
-  { name: "Михаил Петров", role: "Педагог по развитию", emoji: "🧑‍🎨", desc: "Специалист по дошкольной педагогике. Автор 3 методик.", color: "bg-amber-100" },
-  { name: "Елена Козлова", role: "Психолог", emoji: "👩‍⚕️", desc: "Помогает детям и родителям найти общий язык.", color: "bg-teal-100" },
-  { name: "Дмитрий Волков", role: "Педагог по спорту", emoji: "🧑‍🤸", desc: "Мастер спорта по гимнастике. Весёлые тренировки гарантированы!", color: "bg-sky-100" },
+export interface TeamPerson {
+  name: string;
+  role: string;
+}
+
+export interface TeamCard {
+  photo: string;
+  people: TeamPerson[];
+  desc: string;
+}
+
+export const TEAM: TeamCard[] = [
+  {
+    photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/14551404-08d8-4dc2-b5ec-7be906d1b84b.png",
+    people: [{ name: "Ирина Павловна", role: "управляющая центром" }],
+    desc: "Начинала воспитателем — теперь ведёт весь центр",
+  },
+  {
+    photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/817a5fe5-63d6-4f4a-b833-d301f6714a53.png",
+    people: [
+      { name: "Ирина Васильевна", role: "воспитатель" },
+      { name: "Марина Анатольевна", role: "няня" },
+    ],
+    desc: "Две, с которыми малышу не страшно ничего",
+  },
+  {
+    photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/751c35c5-bbe1-46e0-9c7c-110026e0a378.png",
+    people: [{ name: "Наталья Петровна", role: "педагог продлёнки и английский" }],
+    desc: "Превращает занятия в игру, а игру — в английский",
+  },
+  {
+    photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/8000ca8a-f15f-42e5-b15b-d9b5ada35511.png",
+    people: [{ name: "Светлана Владимировна", role: "воспитатель старшей группы" }],
+    desc: "Готовит к школе без давления — через игру и ласку",
+  },
+  {
+    photo: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/fb433919-1b6b-429a-8451-8defe84fe904.png",
+    people: [{ name: "Виктория Анатольевна", role: "логопед" }],
+    desc: "Ставит непослушные звуки на место — мягко и через игру",
+  },
 ];
 
 export const REVIEWS = [

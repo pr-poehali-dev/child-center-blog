@@ -1,32 +1,65 @@
-import Icon from "@/components/ui/icon";
-import { TEAM } from "./constants";
+import { TEAM, TeamCard } from "./constants";
 import SectionTitle from "./SectionTitle";
 
+function TeamCardView({ card }: { card: TeamCard }) {
+  return (
+    <div
+      className="bg-white overflow-hidden flex flex-col"
+      style={{
+        borderRadius: 18,
+        boxShadow: "0 2px 6px rgba(0,0,0,0.06), 0 14px 28px rgba(0,0,0,0.08)",
+      }}
+    >
+      <div className="w-full overflow-hidden bg-gray-100" style={{ aspectRatio: "4 / 5" }}>
+        <img src={card.photo} alt={card.people.map(p => p.name).join(", ")} className="w-full h-full object-cover" />
+      </div>
+      <div className="px-5 py-5 text-center flex-1 flex flex-col justify-center gap-1">
+        {card.people.map((p, i) => (
+          <div key={i}>
+            <div className="font-playfair font-bold" style={{ color: "#17364A", fontSize: 21 }}>
+              {p.name}
+            </div>
+            <div className="font-caveat" style={{ color: "#D9A441", fontSize: 19 }}>
+              {p.role}
+            </div>
+          </div>
+        ))}
+        <p className="text-gray-600 mt-2" style={{ fontSize: 14.5 }}>
+          {card.desc}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function HomeTeamSection() {
+  const topRow = TEAM.slice(0, 3);
+  const bottomRow = TEAM.slice(3, 5);
+
   return (
     <section id="team" className="py-14" style={{ background: "#E1F0FA" }}>
       <div className="max-w-6xl mx-auto px-4">
-        <SectionTitle overline="команда" title="Наши педагоги" />
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <video
-            src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/8393d0ab-cc73-4e76-b85c-c3a4cf0b36dc.mp4"
-            className="rounded-3xl shadow-2xl w-full object-contain"
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-          <div>
-            <p className="text-gray-600 text-lg leading-relaxed">
-              В нашем центре работают люди, любящие детей и своё дело. Они получают только положительные отзывы от родителей и умеют найти подход к любому ребёнку.
-            </p>
-            <p className="text-gray-600 text-lg leading-relaxed mt-4">
-              Такое возможно только тогда, когда люди искренне любят свою работу, когда им комфортно на своём рабочем месте, когда это их профессия. Мы гордимся своими кадрами, помогаем им развиваться и легко идти по дороге своей профессии.
-            </p>
-            <div className="mt-6">
-              <Icon name="Heart" size={36} className="text-red-400" strokeWidth={1.5} />
-            </div>
+        <SectionTitle overline="сердце дома" title="Наша команда" />
+
+        <div className="hidden md:block">
+          <div className="grid grid-cols-3 gap-6">
+            {topRow.map((card, i) => (
+              <TeamCardView key={i} card={card} />
+            ))}
           </div>
+          <div className="flex justify-center gap-6 mt-6">
+            {bottomRow.map((card, i) => (
+              <div key={i} className="w-full" style={{ maxWidth: "calc((100% - 3rem) / 3)" }}>
+                <TeamCardView card={card} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 md:hidden">
+          {TEAM.map((card, i) => (
+            <TeamCardView key={i} card={card} />
+          ))}
         </div>
       </div>
     </section>
