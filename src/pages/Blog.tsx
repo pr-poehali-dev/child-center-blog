@@ -7,9 +7,11 @@ import { ContactDropdown, SubscribeForm } from "./BlogPostCard";
 import BlogCompactCard from "./BlogCompactCard";
 import BlogHero from "./BlogHero";
 import BlogCategoryHeader, { getCategoryImage } from "./BlogCategoryHeader";
+import BlogCategoryMedallions from "./BlogCategoryMedallions";
 import PlateChecklists from "./PlateChecklists";
 import BlogSiteBridges from "@/components/BlogSiteBridges";
 import BlogCategoryBridge from "@/components/BlogCategoryBridge";
+import honeyStar from "@/assets/honey-star.png";
 
 export default function Blog() {
   const navigate = useNavigate();
@@ -77,31 +79,12 @@ export default function Blog() {
           <div className="w-16" />
         </div>
 
-        {/* TABS */}
-        <div className="max-w-3xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto no-scrollbar">
-          {CATEGORIES.map(cat => (
-            <button
-              key={cat.id}
-              id={cat.id === "summer" ? "summer-blog" : undefined}
-              onClick={() => setActiveTab(cat.id)}
-              className={`flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${
-                activeTab === cat.id
-                  ? "bg-orange-400 text-white shadow-sm"
-                  : "bg-gray-100 text-gray-500 hover:bg-orange-50 hover:text-orange-500"
-              }`}
-            >
-              <span>{cat.emoji}</span>
-              <span>{cat.label}</span>
-            </button>
-          ))}
-          <button
-            onClick={() => navigate("/blog/qa")}
-            className="flex items-center gap-1.5 whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all bg-rose-100 text-rose-600 hover:bg-rose-200"
-          >
-            <img src="https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/ea37ac57-0151-42c4-96c8-09560aa13604.png" alt="" className="w-5 h-5 rounded-full object-cover" />
-            <span>Спрашивали — Отвечаем</span>
-          </button>
-        </div>
+        {/* MEDALLIONS */}
+        <BlogCategoryMedallions
+          activeTab={activeTab}
+          onSelect={id => setActiveTab(id)}
+          onQaClick={() => navigate("/blog/qa")}
+        />
       </div>
 
       {/* HERO */}
@@ -110,25 +93,24 @@ export default function Blog() {
       {/* CONTENT */}
       <div ref={postsRef} className="max-w-5xl mx-auto px-4 py-4 md:py-6">
         <BlogCategoryHeader
-          emoji={activeCat.emoji}
           label={activeCat.label}
           image={getCategoryImage(activeTab)}
           description={categoryDescriptions[activeTab]}
         />
         {activeCat.subtitle && (
-          <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 mb-6 flex items-start gap-3">
-            <span className="text-2xl mt-0.5">{activeCat.emoji}</span>
-            <p className="text-green-800 font-semibold text-sm leading-relaxed">{activeCat.subtitle}</p>
+          <div className="rounded-2xl px-5 py-4 mb-6 flex items-start gap-3" style={{ background: "#FBF6EE" }}>
+            <img src={honeyStar} alt="" className="w-6 h-6 mt-0.5 shrink-0" />
+            <p className="font-golos font-semibold text-sm leading-relaxed" style={{ color: "#17364A" }}>{activeCat.subtitle}</p>
           </div>
         )}
         {activeTab === "summer" && (
-          <ContactDropdown label="Забронировать смену летнего клуба" emoji="☀️" colorClass="bg-yellow-400 hover:bg-yellow-500" />
+          <ContactDropdown label="Забронировать смену летнего клуба" />
         )}
         {activeTab === "afterschool" && (
-          <ContactDropdown label="Записаться в группу" emoji="📚" colorClass="bg-indigo-500 hover:bg-indigo-600" />
+          <ContactDropdown label="Записаться в группу" />
         )}
         {activeTab === "english" && (
-          <ContactDropdown label="Записаться в группу английского" emoji="🇬🇧" colorClass="bg-sky-500 hover:bg-sky-600" />
+          <ContactDropdown label="Записаться в группу английского" />
         )}
         {activeTab === "plate" && <PlateChecklists />}
         {loading ? (
@@ -137,7 +119,7 @@ export default function Blog() {
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-24">
-            <div className="text-5xl mb-4">{activeCat.emoji}</div>
+            <img src={honeyStar} alt="" className="w-14 h-14 mx-auto mb-4 opacity-70" />
             <div className="font-black text-xl text-gray-400 mb-2">Пока пусто</div>
             <div className="text-gray-400 text-sm">Скоро здесь появятся записи в разделе «{activeCat.label}»</div>
           </div>

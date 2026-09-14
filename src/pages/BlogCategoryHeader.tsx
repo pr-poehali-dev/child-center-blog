@@ -1,5 +1,6 @@
 import ThinUnderline from "@/components/home/ThinUnderline";
 import { TILES } from "@/components/home/HomeBlogSection";
+import honeyStar from "@/assets/honey-star.png";
 
 export function getCategoryImage(id: string): string | undefined {
   const tile = TILES.find(t => t.id === id);
@@ -9,13 +10,12 @@ export function getCategoryImage(id: string): string | undefined {
 }
 
 interface BlogCategoryHeaderProps {
-  emoji: string;
   label: string;
   image?: string;
   description?: string;
 }
 
-export default function BlogCategoryHeader({ emoji, label, image, description }: BlogCategoryHeaderProps) {
+export default function BlogCategoryHeader({ label, image, description }: BlogCategoryHeaderProps) {
   return (
     <div className="mb-6">
       <div className="flex items-center gap-4 md:gap-5 mb-3">
@@ -27,8 +27,8 @@ export default function BlogCategoryHeader({ emoji, label, image, description }:
             style={{ boxShadow: "inset 0 0 0 3px rgba(217,164,65,0.35), 0 4px 14px rgba(23,54,74,0.18)" }}
           />
         ) : (
-          <div className="w-[84px] h-[84px] md:w-[120px] md:h-[120px] rounded-full bg-amber-50 border-2 border-amber-200 flex items-center justify-center text-4xl md:text-5xl flex-shrink-0">
-            {emoji}
+          <div className="w-[84px] h-[84px] md:w-[120px] md:h-[120px] rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "#FBF6EE", boxShadow: "inset 0 0 0 2px rgba(217,164,65,0.35)" }}>
+            <img src={honeyStar} alt="" className="w-10 h-10 md:w-14 md:h-14" />
           </div>
         )}
         <h2

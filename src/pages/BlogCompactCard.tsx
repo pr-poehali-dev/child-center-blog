@@ -35,7 +35,7 @@ export default function BlogCompactCard({ post }: { post: Post }) {
       )}
       <div className="p-5">
         <span className={`inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-2 ${cat?.tag || "bg-gray-100 text-gray-500"}`}>
-          {cat?.emoji} {cat?.label}
+          {cat?.label}
         </span>
         <h3 className="font-black text-gray-800 text-base leading-snug mb-1.5 line-clamp-2 min-h-[2.6em]">{post.title}</h3>
         {firstSentence && (

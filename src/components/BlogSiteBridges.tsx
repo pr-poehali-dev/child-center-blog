@@ -1,5 +1,5 @@
-import Icon from "@/components/ui/icon";
 import { withBlogUtm } from "@/lib/analytics";
+import BrandBridgeCard from "@/components/BrandBridgeCard";
 
 /**
  * Явные кнопки-мосты с внутренних страниц блога на сайты продлёнки и летнего клуба.
@@ -8,27 +8,17 @@ import { withBlogUtm } from "@/lib/analytics";
  */
 export default function BlogSiteBridges() {
   return (
-    <div className="grid sm:grid-cols-2 gap-3 max-w-3xl mx-auto px-4 py-6">
-      <a
+    <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto px-4 py-6">
+      <BrandBridgeCard
         href={withBlogUtm("https://schooldolli.ru", "cta")}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-black px-6 py-4 rounded-2xl text-sm transition-colors shadow-sm"
-      >
-        <span className="text-lg">📚</span>
-        Записаться в продлёнку
-        <Icon name="ArrowRight" size={16} />
-      </a>
-      <a
+        title="Записаться в продлёнку"
+        subtitle="Присмотр, уроки и полдник каждый будний день"
+      />
+      <BrandBridgeCard
         href={withBlogUtm("https://dolliklub.ru", "cta")}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white font-black px-6 py-4 rounded-2xl text-sm transition-colors shadow-sm"
-      >
-        <span className="text-lg">☀️</span>
-        Записаться в летний клуб
-        <Icon name="ArrowRight" size={16} />
-      </a>
+        title="Записаться в летний клуб"
+        subtitle="Смены, программа и яркие каникулы для детей"
+      />
     </div>
   );
 }

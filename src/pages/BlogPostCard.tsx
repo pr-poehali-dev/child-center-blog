@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
 import Honeypot from "@/components/ui/Honeypot";
+import WatercolorWave from "@/components/home/WatercolorWave";
+import honeyStar from "@/assets/honey-star.png";
 import { MediaGallery } from "./BlogMediaGallery";
 import { CATEGORIES, SUBSCRIBERS_API, MAX_LINK, Post } from "./blog-types";
 import { trackGoal } from "@/lib/analytics";
@@ -36,67 +38,77 @@ export function SubscribeForm() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 pb-12">
-      <div className="bg-gradient-to-br from-orange-50 to-rose-50 border border-orange-100 rounded-3xl p-7">
-        <div className="flex items-start gap-4">
-          <div className="text-4xl shrink-0">📬</div>
-          <div className="flex-1">
-            <h3 className="font-black text-gray-800 text-lg leading-tight">Подпишитесь на блог</h3>
-            <p className="text-gray-500 text-sm mt-1 mb-4">Получайте уведомления о новых статьях прямо на почту</p>
+      <div className="relative overflow-hidden" style={{ background: "#FBF6EE", borderRadius: 20, boxShadow: "0 2px 5px rgba(0,0,0,0.05), 0 14px 28px rgba(0,0,0,0.08)" }}>
+        <div className="relative p-7">
+          <div className="flex items-start gap-4">
+            <img src={honeyStar} alt="" className="w-10 h-10 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="font-playfair font-bold leading-tight" style={{ color: "#17364A", fontSize: 21 }}>Подпишитесь на блог</h3>
+              <p className="font-golos mt-1 mb-4" style={{ color: "#4B4B4B", fontSize: 14.5 }}>Получайте уведомления о новых статьях прямо на почту</p>
 
-            {status === "success" ? (
-              <div className="flex items-center gap-2 text-green-600 font-semibold text-sm bg-green-50 border border-green-200 rounded-xl px-4 py-3">
-                <Icon name="CheckCircle" size={18} />
-                Отлично! Вы подписаны. Ждите писем от нас ☀️
-              </div>
-            ) : status === "exists" ? (
-              <div className="flex items-center gap-2 text-orange-600 font-semibold text-sm bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
-                <Icon name="Info" size={18} />
-                Этот email уже подписан на блог
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-                <Honeypot value={honeypot} onChange={setHoneypot} />
-                <input
-                  type="text"
-                  placeholder="Ваше имя"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  required
-                  className="flex-1 border border-orange-200 bg-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 transition-colors"
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  className="flex-1 border border-orange-200 bg-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 transition-colors"
-                />
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors whitespace-nowrap"
-                >
-                  {status === "loading" ? (
-                    <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <Icon name="Bell" size={15} />
-                  )}
-                  Подписаться
-                </button>
-              </form>
-            )}
-            {status === "error" && (
-              <p className="text-red-500 text-xs mt-2">Ошибка. Попробуйте ещё раз.</p>
-            )}
+              {status === "success" ? (
+                <div className="flex items-center gap-2 text-green-600 font-semibold text-sm bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+                  <Icon name="CheckCircle" size={18} />
+                  Отлично! Вы подписаны. Ждите писем от нас.
+                </div>
+              ) : status === "exists" ? (
+                <div className="flex items-center gap-2 text-orange-600 font-semibold text-sm bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
+                  <Icon name="Info" size={18} />
+                  Этот email уже подписан на блог
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                  <Honeypot value={honeypot} onChange={setHoneypot} />
+                  <input
+                    type="text"
+                    placeholder="Ваше имя"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    required
+                    className="flex-1 border bg-white rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+                    style={{ borderColor: "#EADFC8" }}
+                    onFocus={e => { e.currentTarget.style.borderColor = "#D9A441"; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = "#EADFC8"; }}
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    className="flex-1 border bg-white rounded-xl px-4 py-2.5 text-sm outline-none transition-colors"
+                    style={{ borderColor: "#EADFC8" }}
+                    onFocus={e => { e.currentTarget.style.borderColor = "#D9A441"; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = "#EADFC8"; }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className="flex items-center gap-2 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors whitespace-nowrap disabled:opacity-60"
+                    style={{ background: "#E8985F" }}
+                  >
+                    {status === "loading" ? (
+                      <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <Icon name="Bell" size={15} />
+                    )}
+                    Подписаться
+                  </button>
+                </form>
+              )}
+              {status === "error" && (
+                <p className="text-red-500 text-xs mt-2">Ошибка. Попробуйте ещё раз.</p>
+              )}
+            </div>
           </div>
         </div>
+        <WatercolorWave />
       </div>
     </div>
   );
 }
 
-export function ContactDropdown({ label, emoji, colorClass }: { label: string; emoji: string; colorClass: string }) {
+export function ContactDropdown({ label }: { label: string }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -112,9 +124,9 @@ export function ContactDropdown({ label, emoji, colorClass }: { label: string; e
     <div ref={ref} className="relative w-full mb-6">
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center justify-center gap-2 w-full ${colorClass} text-white font-black px-8 py-4 rounded-2xl text-lg transition-all hover:shadow-lg`}
+        className="flex items-center justify-center gap-2 w-full text-white font-bold px-8 py-4 rounded-2xl text-lg transition-colors hover:brightness-95"
+        style={{ background: "#E8985F" }}
       >
-        <span>{emoji}</span>
         {label}
         <Icon name={open ? "ChevronUp" : "ChevronDown"} size={20} />
       </button>
@@ -127,7 +139,7 @@ export function ContactDropdown({ label, emoji, colorClass }: { label: string; e
             onClick={() => { trackGoal("cta_max_click"); setOpen(false); }}
             className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors font-bold text-gray-700"
           >
-            <span className="text-xl">💬</span>
+            <Icon name="MessageCircle" size={20} style={{ color: "#D9A441" }} />
             Написать в MAX
           </a>
         </div>
@@ -156,7 +168,7 @@ export function PostCard({ post, categoryStickerText }: { post: Post; categorySt
       )}
       <div className="flex items-start justify-between gap-3 mb-3">
         <span className={`text-xs font-bold px-3 py-1 rounded-full ${cat?.tag || "bg-gray-100 text-gray-500"}`}>
-          {cat?.emoji} {cat?.label}
+          {cat?.label}
         </span>
         <span className="text-xs text-gray-400 shrink-0">{formatDate(post.created_at)}</span>
       </div>

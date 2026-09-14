@@ -6,6 +6,7 @@ import { CATEGORIES, useBlogPostData } from "./useBlogPostData";
 import BlogPostRecipeCard from "./BlogPostRecipeCard";
 import BlogPostMedia, { BlogPostLightbox } from "./BlogPostMedia";
 import BlogPostCTA from "./BlogPostCTA";
+import honeyStar from "@/assets/honey-star.png";
 
 export default function BlogPost() {
   const { id } = useParams<{ id: string }>();
@@ -60,7 +61,7 @@ export default function BlogPost() {
 
         {!loading && !post && (
           <div className="text-center py-24">
-            <div className="text-5xl mb-4">😕</div>
+            <img src={honeyStar} alt="" className="w-14 h-14 mx-auto mb-4 opacity-70" />
             <p className="text-gray-500 font-semibold">Статья не найдена</p>
             <button onClick={() => navigate("/blog")} className="mt-6 text-orange-500 font-bold hover:underline">← Вернуться в блог</button>
           </div>
@@ -71,7 +72,7 @@ export default function BlogPost() {
             {/* Категория и дата */}
             <div className="flex items-center justify-between mb-4">
               <span className={`text-sm font-bold px-3 py-1 rounded-full ${cat?.tag || "bg-gray-100 text-gray-500"}`}>
-                {cat?.emoji} {cat?.label}
+                {cat?.label}
               </span>
               <span className="text-sm text-gray-400">{formatDate(post.created_at)}</span>
             </div>
