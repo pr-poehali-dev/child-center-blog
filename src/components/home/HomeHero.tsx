@@ -14,12 +14,13 @@ interface Polaroid {
 
 const POLAROIDS: Polaroid[] = [
   { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/886d25b8-fb6a-49da-884e-b62ebb14ebd8.jpg", caption: "малыши", rotate: -3 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/66ff53cc-a574-4fa5-ba0a-cc50bd4b7baa.jpg", caption: "старшие", rotate: 2 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/e3b913e3-8b0a-499d-8945-e6c49eb58b2d.jpg", caption: "продлёнка", rotate: -2.5 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/66ff53cc-a574-4fa5-ba0a-cc50bd4b7baa.jpg", caption: "старшие", rotate: 1.5 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/e3b913e3-8b0a-499d-8945-e6c49eb58b2d.jpg", caption: "продлёнка", rotate: -2 },
 ];
 
-const CARD_WIDTH = 190;
+const CARD_WIDTH = 150;
 const CARD_PAD = 4;
+const OVERLAP = 30;
 
 export default function HomeHero({ onFormClick }: HomeHeroProps) {
   return (
@@ -34,52 +35,53 @@ export default function HomeHero({ onFormClick }: HomeHeroProps) {
         backgroundPosition: "center",
       }}
     >
-      <div className="max-w-6xl mx-auto px-4 py-3 md:py-4 relative z-10 w-full flex flex-col md:flex-row items-center gap-8 md:gap-2">
+      <div className="max-w-6xl mx-auto px-4 py-4 md:py-5 relative z-10 w-full flex flex-col items-center gap-4 md:gap-5">
 
-        {/* СТОЛБИК ПОЛАРОИДОВ — десктоп */}
-        <div className="hidden md:flex flex-col items-start shrink-0 relative" style={{ marginLeft: 48 }}>
+        {/* ГИРЛЯНДА ПОЛАРОИДОВ — десктоп */}
+        <div className="hidden md:flex items-start justify-center relative" style={{ marginTop: 20 }}>
           {POLAROIDS.map((p, i) => (
-            <div key={i} className="relative" style={{ marginTop: i === 0 ? 0 : 10 }}>
+            <div
+              key={i}
+              className="relative bg-white"
+              style={{
+                width: CARD_WIDTH,
+                padding: CARD_PAD,
+                marginLeft: i === 0 ? 0 : -OVERLAP,
+                transform: `rotate(${p.rotate}deg)`,
+                zIndex: i,
+                boxShadow: "0 2px 5px rgba(0,0,0,0.12), 0 10px 18px rgba(0,0,0,0.14)",
+              }}
+            >
+              <div className="w-full aspect-square overflow-hidden bg-gray-100">
+                <img src={p.url} alt={p.caption} className="w-full h-full object-cover" />
+              </div>
               <div
-                className="bg-white"
-                style={{
-                  width: CARD_WIDTH,
-                  padding: CARD_PAD,
-                  transform: `rotate(${p.rotate}deg) translateX(${i === 1 ? 26 : 0}px)`,
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.12), 0 10px 20px rgba(0,0,0,0.14)",
-                }}
+                className="font-caveat text-center leading-none"
+                style={{ color: "#D9A441", fontSize: 15, marginTop: 3, height: 17 }}
               >
-                <div className="w-full aspect-square overflow-hidden bg-gray-100">
-                  <img src={p.url} alt={p.caption} className="w-full h-full object-cover" />
-                </div>
-                <div
-                  className="font-caveat text-center leading-none"
-                  style={{ color: "#D9A441", fontSize: 14, marginTop: 2, height: 16 }}
-                >
-                  {p.caption}
-                </div>
+                {p.caption}
               </div>
               {i < POLAROIDS.length - 1 && (
                 <img
                   src={honeyStar}
                   alt=""
-                  className="absolute z-10"
-                  style={{ width: 24, height: 24, right: i === 0 ? 6 : "auto", left: i === 1 ? -8 : "auto", bottom: -14 }}
+                  className="absolute z-20"
+                  style={{ width: 24, height: 24, right: -10, top: "38%" }}
                 />
               )}
             </div>
           ))}
         </div>
 
-        {/* СТОЛБИК ПОЛАРОИДОВ — мобильный, горизонтальный ряд с нахлёстом */}
-        <div className="flex md:hidden items-center justify-center order-3 mt-2">
+        {/* ГИРЛЯНДА ПОЛАРОИДОВ — мобильный */}
+        <div className="flex md:hidden items-center justify-center" style={{ marginTop: 8 }}>
           {POLAROIDS.map((p, i) => (
             <div
               key={i}
               className="bg-white p-1.5 relative"
               style={{
-                width: 120,
-                marginLeft: i === 0 ? 0 : -30,
+                width: 105,
+                marginLeft: i === 0 ? 0 : -26,
                 transform: `rotate(${p.rotate}deg)`,
                 zIndex: i,
                 boxShadow: "0 2px 5px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.12)",
@@ -93,7 +95,7 @@ export default function HomeHero({ onFormClick }: HomeHeroProps) {
         </div>
 
         {/* ТЕКСТОВАЯ ГРУППА */}
-        <div className="flex-1 flex flex-col items-center gap-10 order-2 md:order-none">
+        <div className="flex flex-col items-center gap-6 md:gap-7 w-full">
           <div className="text-center max-w-2xl mx-auto">
             <h1 className="font-playfair text-4xl md:text-5xl font-extrabold text-[#175064] leading-tight mb-4">
               Блог детского центра «Рыбка Долли»
