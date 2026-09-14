@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import Honeypot from "@/components/ui/Honeypot";
+import { useAntiSpam } from "@/lib/antispam";
 
 const SUBSCRIBERS_API = "https://functions.poehali.dev/ad0992ef-212b-47b2-9265-aedfd9a33c3f";
 const EASTER_GIFT_ACTIVE = new Date() <= new Date("2026-04-14T23:59:59");
@@ -17,6 +19,7 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
   const [email, setEmail] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "exists">("idle");
+  const { honeypot, setHoneypot, isSpam, formLoadedAt } = useAntiSpam();
 
   const isAdmin = location.pathname.startsWith("/admin");
 
@@ -38,12 +41,13 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
+    if (isSpam()) return;
     setStatus("loading");
     try {
       const res = await fetch(SUBSCRIBERS_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), email: email.trim() }),
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), company: honeypot, form_loaded_at: formLoadedAt }),
       });
       if (res.status === 409) { setStatus("exists"); return; }
       if (!res.ok) { setStatus("error"); return; }
@@ -126,6 +130,7 @@ export default function FloatingSubscribe({ hidden = false }: Props) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-2.5">
+                <Honeypot value={honeypot} onChange={setHoneypot} />
                 <input
                   type="text"
                   placeholder="Ваше имя"

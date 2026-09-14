@@ -2,6 +2,7 @@ import json
 import os
 import smtplib
 import hashlib
+import time
 from datetime import date
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -17,6 +18,14 @@ EASTER_GIFT_DEADLINE = '2026-04-14'
 
 def make_token(email: str, sub_id: int) -> str:
     return hashlib.md5(f"{email}{sub_id}ribkadolli_secret".encode()).hexdigest()
+
+
+def get_client_ip(event: dict) -> str:
+    headers = event.get('headers') or {}
+    xff = headers.get('X-Forwarded-For') or headers.get('x-forwarded-for') or ''
+    if xff:
+        return xff.split(',')[0].strip()
+    return (event.get('requestContext') or {}).get('identity', {}).get('sourceIp', '') or ''
 
 
 def unsubscribe_footer(token: str) -> str:
@@ -139,12 +148,43 @@ def handler(event: dict, context) -> dict:
             name = body.get('name', '').strip()
             email = body.get('email', '').strip().lower()
 
+            # Антиспам: поле-ловушка — если заполнено, молча отбрасываем
+            if (body.get('company') or '').strip():
+                return {
+                    'statusCode': 200,
+                    'headers': {'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'ok': True, 'message': 'Вы успешно подписались!'})
+                }
+
+            # Антиспам: форма отправлена слишком быстро после загрузки страницы
+            form_loaded_at = body.get('form_loaded_at')
+            if isinstance(form_loaded_at, (int, float)) and (time.time() * 1000 - form_loaded_at) < 5000:
+                return {
+                    'statusCode': 200,
+                    'headers': {'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'ok': True, 'message': 'Вы успешно подписались!'})
+                }
+
             if not name or not email:
                 return {
                     'statusCode': 400,
                     'headers': {'Access-Control-Allow-Origin': '*'},
                     'body': json.dumps({'error': 'Имя и email обязательны'})
                 }
+
+            # Антиспам: не более одной подписки с одного IP за 24 часа
+            client_ip = get_client_ip(event)
+            if client_ip:
+                cur.execute(
+                    "SELECT id FROM subscribers WHERE ip_address = %s AND created_at > NOW() - INTERVAL '24 hours' LIMIT 1",
+                    (client_ip,)
+                )
+                if cur.fetchone():
+                    return {
+                        'statusCode': 200,
+                        'headers': {'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'ok': True, 'message': 'Вы успешно подписались!'})
+                    }
 
             cur.execute("SELECT id FROM subscribers WHERE email = %s", (email,))
             existing = cur.fetchone()
@@ -156,8 +196,8 @@ def handler(event: dict, context) -> dict:
                 }
 
             cur.execute(
-                "INSERT INTO subscribers (name, email) VALUES (%s, %s) RETURNING id",
-                (name, email)
+                "INSERT INTO subscribers (name, email, ip_address) VALUES (%s, %s, %s) RETURNING id",
+                (name, email, client_ip or None)
             )
             sub_id = cur.fetchone()[0]
             token = make_token(email, sub_id)

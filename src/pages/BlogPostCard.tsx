@@ -1,24 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 import StickerTag from "@/components/ui/sticker-tag";
+import Honeypot from "@/components/ui/Honeypot";
 import { MediaGallery } from "./BlogMediaGallery";
 import { CATEGORIES, SUBSCRIBERS_API, MAX_LINK, Post } from "./blog-types";
 import { trackGoal } from "@/lib/analytics";
+import { useAntiSpam } from "@/lib/antispam";
 
 export function SubscribeForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error" | "exists">("idle");
+  const { honeypot, setHoneypot, isSpam, formLoadedAt } = useAntiSpam();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
+    if (isSpam()) return;
     setStatus("loading");
     try {
       const res = await fetch(SUBSCRIBERS_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), email: email.trim() }),
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), company: honeypot, form_loaded_at: formLoadedAt }),
       });
       if (res.status === 409) { setStatus("exists"); return; }
       if (!res.ok) { setStatus("error"); return; }
@@ -51,6 +55,7 @@ export function SubscribeForm() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                <Honeypot value={honeypot} onChange={setHoneypot} />
                 <input
                   type="text"
                   placeholder="Ваше имя"

@@ -12,6 +12,20 @@
       "path": "/",
       "body": {"name": "Тест", "text": "Отличный центр!", "stars": 5},
       "expectedStatus": 201
+    },
+    {
+      "name": "POST review honeypot filled — silently accepted, not saved",
+      "method": "POST",
+      "path": "/",
+      "body": {"name": "Spam Bot", "text": "buy cheap stuff", "stars": 5, "company": "acme"},
+      "expectedStatus": 201
+    },
+    {
+      "name": "POST review too fast — silently accepted, not saved",
+      "method": "POST",
+      "path": "/",
+      "body": {"name": "Fast Bot", "text": "spam text", "stars": 5, "form_loaded_at": 99999999999999},
+      "expectedStatus": 201
     }
   ]
 }

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { REVIEWS } from "./constants";
 import SectionTitle from "./SectionTitle";
 import honeyStar from "@/assets/honey-star.png";
+import Honeypot from "@/components/ui/Honeypot";
+import { useAntiSpam } from "@/lib/antispam";
 
 const REVIEWS_API = "https://functions.poehali.dev/1c662b6b-5f56-4e25-b517-f6fdfc24912b";
 const BG_COLORS = ["bg-rose-50", "bg-amber-50", "bg-violet-50", "bg-teal-50", "bg-sky-50", "bg-orange-50"];
@@ -44,14 +46,16 @@ function ReviewForm() {
   const [agreed, setAgreed] = useState(false);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const { honeypot, setHoneypot, isSpam, formLoadedAt } = useAntiSpam();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSpam()) return;
     setSending(true);
     await fetch(REVIEWS_API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, company: honeypot, form_loaded_at: formLoadedAt }),
     });
     setSent(true);
     setSending(false);
@@ -72,6 +76,7 @@ function ReviewForm() {
       <h3 className="font-black text-xl text-gray-800 mb-1">Оставить отзыв в блоге</h3>
       <p className="text-gray-400 text-sm mb-5">Отзыв появится на этом сайте после проверки</p>
       <div className="space-y-4">
+        <Honeypot value={honeypot} onChange={setHoneypot} />
         <div>
           <label className="text-xs font-bold text-gray-500 mb-1 block">Ваше имя</label>
           <input required className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 bg-white" placeholder="Мама / папа" value={form.name} onChange={e => setForm({...form, name: e.target.value})} />

@@ -1,9 +1,18 @@
 import json
 import os
+import time
 import psycopg2
 
 def get_conn():
     return psycopg2.connect(os.environ["DATABASE_URL"])
+
+
+def get_client_ip(event: dict) -> str:
+    headers = event.get("headers") or {}
+    xff = headers.get("X-Forwarded-For") or headers.get("x-forwarded-for") or ""
+    if xff:
+        return xff.split(",")[0].strip()
+    return (event.get("requestContext") or {}).get("identity", {}).get("sourceIp", "") or ""
 
 def handler(event: dict, context) -> dict:
     """Управление отзывами: GET — публичные, POST — добавить, PATCH — одобрить/удалить (админ)"""
@@ -45,6 +54,15 @@ def handler(event: dict, context) -> dict:
         text = (body.get("text") or "").strip()
         stars = int(body.get("stars") or 5)
 
+        # Антиспам: поле-ловушка — если заполнено, молча делаем вид что всё ок
+        if (body.get("company") or "").strip():
+            return {"statusCode": 201, "headers": cors, "body": json.dumps({"id": 0})}
+
+        # Антиспам: форма отправлена слишком быстро после загрузки страницы
+        form_loaded_at = body.get("form_loaded_at")
+        if isinstance(form_loaded_at, (int, float)) and (time.time() * 1000 - form_loaded_at) < 5000:
+            return {"statusCode": 201, "headers": cors, "body": json.dumps({"id": 0})}
+
         if not name or not text:
             return {"statusCode": 400, "headers": cors, "body": json.dumps({"error": "name and text required"})}
         if not (1 <= stars <= 5):
@@ -52,9 +70,21 @@ def handler(event: dict, context) -> dict:
 
         conn = get_conn()
         cur = conn.cursor()
+
+        # Антиспам: не более одного отзыва с одного IP за 24 часа
+        client_ip = get_client_ip(event)
+        if client_ip:
+            cur.execute(
+                "SELECT id FROM reviews WHERE ip_address = %s AND created_at > NOW() - INTERVAL '24 hours' LIMIT 1",
+                (client_ip,)
+            )
+            if cur.fetchone():
+                conn.close()
+                return {"statusCode": 201, "headers": cors, "body": json.dumps({"id": 0})}
+
         cur.execute(
-            "INSERT INTO reviews (name, child, text, stars) VALUES (%s, %s, %s, %s) RETURNING id",
-            (name, child or None, text, stars)
+            "INSERT INTO reviews (name, child, text, stars, ip_address) VALUES (%s, %s, %s, %s, %s) RETURNING id",
+            (name, child or None, text, stars, client_ip or None)
         )
         new_id = cur.fetchone()[0]
         conn.commit()
