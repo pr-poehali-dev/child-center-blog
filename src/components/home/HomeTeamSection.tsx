@@ -1,15 +1,27 @@
 import { TEAM, TeamCard } from "./constants";
 import SectionTitle from "./SectionTitle";
+import honeyStar from "@/assets/honey-star.png";
 
-function TeamCardView({ card }: { card: TeamCard }) {
+function TeamCardView({ card, highlight }: { card: TeamCard; highlight?: boolean }) {
   return (
     <div
-      className="bg-white overflow-hidden flex flex-col"
+      className="bg-white overflow-hidden flex flex-col relative"
       style={{
         borderRadius: 18,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.06), 0 14px 28px rgba(0,0,0,0.08)",
+        boxShadow: highlight
+          ? "0 2px 6px rgba(217,164,65,0.2), 0 16px 32px rgba(217,164,65,0.25)"
+          : "0 2px 6px rgba(0,0,0,0.06), 0 14px 28px rgba(0,0,0,0.08)",
+        border: highlight ? "1.5px solid #D9A441" : "1.5px solid transparent",
       }}
     >
+      {highlight && (
+        <img
+          src={honeyStar}
+          alt=""
+          className="absolute z-10"
+          style={{ width: 30, height: 30, top: -12, right: -10 }}
+        />
+      )}
       <div className="w-full overflow-hidden bg-gray-100" style={{ aspectRatio: "4 / 5" }}>
         <img src={card.photo} alt={card.people.map(p => p.name).join(", ")} className="w-full h-full object-cover" />
       </div>
@@ -44,7 +56,7 @@ export default function HomeTeamSection() {
         <div className="hidden md:block">
           <div className="grid grid-cols-3 gap-6">
             {topRow.map((card, i) => (
-              <TeamCardView key={i} card={card} />
+              <TeamCardView key={i} card={card} highlight={i === 0} />
             ))}
           </div>
           <div className="flex justify-center gap-6 mt-6">
@@ -58,7 +70,7 @@ export default function HomeTeamSection() {
 
         <div className="grid grid-cols-1 gap-6 md:hidden">
           {TEAM.map((card, i) => (
-            <TeamCardView key={i} card={card} />
+            <TeamCardView key={i} card={card} highlight={i === 0} />
           ))}
         </div>
       </div>

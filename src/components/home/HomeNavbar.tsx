@@ -40,14 +40,27 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
             <button
               key={l.label}
               onClick={() => scrollTo(l.id)}
-              className={`text-sm font-semibold transition-colors hover:text-orange-500 ${activeSection === l.id ? "text-orange-500" : "text-gray-600"}`}
+              className="font-golos font-medium text-[15px] transition-colors relative pb-0.5"
+              style={{
+                letterSpacing: "0.2px",
+                color: activeSection === l.id ? "#D9A441" : "#17364A",
+                borderBottom: activeSection === l.id ? "1.5px solid #D9A441" : "1.5px solid transparent",
+              }}
             >
               {l.label}
             </button>
           ))}
-          <a href="tel:+79881521698" className="flex items-center gap-1.5 text-sm font-bold text-[#175064] hover:text-orange-500 transition-colors">
-            <Icon name="Phone" size={16} />
-            +7 (988) 152-16-98
+          <a
+            href="tel:+79881521698"
+            className="font-golos font-bold whitespace-nowrap transition-colors"
+            style={{ fontSize: 16.5, color: "#17364A" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#D9A441"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "#17364A"; }}
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <Icon name="Phone" size={16} />
+              +7 (988) 152-16-98
+            </span>
           </a>
           <NavBookingDropdown onFormClick={onFormClick} />
         </div>
@@ -58,11 +71,21 @@ export default function HomeNavbar({ activeSection, onFormClick }: HomeNavbarPro
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-orange-100 px-4 py-3 flex flex-col gap-3">
           {NAV_LINKS.map((l) => (
-            <button key={l.label} onClick={() => scrollTo(l.id)} className="text-left text-sm font-semibold text-gray-600 hover:text-orange-500 py-1">
+            <button
+              key={l.label}
+              onClick={() => scrollTo(l.id)}
+              className="text-left font-golos font-medium py-1 w-fit"
+              style={{
+                fontSize: 15,
+                letterSpacing: "0.2px",
+                color: activeSection === l.id ? "#D9A441" : "#17364A",
+                borderBottom: activeSection === l.id ? "1.5px solid #D9A441" : "1.5px solid transparent",
+              }}
+            >
               {l.label}
             </button>
           ))}
-          <a href="tel:+79881521698" className="flex items-center gap-1.5 text-sm font-bold text-[#175064] py-1">
+          <a href="tel:+79881521698" className="flex items-center gap-1.5 font-golos font-bold py-1 whitespace-nowrap" style={{ fontSize: 16.5, color: "#17364A" }}>
             <Icon name="Phone" size={16} />
             +7 (988) 152-16-98
           </a>

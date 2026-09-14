@@ -23,6 +23,7 @@ export default {
 			caveat: ['Caveat', 'cursive'],
 			marck: ['Marck Script', 'cursive'],
 			playfair: ['Playfair Display', 'serif'],
+			golos: ['Golos Text', 'sans-serif'],
 		},
 		extend: {
 			colors: {
