@@ -10,17 +10,20 @@ interface Polaroid {
   url: string;
   caption: string;
   rotate: number;
+  lift?: number;
 }
 
 const POLAROIDS: Polaroid[] = [
   { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/886d25b8-fb6a-49da-884e-b62ebb14ebd8.jpg", caption: "малыши", rotate: -3 },
-  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/66ff53cc-a574-4fa5-ba0a-cc50bd4b7baa.jpg", caption: "старшие", rotate: 1.5 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/66ff53cc-a574-4fa5-ba0a-cc50bd4b7baa.jpg", caption: "старшие", rotate: 1.5, lift: 7 },
   { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/e3b913e3-8b0a-499d-8945-e6c49eb58b2d.jpg", caption: "продлёнка", rotate: -2 },
 ];
 
-const CARD_WIDTH = 150;
-const CARD_PAD = 4;
-const OVERLAP = 30;
+const CARD_WIDTH = 175;
+const CARD_PAD = 9;
+const OVERLAP = 18;
+const STEP = CARD_WIDTH - OVERLAP;
+const GARLAND_WIDTH = CARD_WIDTH + STEP * 2;
 
 export default function HomeHero({ onFormClick }: HomeHeroProps) {
   return (
@@ -38,15 +41,16 @@ export default function HomeHero({ onFormClick }: HomeHeroProps) {
       <div className="max-w-6xl mx-auto px-4 py-4 md:py-5 relative z-10 w-full flex flex-col items-center gap-4 md:gap-5">
 
         {/* ГИРЛЯНДА ПОЛАРОИДОВ — десктоп */}
-        <div className="hidden md:flex items-start justify-center relative" style={{ marginTop: 20 }}>
+        <div className="hidden md:block relative" style={{ marginTop: 20, width: GARLAND_WIDTH, height: 210 }}>
           {POLAROIDS.map((p, i) => (
             <div
               key={i}
-              className="relative bg-white"
+              className="absolute bg-white"
               style={{
+                left: i * STEP,
+                top: p.lift ? -p.lift : 0,
                 width: CARD_WIDTH,
                 padding: CARD_PAD,
-                marginLeft: i === 0 ? 0 : -OVERLAP,
                 transform: `rotate(${p.rotate}deg)`,
                 zIndex: i,
                 boxShadow: "0 2px 5px rgba(0,0,0,0.12), 0 10px 18px rgba(0,0,0,0.14)",
@@ -61,16 +65,21 @@ export default function HomeHero({ onFormClick }: HomeHeroProps) {
               >
                 {p.caption}
               </div>
-              {i < POLAROIDS.length - 1 && (
-                <img
-                  src={honeyStar}
-                  alt=""
-                  className="absolute z-20"
-                  style={{ width: 24, height: 24, right: -10, top: "38%" }}
-                />
-              )}
             </div>
           ))}
+          {/* Звёзды на стыках — отдельный слой поверх всех карточек */}
+          <img
+            src={honeyStar}
+            alt=""
+            className="absolute"
+            style={{ width: 22, height: 22, left: STEP - 11, top: 150, zIndex: 10 }}
+          />
+          <img
+            src={honeyStar}
+            alt=""
+            className="absolute"
+            style={{ width: 22, height: 22, left: STEP * 2 - 11, top: 120, zIndex: 10 }}
+          />
         </div>
 
         {/* ГИРЛЯНДА ПОЛАРОИДОВ — мобильный */}
@@ -81,7 +90,7 @@ export default function HomeHero({ onFormClick }: HomeHeroProps) {
               className="bg-white p-1.5 relative"
               style={{
                 width: 105,
-                marginLeft: i === 0 ? 0 : -26,
+                marginLeft: i === 0 ? 0 : -16,
                 transform: `rotate(${p.rotate}deg)`,
                 zIndex: i,
                 boxShadow: "0 2px 5px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.12)",
