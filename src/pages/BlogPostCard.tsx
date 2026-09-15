@@ -37,7 +37,7 @@ export function SubscribeForm() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 pb-12">
+    <div id="subscribe" className="max-w-3xl mx-auto px-4 pb-12 scroll-mt-24">
       <div className="relative overflow-hidden" style={{ background: "#FBF6EE", borderRadius: 20, boxShadow: "0 2px 5px rgba(0,0,0,0.05), 0 14px 28px rgba(0,0,0,0.08)" }}>
         <div className="relative p-7">
           <div className="flex items-start gap-4">
