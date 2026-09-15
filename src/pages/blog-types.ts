@@ -5,18 +5,18 @@ export const STICKERS_API = "https://functions.poehali.dev/abb60737-528d-41b4-95
 export const MAX_LINK = "https://max.ru/u/f9LHodD0cOIKcG0itfDWIZMQp22OCCCC7iCwIUARylW6FIn7W2H3IZ-imyY";
 
 export const CATEGORIES = [
-  { id: "tips", label: "Советы от педагога", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700" },
-  { id: "life", label: "Наша жизнь на ладони", emoji: "🌈", color: "bg-rose-50", border: "border-rose-200", tag: "bg-rose-100 text-rose-700" },
-  { id: "detail", label: "Подробно о важном", emoji: "📖", color: "bg-teal-50", border: "border-teal-200", tag: "bg-teal-100 text-teal-700" },
-  { id: "summer",      label: "Лето с нами. Новости летнего клуба", emoji: "☀️", color: "bg-yellow-50",  border: "border-yellow-200",  tag: "bg-yellow-100 text-yellow-700"  },
-  { id: "afterschool", label: "Продлёнка",    emoji: "📚", color: "bg-indigo-50",  border: "border-indigo-200",  tag: "bg-indigo-100 text-indigo-700"  },
-  { id: "english",     label: "Группа английского языка", emoji: "🇬🇧", color: "bg-sky-50",    border: "border-sky-200",    tag: "bg-sky-100 text-sky-700"        },
-  { id: "experiments", label: "Экспериментаторы",         emoji: "🔬", color: "bg-purple-50",  border: "border-purple-200",  tag: "bg-purple-100 text-purple-700"  },
-  { id: "chefs",       label: "Шеф-повара",               emoji: "👨‍🍳", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700"  },
-  { id: "masters",     label: "Мастера вдохновения",      emoji: "🎨", color: "bg-pink-50",    border: "border-pink-200",    tag: "bg-pink-100 text-pink-700"      },
-  { id: "plate",       label: "Тарелка для всех",         emoji: "🥗", color: "bg-green-50",   border: "border-green-200",   tag: "bg-green-100 text-green-700",  subtitle: "Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей" },
-  { id: "yasli",       label: "Ясли (1,5–3 года)",        emoji: "🍼", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700" },
-  { id: "school",      label: "Подготовка к школе",       emoji: "🎒", color: "bg-yellow-50",  border: "border-yellow-300",  tag: "bg-yellow-100 text-yellow-800" },
+  { id: "tips", label: "Советы от педагога", shortLabel: "Советы педагога", emoji: "🎓", color: "bg-amber-50", border: "border-amber-200", tag: "bg-amber-100 text-amber-700" },
+  { id: "life", label: "Наша жизнь на ладони", shortLabel: "Наша жизнь", emoji: "🌈", color: "bg-rose-50", border: "border-rose-200", tag: "bg-rose-100 text-rose-700" },
+  { id: "detail", label: "Подробно о важном", shortLabel: "О важном", emoji: "📖", color: "bg-teal-50", border: "border-teal-200", tag: "bg-teal-100 text-teal-700" },
+  { id: "summer",      label: "Лето с нами. Новости летнего клуба", shortLabel: "Летний клуб", emoji: "☀️", color: "bg-yellow-50",  border: "border-yellow-200",  tag: "bg-yellow-100 text-yellow-700"  },
+  { id: "afterschool", label: "Продлёнка",    shortLabel: "Продлёнка", emoji: "📚", color: "bg-indigo-50",  border: "border-indigo-200",  tag: "bg-indigo-100 text-indigo-700"  },
+  { id: "english",     label: "Группа английского языка", shortLabel: "Английский", emoji: "🇬🇧", color: "bg-sky-50",    border: "border-sky-200",    tag: "bg-sky-100 text-sky-700"        },
+  { id: "experiments", label: "Экспериментаторы",         shortLabel: "Экспериментаторы", emoji: "🔬", color: "bg-purple-50",  border: "border-purple-200",  tag: "bg-purple-100 text-purple-700"  },
+  { id: "chefs",       label: "Шеф-повара",               shortLabel: "Кулинария", emoji: "👨‍🍳", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700"  },
+  { id: "masters",     label: "Мастера вдохновения",      shortLabel: "Вдохновение", emoji: "🎨", color: "bg-pink-50",    border: "border-pink-200",    tag: "bg-pink-100 text-pink-700"      },
+  { id: "plate",       label: "Тарелка для всех",         shortLabel: "Тарелка всех", emoji: "🥗", color: "bg-green-50",   border: "border-green-200",   tag: "bg-green-100 text-green-700",  subtitle: "Безглютеновое, безказеиновое и безлактозное питание для самых любимых — для детей" },
+  { id: "yasli",       label: "Ясли (1,5–3 года)",        shortLabel: "Ясли", emoji: "🍼", color: "bg-orange-50",  border: "border-orange-200",  tag: "bg-orange-100 text-orange-700" },
+  { id: "school",      label: "Подготовка к школе",       shortLabel: "К школе", emoji: "🎒", color: "bg-yellow-50",  border: "border-yellow-300",  tag: "bg-yellow-100 text-yellow-800" },
 ];
 
 export const SEO_BY_CATEGORY: Record<string, { title: string; description: string }> = {

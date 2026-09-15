@@ -40,3 +40,19 @@ export function withBlogUtm(url: string, medium: "internal" | "cta" = "internal"
     return url;
   }
 }
+
+/**
+ * Добавляет к ссылке UTM-метки с явно заданной кампанией (для карточки выбора направления,
+ * где кампания зависит от конкретного направления, а не от домена).
+ */
+export function withDirectionUtm(url: string, direction: string): string {
+  try {
+    const parsed = new URL(url, window.location.origin);
+    parsed.searchParams.set("utm_source", "blog");
+    parsed.searchParams.set("utm_medium", "cta");
+    parsed.searchParams.set("utm_campaign", `blog_to_${direction}`);
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}

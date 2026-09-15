@@ -14,11 +14,11 @@ const ROW_PHOTOS: PolaroidPhoto[] = [
   { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/66ff53cc-a574-4fa5-ba0a-cc50bd4b7baa.jpg", caption: "собираемся на занятия", rotate: 2 },
 ];
 
-const CENTER_PHOTO: PolaroidPhoto = {
-  url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/0642eab1-46f3-4016-86f5-2358ac7185ef.jpg",
-  caption: "тихий час бережёт сны",
-  rotate: -1,
-};
+const SECOND_ROW_PHOTOS: PolaroidPhoto[] = [
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/0642eab1-46f3-4016-86f5-2358ac7185ef.jpg", caption: "тихий час бережёт сны", rotate: -1 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/blog/2db05ee4-9993-4866-ad00-6a5448ca2dd2.jpg", caption: "прогулка под парусом", rotate: 1.8 },
+  { url: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/blog/86ee6be6-a75c-4eb6-a03e-ba8553e7bd0f.jpg", caption: "вечер: игры с друзьями", rotate: -2 },
+];
 
 function Polaroid({ photo, onClick }: { photo: PolaroidPhoto; onClick: () => void }) {
   return (
@@ -56,8 +56,12 @@ export default function HomePolaroidCollage() {
           </div>
         ))}
       </div>
-      <div className="flex justify-center mt-4 md:mt-6">
-        <Polaroid photo={CENTER_PHOTO} onClick={() => setLightbox(CENTER_PHOTO)} />
+      <div className="grid grid-cols-2 md:flex md:flex-wrap items-start justify-center gap-4 md:gap-6 mt-4 md:mt-6">
+        {SECOND_ROW_PHOTOS.map((photo, i) => (
+          <div key={i} className={`flex justify-center ${i === 2 ? "col-span-2" : ""}`}>
+            <Polaroid photo={photo} onClick={() => setLightbox(photo)} />
+          </div>
+        ))}
       </div>
 
       {lightbox && (

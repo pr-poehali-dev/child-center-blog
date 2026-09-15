@@ -9,8 +9,7 @@ import BlogHero from "./BlogHero";
 import BlogCategoryHeader, { getCategoryImage } from "./BlogCategoryHeader";
 import BlogCategoryMedallions from "./BlogCategoryMedallions";
 import PlateChecklists from "./PlateChecklists";
-import BlogSiteBridges from "@/components/BlogSiteBridges";
-import BlogCategoryBridge from "@/components/BlogCategoryBridge";
+import BlogDirectionPicker from "@/components/BlogDirectionPicker";
 import honeyStar from "@/assets/honey-star.png";
 
 export default function Blog() {
@@ -130,9 +129,10 @@ export default function Blog() {
             ))}
           </div>
         )}
-        <BlogCategoryBridge categoryId={activeTab} />
       </div>
-      <BlogSiteBridges />
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        <BlogDirectionPicker />
+      </div>
       <SubscribeForm />
     </div>
   );
