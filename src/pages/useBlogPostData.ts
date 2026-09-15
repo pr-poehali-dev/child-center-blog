@@ -201,20 +201,46 @@ export function useBlogPostData(id: string | undefined) {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // Цель "Статья дочитана до конца": засчитывается только если ОБА условия выполнены —
+  // пользователь проскроллил минимум 90% страницы И провёл на ней минимум 30 секунд.
+  // Так быстрые "долистывания" колёсиком мыши без реального чтения не попадают в цель.
   useEffect(() => {
     if (!post) return;
     let fired = false;
+    let scrolledEnough = false;
+    let timeEnough = false;
+    const startedAt = Date.now();
+    const MIN_TIME_MS = 30000;
+    const MIN_SCROLL_RATIO = 0.9;
+
+    const tryFire = () => {
+      if (fired || !scrolledEnough || !timeEnough) return;
+      fired = true;
+      trackGoal("read_end");
+    };
+
     const handleScroll = () => {
       if (fired) return;
       const scrolled = window.scrollY + window.innerHeight;
       const full = document.documentElement.scrollHeight;
-      if (full > 0 && scrolled / full >= 0.9) {
-        fired = true;
-        trackGoal("read_end");
+      if (full > 0 && scrolled / full >= MIN_SCROLL_RATIO) {
+        scrolledEnough = true;
+        tryFire();
       }
     };
+
+    const timer = setTimeout(() => {
+      if (Date.now() - startedAt >= MIN_TIME_MS) {
+        timeEnough = true;
+        tryFire();
+      }
+    }, MIN_TIME_MS);
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timer);
+    };
   }, [post]);
 
   return { post, loading };
