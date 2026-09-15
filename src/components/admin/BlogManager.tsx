@@ -113,6 +113,20 @@ export default function BlogManager() {
     }
   }, [showForm, form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker, checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings, recipeCalories, recipeProteins, recipeFats, recipeCarbs, recipeIngredients, recipeSteps, slug, seoTitle, seoDescription]);
 
+  // Предупреждение при попытке закрыть/обновить вкладку, пока есть незаконченный черновик статьи.
+  // Черновик всё равно не потеряется (он уже в localStorage), но предупреждение подстрахует
+  // от случайного закрытия, если пользователь ждёт публикации.
+  useEffect(() => {
+    const hasDraft = showForm && (form.title.trim() || form.content.trim());
+    if (!hasDraft) return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [showForm, form.title, form.content]);
+
   const clearDraft = () => {
     try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
     setDraftRestored(false);
