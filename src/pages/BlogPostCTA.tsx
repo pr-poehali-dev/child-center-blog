@@ -1,5 +1,5 @@
 import Icon from "@/components/ui/icon";
-import { withBlogUtm } from "@/lib/analytics";
+import { withBlogUtm, withDirectionUtm } from "@/lib/analytics";
 import BrandBridgeCard from "@/components/BrandBridgeCard";
 import WatercolorWave from "@/components/home/WatercolorWave";
 import honeyStar from "@/assets/honey-star.png";
@@ -52,12 +52,12 @@ export default function BlogPostCTA({ post, shareUrl }: BlogPostCTAProps) {
       {/* Мосты на сайты продлёнки и летнего клуба */}
       <div className="grid sm:grid-cols-2 gap-4 mb-6">
         <BrandBridgeCard
-          href={withBlogUtm("https://schooldolli.ru", "cta")}
+          href={withDirectionUtm("https://schooldolli.ru/", "prodlenka")}
           title="Записаться в продлёнку"
           subtitle="Присмотр, уроки и полдник каждый будний день"
         />
         <BrandBridgeCard
-          href={withBlogUtm("https://dolliklub.ru", "cta")}
+          href={withDirectionUtm("https://dolliklub.ru/", "camp")}
           title="Записаться в летний клуб"
           subtitle="Смены, программа и яркие каникулы для детей"
         />

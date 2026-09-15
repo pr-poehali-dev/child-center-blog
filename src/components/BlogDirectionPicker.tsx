@@ -11,13 +11,14 @@ interface Direction {
   campaign: string;
 }
 
+// Английский и логопед скрыты: отдельных страниц услуг на ribkadollilend.ru пока нет
+// (только /yasli/ и /podgotovka-k-shkole/ существуют). Как только страницы появятся —
+// вернуть строки с путями /angliyskiy/ и /logoped/ (или актуальными путями).
 const DIRECTIONS: Direction[] = [
-  { label: "Ясли", href: "https://ribkadollilend.ru", campaign: "yasli" },
-  { label: "Старшая группа и подготовка к школе", href: "https://ribkadollilend.ru", campaign: "school" },
-  { label: "Продлёнка", href: "https://schooldolli.ru", campaign: "afterschool" },
-  { label: "Английский", href: "https://ribkadollilend.ru", campaign: "english" },
-  { label: "Логопед", href: "https://ribkadollilend.ru", campaign: "logoped" },
-  { label: "Летний клуб", href: "https://dolliklub.ru", campaign: "summer" },
+  { label: "Ясли", href: "https://ribkadollilend.ru/yasli/", campaign: "yasli" },
+  { label: "Старшая группа и подготовка к школе", href: "https://ribkadollilend.ru/podgotovka-k-shkole/", campaign: "school" },
+  { label: "Продлёнка", href: "https://schooldolli.ru/", campaign: "prodlenka" },
+  { label: "Летний клуб", href: "https://dolliklub.ru/", campaign: "camp" },
 ];
 
 export default function BlogDirectionPicker() {

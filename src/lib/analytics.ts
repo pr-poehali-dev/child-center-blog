@@ -11,7 +11,8 @@ export function trackGoal(goal: string): void {
   }
 }
 
-/** Домены-мосты блога: каждому сайту центра соответствует своя UTM-кампания. */
+/** Домены-мосты блога: каждому сайту центра соответствует своя UTM-кампания (запасной вариант,
+ * если конкретное направление не передано явно через withDirectionUtm). */
 const UTM_CAMPAIGN_BY_HOST: Record<string, string> = {
   "ribkadollilend.ru": "blog_to_site",
   "www.ribkadollilend.ru": "blog_to_site",
@@ -42,8 +43,12 @@ export function withBlogUtm(url: string, medium: "internal" | "cta" = "internal"
 }
 
 /**
- * Добавляет к ссылке UTM-метки с явно заданной кампанией (для карточки выбора направления,
- * где кампания зависит от конкретного направления, а не от домена).
+ * Единая UTM-разметка для мостов блога на страницы услуг центра.
+ * utm_source=blog и utm_medium=cta неизменны для всех мостов, meняется только utm_campaign
+ * (по направлению — blog_to_<направление>). Путь страницы услуги обязателен: мостов
+ * на главную без пути больше нет.
+ * @param url — полный URL страницы услуги, включая путь (например https://ribkadollilend.ru/yasli/)
+ * @param direction — код направления для utm_campaign=blog_to_<direction> (напр. "yasli", "school", "prodlenka", "english", "logoped", "camp")
  */
 export function withDirectionUtm(url: string, direction: string): string {
   try {
