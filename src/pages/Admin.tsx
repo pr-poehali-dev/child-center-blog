@@ -9,13 +9,28 @@ import QAManager from "@/components/admin/QAManager";
 import SubscribersManager from "@/components/admin/SubscribersManager";
 import PlateManager from "@/components/admin/PlateManager";
 
+const LAST_TAB_KEY = "admin_last_tab";
+type AdminTab = "bookings" | "blog" | "reviews" | "qa" | "subscribers" | "plate";
+const VALID_TABS: AdminTab[] = ["bookings", "blog", "reviews", "qa", "subscribers", "plate"];
+
 export default function Admin() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [updating, setUpdating] = useState<number | null>(null);
-  const [tab, setTab] = useState<"bookings" | "blog" | "reviews" | "qa" | "subscribers" | "plate">("bookings");
+  // Запоминаем последнюю открытую вкладку — если браузер выгрузит вкладку из памяти
+  // (например, при переключении в другое окно для копирования текста статьи) и её придётся
+  // загрузить заново, админка откроется там же, где остановились, а не на "Заявках".
+  const [tab, setTab] = useState<AdminTab>(() => {
+    const saved = localStorage.getItem(LAST_TAB_KEY) as AdminTab | null;
+    return saved && VALID_TABS.includes(saved) ? saved : "bookings";
+  });
+
+  const changeTab = (t: AdminTab) => {
+    setTab(t);
+    try { localStorage.setItem(LAST_TAB_KEY, t); } catch { /* ignore */ }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -90,7 +105,7 @@ export default function Admin() {
           ].map(t => (
             <button
               key={t.key}
-              onClick={() => setTab(t.key as "bookings" | "blog" | "reviews" | "qa" | "subscribers" | "plate")}
+              onClick={() => changeTab(t.key as AdminTab)}
               className={`flex items-center gap-1.5 px-5 py-3 text-sm font-bold border-b-2 transition-colors ${
                 tab === t.key
                   ? "border-orange-400 text-orange-500"
