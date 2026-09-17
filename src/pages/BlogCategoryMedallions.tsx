@@ -9,6 +9,41 @@ interface BlogCategoryMedallionsProps {
 
 const QA_IMAGE = "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/ea37ac57-0151-42c4-96c8-09560aa13604.png";
 
+const BASE_SHADOW = "0 2px 6px rgba(23,54,74,0.10), 0 8px 20px rgba(23,54,74,0.12)";
+
+function Medallion({ image, label, active }: { image?: string; label: string; active: boolean }) {
+  const ringWidth = active ? 3 : 2;
+  return (
+    <span
+      className="relative rounded-full flex-shrink-0 flex items-center justify-center transition-all duration-200 group-hover:-translate-y-0.5"
+      style={{
+        width: 80,
+        height: 80,
+        boxShadow: active
+          ? `0 0 0 ${ringWidth}px #D9A441, 0 0 10px 2px rgba(217,164,65,0.45), ${BASE_SHADOW}`
+          : `0 0 0 ${ringWidth}px #D9A441, ${BASE_SHADOW}`,
+      }}
+    >
+      <span
+        className="relative block rounded-full bg-white overflow-hidden"
+        style={{ width: 74, height: 74, padding: 7 }}
+      >
+        <span className="relative block w-full h-full rounded-full overflow-hidden">
+          {image ? (
+            <img src={image} alt={label} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full bg-[#FBF6EE]" />
+          )}
+          <span
+            className="pointer-events-none absolute inset-0 rounded-full"
+            style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 35%)" }}
+          />
+        </span>
+      </span>
+    </span>
+  );
+}
+
 export default function BlogCategoryMedallions({ activeTab, onSelect, onQaClick }: BlogCategoryMedallionsProps) {
   const items = CATEGORIES.map(c => ({ id: c.id, label: c.shortLabel || c.label, image: getCategoryImage(c.id) }));
 
@@ -29,30 +64,10 @@ export default function BlogCategoryMedallions({ activeTab, onSelect, onQaClick 
             <button
               key={item.id}
               onClick={() => onSelect(item.id)}
-              className="flex flex-col items-center gap-1.5 shrink-0"
-              style={{ width: 78 }}
+              className="flex flex-col items-center gap-1.5 shrink-0 group"
+              style={{ width: 80 }}
             >
-              <span
-                className="rounded-full overflow-hidden flex-shrink-0 transition-shadow"
-                style={{
-                  width: 76,
-                  height: 76,
-                  boxShadow: active
-                    ? "inset 0 0 0 3px #D9A441, 0 4px 12px rgba(217,164,65,0.35)"
-                    : "inset 0 0 0 2px rgba(217,164,65,0.35)",
-                }}
-              >
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={item.label}
-                    className="w-full h-full object-cover"
-                    style={{ filter: "saturate(1.35) contrast(1.08)" }}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-[#FBF6EE]" />
-                )}
-              </span>
+              <Medallion image={item.image} label={item.label} active={active} />
               <span
                 className="font-playfair font-bold text-center leading-tight flex items-center justify-center"
                 style={{ fontSize: 11.5, color: "#17364A", height: 28, borderBottom: active ? "2px solid #D9A441" : "2px solid transparent" }}
@@ -62,13 +77,8 @@ export default function BlogCategoryMedallions({ activeTab, onSelect, onQaClick 
             </button>
           );
         })}
-        <button onClick={onQaClick} className="flex flex-col items-center gap-1.5 shrink-0" style={{ width: 78 }}>
-          <span
-            className="rounded-full overflow-hidden flex-shrink-0"
-            style={{ width: 76, height: 76, boxShadow: "inset 0 0 0 2px rgba(217,164,65,0.35)" }}
-          >
-            <img src={QA_IMAGE} alt="Вопрос-ответ" className="w-full h-full object-cover" style={{ filter: "saturate(1.35) contrast(1.08)" }} />
-          </span>
+        <button onClick={onQaClick} className="flex flex-col items-center gap-1.5 shrink-0 group" style={{ width: 80 }}>
+          <Medallion image={QA_IMAGE} label="Вопрос-ответ" active={false} />
           <span className="font-playfair font-bold text-center leading-tight flex items-center justify-center" style={{ fontSize: 11.5, color: "#17364A", height: 28 }}>
             Вопрос-ответ
           </span>
