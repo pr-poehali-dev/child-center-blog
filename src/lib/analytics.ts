@@ -12,8 +12,7 @@ export function trackGoal(goal: string, params?: Record<string, string>): void {
   }
 }
 
-/** Домены-мосты блога: каждому сайту центра соответствует своя UTM-кампания (запасной вариант,
- * если конкретное направление не передано явно через withDirectionUtm). */
+/** Домены-мосты блога: каждому сайту центра соответствует своя UTM-кампания. */
 const UTM_CAMPAIGN_BY_HOST: Record<string, string> = {
   "ribkadollilend.ru": "blog_to_site",
   "www.ribkadollilend.ru": "blog_to_site",
@@ -37,26 +36,6 @@ export function withBlogUtm(url: string, medium: "internal" | "cta" = "internal"
     parsed.searchParams.set("utm_source", "blog");
     parsed.searchParams.set("utm_medium", medium);
     parsed.searchParams.set("utm_campaign", campaign);
-    return parsed.toString();
-  } catch {
-    return url;
-  }
-}
-
-/**
- * Единая UTM-разметка для мостов блога на страницы услуг центра.
- * utm_source=blog и utm_medium=cta неизменны для всех мостов, meняется только utm_campaign
- * (по направлению — blog_to_<направление>). Путь страницы услуги обязателен: мостов
- * на главную без пути больше нет.
- * @param url — полный URL страницы услуги, включая путь (например https://ribkadollilend.ru/yasli/)
- * @param direction — код направления для utm_campaign=blog_to_<direction> (напр. "yasli", "school", "prodlenka", "english", "logoped", "camp")
- */
-export function withDirectionUtm(url: string, direction: string): string {
-  try {
-    const parsed = new URL(url, window.location.origin);
-    parsed.searchParams.set("utm_source", "blog");
-    parsed.searchParams.set("utm_medium", "cta");
-    parsed.searchParams.set("utm_campaign", `blog_to_${direction}`);
     return parsed.toString();
   } catch {
     return url;
