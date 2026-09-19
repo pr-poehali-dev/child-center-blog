@@ -2,12 +2,13 @@ const METRIKA_ID = 108285412;
 
 /**
  * Отправляет цель в Яндекс.Метрику, если счётчик успел загрузиться.
+ * @param params — дополнительные параметры визита (передаются в reachGoal третьим аргументом).
  */
-export function trackGoal(goal: string): void {
+export function trackGoal(goal: string, params?: Record<string, string>): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (typeof (window as any).ym === "function") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).ym(METRIKA_ID, "reachGoal", goal);
+    (window as any).ym(METRIKA_ID, "reachGoal", goal, params);
   }
 }
 

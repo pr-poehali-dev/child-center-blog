@@ -29,6 +29,7 @@ export function SubscribeForm() {
       if (res.status === 409) { setStatus("exists"); return; }
       if (!res.ok) { setStatus("error"); return; }
       setStatus("success");
+      trackGoal("subscribe_submit");
       setName("");
       setEmail("");
     } catch {
