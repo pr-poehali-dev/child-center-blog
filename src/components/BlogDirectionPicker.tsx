@@ -4,25 +4,7 @@ import WatercolorWave from "@/components/home/WatercolorWave";
 import honeyStar from "@/assets/honey-star.png";
 import { trackGoal } from "@/lib/analytics";
 import { MAX_LINK } from "@/pages/blog-types";
-
-interface Direction {
-  label: string;
-  href: string;
-  direction: string;
-}
-
-// Ссылки-мосты на разделы основного сайта ribkadollilend.ru. UTM-метки (utm_source=blog,
-// utm_medium=bridge, utm_content=<direction>) уже зашиты в href — не пересобирать через
-// withBlogUtm, чтобы не разъехались с тем, что размечено на стороне сайта.
-// direction — значение параметра "direction" в цели Метрики direction_click (совпадает с utm_content).
-const DIRECTIONS: Direction[] = [
-  { label: "Пробное занятие и экскурсия", href: "https://ribkadollilend.ru/?utm_source=blog&utm_medium=bridge&utm_content=tour#tour", direction: "tour" },
-  { label: "Ясли", href: "https://ribkadollilend.ru/yasli/?utm_source=blog&utm_medium=bridge&utm_content=yasli", direction: "yasli" },
-  { label: "4-5 лет: Фундамент", href: "https://ribkadollilend.ru/podgotovka-k-shkole/?utm_source=blog&utm_medium=bridge&utm_content=foundation#4-5", direction: "school" },
-  { label: "5-7 лет: Предшкольная", href: "https://ribkadollilend.ru/podgotovka-k-shkole/?utm_source=blog&utm_medium=bridge&utm_content=school#5-7", direction: "school" },
-  { label: "Продлёнка", href: "https://ribkadollilend.ru/prodlenka/?utm_source=blog&utm_medium=bridge&utm_content=prodlenka", direction: "prodlenka" },
-  { label: "Летний клуб", href: "https://ribkadollilend.ru/letniy-klub/?utm_source=blog&utm_medium=bridge&utm_content=letniy", direction: "letniy" },
-];
+import { DIRECTION_PICKER_LINKS } from "@/content/links";
 
 export default function BlogDirectionPicker() {
   const [open, setOpen] = useState(false);
@@ -49,7 +31,7 @@ export default function BlogDirectionPicker() {
 
             {open && (
               <div className="mt-3 bg-white rounded-xl border overflow-hidden" style={{ borderColor: "#EADFC8" }}>
-                {DIRECTIONS.map((d, i) => (
+                {DIRECTION_PICKER_LINKS.map((d, i) => (
                   <a
                     key={d.label}
                     href={d.href}
