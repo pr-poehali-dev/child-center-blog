@@ -5,10 +5,10 @@ import ScrollReveal from "./ScrollReveal";
 
 const POPULAR_POSTS = [
   {
-    id: 63, slug: "", title: "Лето-2026 в «Рыбке Долли»: больше 100 детей, море и мастер-классы",
-    category: "summer", emoji: "☀️", tag: "bg-yellow-100 text-yellow-700", label: "Летний клуб",
-    date: "5 сентября", readMin: 4,
-    image: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/blog/2db05ee4-9993-4866-ad00-6a5448ca2dd2.jpg",
+    id: 69, slug: "diagnostika-gotovnosti-k-shkole", title: "Диагностика готовности: 40 минут за четыре минуты",
+    category: "life", emoji: "🌈", tag: "bg-rose-100 text-rose-700", label: "Наша жизнь на ладони",
+    date: "20 сентября", readMin: 2,
+    image: "/blog-covers/diagnostika-preview.jpg",
   },
   {
     id: 64, slug: "", title: "Продленка снова полная — и к нам вернулись пятиклассники",
@@ -29,10 +29,10 @@ const POPULAR_POSTS = [
     image: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/blog/e4e0c0ba-8e5a-40e2-be58-0cc79a205156.jpg",
   },
   {
-    id: 61, slug: "", title: "Мамина забота в каждом дне: открываем набор в ясельную группу!",
-    category: "tips", emoji: "🎓", tag: "bg-amber-100 text-amber-700", label: "Советы от педагога",
-    date: "22 июля", readMin: 2,
-    image: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/blog/96236e00-be16-4f66-b38b-681f1e6f81ca.jpg",
+    id: 71, slug: "angliyskiy-vo-vtorom-klasse", title: "Месяц аудирования — и читайте с переводом: почему английский во втором классе начинается со слёз",
+    category: "life", emoji: "🌈", tag: "bg-rose-100 text-rose-700", label: "Наша жизнь на ладони",
+    date: "20 сентября", readMin: 3,
+    image: "https://cdn.poehali.dev/projects/891591f8-ea8a-4dbb-94f9-151d66af9489/bucket/blog/e3114f6f-4afc-4338-bf53-808980891ed6.jpg",
   },
   {
     id: 67, slug: "morkovnye-maffiny-bgbk", title: "Морковные маффины без сахара (БГБК)",
