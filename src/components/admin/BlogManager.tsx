@@ -302,6 +302,9 @@ export default function BlogManager() {
       if (!res.ok) {
         if (res.status === 409) {
           alert("Такой адрес статьи (slug) уже занят другой статьёй. Измените slug и попробуйте снова.");
+        } else if (res.status === 400) {
+          const data = await res.json().catch(() => null);
+          alert(data?.error || "Проверьте заполненные поля и попробуйте ещё раз.");
         } else {
           alert("Ошибка при сохранении. Попробуйте ещё раз.");
         }

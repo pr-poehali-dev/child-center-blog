@@ -118,6 +118,7 @@ export default function PostForm({
             <input
               ref={titleRef}
               required
+              maxLength={500}
               className="w-full border border-gray-200 rounded-2xl px-4 py-3 pr-11 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
               placeholder="О чём этот пост?"
               value={form.title}

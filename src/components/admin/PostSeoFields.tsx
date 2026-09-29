@@ -34,6 +34,7 @@ export default function PostSeoFields({
           <span className="text-xs text-gray-400 shrink-0">/blog/</span>
           <input
             type="text"
+            maxLength={255}
             value={slug}
             onChange={e => setSlug(slugify(e.target.value))}
             placeholder="adaptaciya"

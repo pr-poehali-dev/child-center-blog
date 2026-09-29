@@ -148,6 +148,25 @@ def escape(val: str) -> str:
     return val.replace("'", "''")
 
 
+FIELD_LIMITS = {
+    'category': 50,
+    'title': 500,
+    'teacher_name': 255,
+    'slug': 255,
+    'seo_title': 255,
+    'seo_description': 500,
+}
+
+
+def validate_lengths(body: dict) -> str:
+    """Проверяет поля на превышение лимита длины колонки в БД. Возвращает текст ошибки или ''."""
+    for field, limit in FIELD_LIMITS.items():
+        value = body.get(field) or ''
+        if len(value) > limit:
+            return f'Поле "{field}" слишком длинное: {len(value)} символов, а максимум {limit}. Сократите текст.'
+    return ''
+
+
 def handler(event: dict, context) -> dict:
     """Управление постами блога: GET — список, POST — создать, DELETE — удалить"""
 
@@ -226,6 +245,10 @@ def handler(event: dict, context) -> dict:
             cur.close(); conn.close()
             return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
+        length_error = validate_lengths(body)
+        if length_error:
+            cur.close(); conn.close()
+            return {'statusCode': 400, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'error': length_error}, ensure_ascii=False)}
         category = escape(body.get('category', ''))
         title = escape(body.get('title', ''))
         content = escape(body.get('content', ''))
@@ -292,6 +315,10 @@ def handler(event: dict, context) -> dict:
             cur.close(); conn.close()
             return {'statusCode': 401, 'headers': CORS, 'body': json.dumps({'error': 'Unauthorized'})}
         body = json.loads(event.get('body') or '{}')
+        length_error = validate_lengths(body)
+        if length_error:
+            cur.close(); conn.close()
+            return {'statusCode': 400, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'error': length_error}, ensure_ascii=False)}
         post_id = int(body.get('id', 0))
         category = escape(body.get('category', ''))
         title = escape(body.get('title', ''))

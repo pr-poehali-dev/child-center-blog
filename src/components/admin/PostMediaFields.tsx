@@ -99,6 +99,7 @@ export default function PostMediaFields({
           <div className="flex-1">
             <input
               type="text"
+              maxLength={255}
               className="w-full border border-gray-200 rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
               placeholder="Имя автора (необязательно)"
               value={teacherName}
