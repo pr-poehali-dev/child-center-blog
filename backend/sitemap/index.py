@@ -88,7 +88,7 @@ def handler(event: dict, context) -> dict:
 
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     cur = conn.cursor()
-    cur.execute(f"SELECT id, created_at, slug FROM {SCHEMA}.blog_posts ORDER BY id")
+    cur.execute(f"SELECT id, created_at, slug FROM {SCHEMA}.blog_posts WHERE status = 'published' ORDER BY id")
     posts = [(row[0], row[1].strftime('%Y-%m-%d'), row[2] or '') for row in cur.fetchall()]
     cur.close()
     conn.close()

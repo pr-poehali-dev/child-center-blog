@@ -10,15 +10,19 @@ interface PostsListProps {
   deleting: number | null;
   onEdit: (post: Post) => void;
   onDelete: (id: number) => void;
+  onPublish: (post: Post) => void;
+  publishing: number | null;
 }
 
 export default function PostsList({
-  posts, loading, activeTab, setActiveTab, deleting, onEdit, onDelete,
+  posts, loading, activeTab, setActiveTab, deleting, onEdit, onDelete, onPublish, publishing,
 }: PostsListProps) {
   const [copied, setCopied] = useState<number | null>(null);
 
-  const copyLink = (postId: number) => {
-    const url = `${window.location.origin}/blog/${postId}`;
+  const copyLink = (postId: number, isDraft: boolean) => {
+    const url = isDraft
+      ? `${window.location.origin}/admin?post=${postId}`
+      : `${window.location.origin}/blog/${postId}`;
     navigator.clipboard.writeText(url);
     setCopied(postId);
     setTimeout(() => setCopied(null), 2000);
@@ -65,7 +69,12 @@ export default function PostsList({
             <div key={post.id} className="bg-white rounded-2xl border border-orange-100 p-5 hover:shadow-sm transition-all">
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
-                  <div className="font-black text-gray-800 text-sm mb-1 leading-snug">{post.title}</div>
+                  <div className="font-black text-gray-800 text-sm mb-1 leading-snug">
+                    {post.status === "draft" && (
+                      <span className="inline-block mr-2 align-middle text-[11px] font-bold px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">Черновик</span>
+                    )}
+                    {post.title}
+                  </div>
                   {post.content && (
                     <div className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-2">{post.content}</div>
                   )}
@@ -90,10 +99,20 @@ export default function PostsList({
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  {post.status === "draft" && (
+                    <button
+                      onClick={() => onPublish(post)}
+                      disabled={publishing === post.id}
+                      className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 disabled:opacity-60 text-white text-xs font-bold px-3 py-1.5 rounded-full transition-colors"
+                    >
+                      <Icon name={publishing === post.id ? "Loader2" : "Send"} size={13} className={publishing === post.id ? "animate-spin" : ""} />
+                      Опубликовать
+                    </button>
+                  )}
                   <button
-                    onClick={() => copyLink(post.id)}
+                    onClick={() => copyLink(post.id, post.status === "draft")}
                     className={`transition-colors ${copied === post.id ? "text-green-500" : "text-gray-300 hover:text-blue-400"}`}
-                    title="Скопировать ссылку для рекламы"
+                    title={post.status === "draft" ? "Скопировать ссылку на черновик в админке" : "Скопировать ссылку для рекламы"}
                   >
                     <Icon name={copied === post.id ? "Check" : "Link"} size={16} />
                   </button>

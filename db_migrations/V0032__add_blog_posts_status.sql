@@ -1,0 +1,2 @@
+ALTER TABLE t_p99892216_child_center_blog.blog_posts ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'published';
+CREATE INDEX IF NOT EXISTS idx_blog_posts_status ON t_p99892216_child_center_blog.blog_posts (status);

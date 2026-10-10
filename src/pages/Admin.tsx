@@ -23,6 +23,7 @@ export default function Admin() {
   // (например, при переключении в другое окно для копирования текста статьи) и её придётся
   // загрузить заново, админка откроется там же, где остановились, а не на "Заявках".
   const [tab, setTab] = useState<AdminTab>(() => {
+    if (new URLSearchParams(window.location.search).get("post")) return "blog";
     const saved = localStorage.getItem(LAST_TAB_KEY) as AdminTab | null;
     return saved && VALID_TABS.includes(saved) ? saved : "bookings";
   });

@@ -75,4 +75,5 @@ export interface Post {
   slug?: string;
   seo_title?: string;
   seo_description?: string;
+  status?: "draft" | "published";
 }

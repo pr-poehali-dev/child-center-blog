@@ -185,10 +185,12 @@ def handler(event: dict, context) -> dict:
         category = params.get('category')
 
         RECIPE_FIELDS = "recipe_time, recipe_servings, recipe_calories, recipe_proteins, recipe_fats, recipe_carbs, recipe_ingredients, recipe_steps"
-        SEO_FIELDS = "slug, seo_title, seo_description"
+        SEO_FIELDS = "slug, seo_title, seo_description, status"
+        is_admin = check_auth(event)
+        vis = "" if is_admin else " AND status = 'published'"
 
         if post_id or slug:
-            where_clause = f"id = {int(post_id)}" if post_id else f"slug = '{escape(slug)}'"
+            where_clause = (f"id = {int(post_id)}" if post_id else f"slug = '{escape(slug)}'") + vis
             cur.execute(
                 f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS}, {SEO_FIELDS} FROM {SCHEMA}.blog_posts WHERE {where_clause}"
             )
@@ -207,18 +209,18 @@ def handler(event: dict, context) -> dict:
                 'recipe_calories': row[14] or '', 'recipe_proteins': row[15] or '',
                 'recipe_fats': row[16] or '', 'recipe_carbs': row[17] or '',
                 'recipe_ingredients': row[18] or '', 'recipe_steps': row[19] or '',
-                'slug': row[20] or '', 'seo_title': row[21] or '', 'seo_description': row[22] or '',
+                'slug': row[20] or '', 'seo_title': row[21] or '', 'seo_description': row[22] or '', 'status': row[23],
             }
             return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'post': post}, ensure_ascii=False)}
 
         if category and category != 'all':
             cat_escaped = escape(category)
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS}, {SEO_FIELDS} FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}' ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS}, {SEO_FIELDS} FROM {SCHEMA}.blog_posts WHERE category = '{cat_escaped}'{vis} ORDER BY created_at DESC"
             )
         else:
             cur.execute(
-                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS}, {SEO_FIELDS} FROM {SCHEMA}.blog_posts ORDER BY created_at DESC"
+                f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, {RECIPE_FIELDS}, {SEO_FIELDS} FROM {SCHEMA}.blog_posts WHERE 1=1{vis} ORDER BY created_at DESC"
             )
         rows = cur.fetchall()
         cur.close()
@@ -234,7 +236,7 @@ def handler(event: dict, context) -> dict:
                 'recipe_calories': r[14] or '', 'recipe_proteins': r[15] or '',
                 'recipe_fats': r[16] or '', 'recipe_carbs': r[17] or '',
                 'recipe_ingredients': r[18] or '', 'recipe_steps': r[19] or '',
-                'slug': r[20] or '', 'seo_title': r[21] or '', 'seo_description': r[22] or '',
+                'slug': r[20] or '', 'seo_title': r[21] or '', 'seo_description': r[22] or '', 'status': r[23],
             }
             for r in rows
         ]
@@ -271,6 +273,7 @@ def handler(event: dict, context) -> dict:
         slug_sql = f"'{escape(slug_raw)}'" if slug_raw else 'NULL'
         seo_title = escape(body.get('seo_title', ''))
         seo_description = escape(body.get('seo_description', ''))
+        status = 'draft' if body.get('status') == 'draft' else 'published'
 
         s3 = get_s3()
         uploaded = []
@@ -296,7 +299,7 @@ def handler(event: dict, context) -> dict:
 
         try:
             cur.execute(
-                f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, recipe_time, recipe_servings, recipe_calories, recipe_proteins, recipe_fats, recipe_carbs, recipe_ingredients, recipe_steps, slug, seo_title, seo_description) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}', '{sticker}', '{checklist_url}', '{cta_text}', '{cta_url}', '{recipe_time}', '{recipe_servings}', '{recipe_calories}', '{recipe_proteins}', '{recipe_fats}', '{recipe_carbs}', '{recipe_ingredients}', '{recipe_steps}', {slug_sql}, '{seo_title}', '{seo_description}') RETURNING id, created_at"
+                f"INSERT INTO {SCHEMA}.blog_posts (category, title, content, media, teacher_photo, teacher_name, sticker, checklist_url, cta_text, cta_url, recipe_time, recipe_servings, recipe_calories, recipe_proteins, recipe_fats, recipe_carbs, recipe_ingredients, recipe_steps, slug, seo_title, seo_description, status) VALUES ('{category}', '{title}', '{content}', '{media_json}', '{teacher_photo_escaped}', '{teacher_name}', '{sticker}', '{checklist_url}', '{cta_text}', '{cta_url}', '{recipe_time}', '{recipe_servings}', '{recipe_calories}', '{recipe_proteins}', '{recipe_fats}', '{recipe_carbs}', '{recipe_ingredients}', '{recipe_steps}', {slug_sql}, '{seo_title}', '{seo_description}', '{status}') RETURNING id, created_at"
             )
         except psycopg2.errors.UniqueViolation:
             conn.rollback()
@@ -306,9 +309,10 @@ def handler(event: dict, context) -> dict:
         conn.commit()
         cur.close()
         conn.close()
-        ping_yandex(row[0])
-        notify_subscribers(row[0], body.get('title', ''), body.get('content', ''), body.get('category', ''), body.get('teacher_name', ''))
-        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat()})}
+        if status == 'published':
+            ping_yandex(row[0])
+            notify_subscribers(row[0], body.get('title', ''), body.get('content', ''), body.get('category', ''), body.get('teacher_name', ''))
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'id': row[0], 'created_at': row[1].isoformat(), 'status': status})}
 
     if method == 'PUT':
         if not check_auth(event):
@@ -343,6 +347,15 @@ def handler(event: dict, context) -> dict:
         seo_title = escape(body.get('seo_title', ''))
         seo_description = escape(body.get('seo_description', ''))
 
+        cur.execute(f"SELECT status FROM {SCHEMA}.blog_posts WHERE id={post_id}")
+        prev = cur.fetchone()
+        if not prev:
+            cur.close(); conn.close()
+            return {'statusCode': 404, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'error': 'Not found'})}
+        prev_status = prev[0]
+        req_status = body.get('status')
+        status = req_status if req_status in ('draft', 'published') else prev_status
+
         s3 = get_s3()
         uploaded = []
         for item in media_list:
@@ -367,7 +380,7 @@ def handler(event: dict, context) -> dict:
 
         try:
             cur.execute(
-                f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}', sticker='{sticker}', checklist_url='{checklist_url}', cta_text='{cta_text}', cta_url='{cta_url}', recipe_time='{recipe_time}', recipe_servings='{recipe_servings}', recipe_calories='{recipe_calories}', recipe_proteins='{recipe_proteins}', recipe_fats='{recipe_fats}', recipe_carbs='{recipe_carbs}', recipe_ingredients='{recipe_ingredients}', recipe_steps='{recipe_steps}', slug={slug_sql}, seo_title='{seo_title}', seo_description='{seo_description}' WHERE id={post_id}"
+                f"UPDATE {SCHEMA}.blog_posts SET category='{category}', title='{title}', content='{content}', media='{media_json}', teacher_photo='{teacher_photo_escaped}', teacher_name='{teacher_name}', sticker='{sticker}', checklist_url='{checklist_url}', cta_text='{cta_text}', cta_url='{cta_url}', recipe_time='{recipe_time}', recipe_servings='{recipe_servings}', recipe_calories='{recipe_calories}', recipe_proteins='{recipe_proteins}', recipe_fats='{recipe_fats}', recipe_carbs='{recipe_carbs}', recipe_ingredients='{recipe_ingredients}', recipe_steps='{recipe_steps}', slug={slug_sql}, seo_title='{seo_title}', seo_description='{seo_description}', status='{status}' WHERE id={post_id}"
             )
         except psycopg2.errors.UniqueViolation:
             conn.rollback()
@@ -376,7 +389,10 @@ def handler(event: dict, context) -> dict:
         conn.commit()
         cur.close()
         conn.close()
-        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True})}
+        if prev_status == 'draft' and status == 'published':
+            ping_yandex(post_id)
+            notify_subscribers(post_id, body.get('title', ''), body.get('content', ''), body.get('category', ''), body.get('teacher_name', ''))
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'status': status})}
 
     if method == 'DELETE':
         if not check_auth(event):
@@ -388,7 +404,10 @@ def handler(event: dict, context) -> dict:
         conn.commit()
         cur.close()
         conn.close()
-        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True})}
+        if prev_status == 'draft' and status == 'published':
+            ping_yandex(post_id)
+            notify_subscribers(post_id, body.get('title', ''), body.get('content', ''), body.get('category', ''), body.get('teacher_name', ''))
+        return {'statusCode': 200, 'headers': {**CORS, 'Content-Type': 'application/json'}, 'body': json.dumps({'ok': True, 'status': status})}
 
     cur.close()
     conn.close()

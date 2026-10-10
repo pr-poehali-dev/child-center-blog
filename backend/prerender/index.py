@@ -266,7 +266,7 @@ def handler(event: dict, context) -> dict:
     cur = conn.cursor()
     cur.execute(
         f"SELECT id, category, title, content, media, created_at, teacher_photo, teacher_name, sticker, slug, seo_title, seo_description "
-        f"FROM {SCHEMA}.blog_posts WHERE {where_clause}"
+        f"FROM {SCHEMA}.blog_posts WHERE ({where_clause}) AND status = 'published'"
     )
     row = cur.fetchone()
     cur.close()

@@ -1,0 +1,5 @@
+{"tests": [
+  {"name": "GET authors without key", "method": "GET", "path": "/", "expectedStatus": 401},
+  {"name": "POST article without key", "method": "POST", "path": "/", "body": {"title": "t"}, "expectedStatus": 401},
+  {"name": "OPTIONS preflight", "method": "OPTIONS", "path": "/", "expectedStatus": 200}
+]}
