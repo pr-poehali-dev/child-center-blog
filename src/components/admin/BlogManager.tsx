@@ -1,152 +1,53 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
-import { BLOG_API, UPLOAD_API, TOKEN_KEY, STICKERS_API, Post, MediaItem } from "./constants";
+import { BLOG_API, TOKEN_KEY, MediaItem } from "./constants";
 import PostForm from "./PostForm";
 import PostsList from "./PostsList";
 import StickersPanel from "./StickersPanel";
-
-const DRAFT_KEY = "blog_post_draft";
-
-interface Draft {
-  form: { category: string; title: string; content: string };
-  mediaItems: MediaItem[];
-  teacherPhoto: string; teacherName: string; videoUrl: string; postSticker: string;
-  checklistUrl: string; ctaText: string; ctaUrl: string;
-  recipeTime: string; recipeServings: string; recipeCalories: string; recipeProteins: string;
-  recipeFats: string; recipeCarbs: string; recipeIngredients: string; recipeSteps: string;
-  slug: string; seoTitle: string; seoDescription: string;
-}
+import useBlogPostForm from "./useBlogPostForm";
+import useBlogPosts from "./useBlogPosts";
+import useBlogStickers from "./useBlogStickers";
 
 export default function BlogManager() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("tips");
-  const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ category: "tips", title: "", content: "" });
-  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
-  const [uploadingMedia, setUploadingMedia] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState<number | null>(null);
-  const [publishing, setPublishing] = useState<number | null>(null);
-  const [showEmoji, setShowEmoji] = useState(false);
-  const [emojiTarget, setEmojiTarget] = useState<"title" | "content">("content");
-  const [teacherPhoto, setTeacherPhoto] = useState<string>("");
-  const [teacherName, setTeacherName] = useState<string>("");
-  const [videoUrl, setVideoUrl] = useState<string>("");
-  const [postSticker, setPostSticker] = useState<string>("");
-  const [checklistUrl, setChecklistUrl] = useState<string>("");
-  const [ctaText, setCtaText] = useState<string>("");
-  const [ctaUrl, setCtaUrl] = useState<string>("");
-  const [recipeTime, setRecipeTime] = useState<string>("");
-  const [recipeServings, setRecipeServings] = useState<string>("");
-  const [recipeCalories, setRecipeCalories] = useState<string>("");
-  const [recipeProteins, setRecipeProteins] = useState<string>("");
-  const [recipeFats, setRecipeFats] = useState<string>("");
-  const [recipeCarbs, setRecipeCarbs] = useState<string>("");
-  const [recipeIngredients, setRecipeIngredients] = useState<string>("");
-  const [recipeSteps, setRecipeSteps] = useState<string>("");
-  const [slug, setSlug] = useState<string>("");
-  const [seoTitle, setSeoTitle] = useState<string>("");
-  const [seoDescription, setSeoDescription] = useState<string>("");
-  const [editingPost, setEditingPost] = useState<Post | null>(null);
   const [managerTab, setManagerTab] = useState<"posts" | "stickers">("posts");
-  const [stickers, setStickers] = useState<Record<string, string>>({});
-  const [stickerEdits, setStickerEdits] = useState<Record<string, string>>({});
-  const [savingSticker, setSavingSticker] = useState<string | null>(null);
-  const [descriptions, setDescriptions] = useState<Record<string, string>>({});
-  const [descriptionEdits, setDescriptionEdits] = useState<Record<string, string>>({});
-  const [savingDescription, setSavingDescription] = useState<string | null>(null);
-  const [draftRestored, setDraftRestored] = useState(false);
-  const draftLoadedRef = useRef(false);
 
-  // Восстановление черновика поста при открытии (например, после случайной перезагрузки страницы)
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (raw) {
-        const d: Draft = JSON.parse(raw);
-        if (d.form && (d.form.title || d.form.content)) {
-          setForm(d.form);
-          setMediaItems(d.mediaItems || []);
-          setTeacherPhoto(d.teacherPhoto || "");
-          setTeacherName(d.teacherName || "");
-          setVideoUrl(d.videoUrl || "");
-          setPostSticker(d.postSticker || "");
-          setChecklistUrl(d.checklistUrl || "");
-          setCtaText(d.ctaText || "");
-          setCtaUrl(d.ctaUrl || "");
-          setRecipeTime(d.recipeTime || "");
-          setRecipeServings(d.recipeServings || "");
-          setRecipeCalories(d.recipeCalories || "");
-          setRecipeProteins(d.recipeProteins || "");
-          setRecipeFats(d.recipeFats || "");
-          setRecipeCarbs(d.recipeCarbs || "");
-          setRecipeIngredients(d.recipeIngredients || "");
-          setRecipeSteps(d.recipeSteps || "");
-          setSlug(d.slug || "");
-          setSeoTitle(d.seoTitle || "");
-          setSeoDescription(d.seoDescription || "");
-          setShowForm(true);
-          setDraftRestored(true);
-        }
-      }
-    } catch {
-      /* ignore corrupted draft */
-    } finally {
-      draftLoadedRef.current = true;
-    }
-  }, []);
+  const {
+    showForm, setShowForm,
+    form, setForm,
+    mediaItems, setMediaItems,
+    uploadingMedia, setUploadingMedia,
+    saving, setSaving,
+    showEmoji, setShowEmoji,
+    emojiTarget, setEmojiTarget,
+    teacherPhoto, setTeacherPhoto,
+    teacherName, setTeacherName,
+    videoUrl, setVideoUrl,
+    postSticker, setPostSticker,
+    checklistUrl, setChecklistUrl,
+    ctaText, setCtaText,
+    ctaUrl, setCtaUrl,
+    recipeTime, setRecipeTime,
+    recipeServings, setRecipeServings,
+    recipeCalories, setRecipeCalories,
+    recipeProteins, setRecipeProteins,
+    recipeFats, setRecipeFats,
+    recipeCarbs, setRecipeCarbs,
+    recipeIngredients, setRecipeIngredients,
+    recipeSteps, setRecipeSteps,
+    slug, setSlug,
+    seoTitle, setSeoTitle,
+    seoDescription, setSeoDescription,
+    editingPost,
+    draftRestored, setDraftRestored,
+    resetForm, startEdit,
+    compressImage, uploadToS3,
+  } = useBlogPostForm();
 
-  // Автосохранение черновика поста, чтобы текст не терялся при случайной перезагрузке страницы
-  useEffect(() => {
-    if (!draftLoadedRef.current) return;
-    if (!showForm) return;
-    const draft: Draft = {
-      form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker,
-      checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings,
-      recipeCalories, recipeProteins, recipeFats, recipeCarbs,
-      recipeIngredients, recipeSteps, slug, seoTitle, seoDescription,
-    };
-    try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-    } catch {
-      /* localStorage может быть недоступен (приватный режим) — черновик просто не сохранится */
-    }
-  }, [showForm, form, mediaItems, teacherPhoto, teacherName, videoUrl, postSticker, checklistUrl, ctaText, ctaUrl, recipeTime, recipeServings, recipeCalories, recipeProteins, recipeFats, recipeCarbs, recipeIngredients, recipeSteps, slug, seoTitle, seoDescription]);
-
-  // Предупреждение при попытке закрыть/обновить вкладку, пока есть незаконченный черновик статьи.
-  // Черновик всё равно не потеряется (он уже в localStorage), но предупреждение подстрахует
-  // от случайного закрытия, если пользователь ждёт публикации.
-  useEffect(() => {
-    const hasDraft = showForm && (form.title.trim() || form.content.trim());
-    if (!hasDraft) return;
-    const handler = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "";
-    };
-    window.addEventListener("beforeunload", handler);
-    return () => window.removeEventListener("beforeunload", handler);
-  }, [showForm, form.title, form.content]);
-
-  const clearDraft = () => {
-    try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
-    setDraftRestored(false);
-  };
-
-  const loadPosts = async (cat: string) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${BLOG_API}?category=${cat}`, {
-        headers: { "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-      });
-      const data = await res.json();
-      setPosts(data.posts || []);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { loadPosts(activeTab); }, [activeTab]);
+  const {
+    posts, loading, activeTab, setActiveTab,
+    deleting, publishing,
+    loadPosts, publishPost, deletePost,
+  } = useBlogPosts();
 
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("post");
@@ -166,135 +67,11 @@ export default function BlogManager() {
     })();
   }, []);
 
-  const loadStickers = async () => {
-    const res = await fetch(STICKERS_API);
-    const data = await res.json();
-    const s = data.stickers || {};
-    const d = data.descriptions || {};
-    setStickers(s);
-    setStickerEdits(s);
-    setDescriptions(d);
-    setDescriptionEdits(d);
-  };
-
-  useEffect(() => { loadStickers(); }, []);
-
-  const saveSticker = async (categoryId: string) => {
-    setSavingSticker(categoryId);
-    const text = (stickerEdits[categoryId] || "").trim();
-    if (text) {
-      await fetch(STICKERS_API, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ category_id: categoryId, sticker_text: text }),
-      });
-    } else {
-      await fetch(STICKERS_API, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({ category_id: categoryId }),
-      });
-    }
-    await loadStickers();
-    setSavingSticker(null);
-  };
-
-  const saveDescription = async (categoryId: string) => {
-    setSavingDescription(categoryId);
-    const text = (descriptionEdits[categoryId] || "").trim();
-    await fetch(STICKERS_API, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-      body: JSON.stringify({ category_id: categoryId, description: text }),
-    });
-    await loadStickers();
-    setSavingDescription(null);
-  };
-
-  const compressImage = (dataUrl: string, maxSize = 900): Promise<string> => {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload = () => {
-        let { width, height } = img;
-        if (width > maxSize || height > maxSize) {
-          if (width > height) { height = Math.round(height * maxSize / width); width = maxSize; }
-          else { width = Math.round(width * maxSize / height); height = maxSize; }
-        }
-        const canvas = document.createElement("canvas");
-        canvas.width = width; canvas.height = height;
-        canvas.getContext("2d")!.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", 0.75));
-      };
-      img.src = dataUrl;
-    });
-  };
-
-  const uploadToS3 = async (dataUrl: string, fileName?: string): Promise<string> => {
-    const res = await fetch(UPLOAD_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-      body: JSON.stringify({ data_url: dataUrl, file_name: fileName }),
-    });
-    const data = await res.json();
-    return data.url;
-  };
-
-  const resetForm = () => {
-    setShowForm(false);
-    setEditingPost(null);
-    setForm({ category: "tips", title: "", content: "" });
-    setMediaItems([]);
-    setTeacherPhoto("");
-    setTeacherName("");
-    setVideoUrl("");
-    setPostSticker("");
-    setChecklistUrl("");
-    setCtaText("");
-    setCtaUrl("");
-    setRecipeTime("");
-    setRecipeServings("");
-    setRecipeCalories("");
-    setRecipeProteins("");
-    setRecipeFats("");
-    setRecipeCarbs("");
-    setRecipeIngredients("");
-    setRecipeSteps("");
-    setSlug("");
-    setSeoTitle("");
-    setSeoDescription("");
-    setShowEmoji(false);
-    clearDraft();
-  };
-
-  const startEdit = (post: Post) => {
-    const videoItem = post.media?.find(m => m.type === "video");
-    const imageItems = (post.media || []).filter(m => m.type === "image" || m.type === "document");
-    clearDraft();
-    setEditingPost(post);
-    setForm({ category: post.category, title: post.title, content: post.content });
-    setMediaItems(imageItems);
-    setTeacherPhoto(post.teacher_photo || "");
-    setTeacherName(post.teacher_name || "");
-    setVideoUrl(videoItem?.url || "");
-    setPostSticker(post.sticker || "");
-    setChecklistUrl(post.checklist_url || "");
-    setCtaText(post.cta_text || "");
-    setCtaUrl(post.cta_url || "");
-    setRecipeTime(post.recipe_time || "");
-    setRecipeServings(post.recipe_servings || "");
-    setRecipeCalories(post.recipe_calories || "");
-    setRecipeProteins(post.recipe_proteins || "");
-    setRecipeFats(post.recipe_fats || "");
-    setRecipeCarbs(post.recipe_carbs || "");
-    setRecipeIngredients(post.recipe_ingredients || "");
-    setRecipeSteps(post.recipe_steps || "");
-    setSlug(post.slug || "");
-    setSeoTitle(post.seo_title || "");
-    setSeoDescription(post.seo_description || "");
-    setShowForm(true);
-    setShowEmoji(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const {
+    stickers, stickerEdits, setStickerEdits, savingSticker,
+    descriptions, descriptionEdits, setDescriptionEdits, savingDescription,
+    saveSticker, saveDescription,
+  } = useBlogStickers();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -342,49 +119,6 @@ export default function BlogManager() {
     } finally {
       setSaving(false);
     }
-  };
-
-  const publishPost = async (post: Post) => {
-    setPublishing(post.id);
-    try {
-      const res = await fetch(BLOG_API, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-        body: JSON.stringify({
-          id: post.id, category: post.category, title: post.title, content: post.content,
-          media: post.media || [], teacher_photo: post.teacher_photo || "", teacher_name: post.teacher_name || "",
-          sticker: post.sticker || "", checklist_url: post.checklist_url || "",
-          cta_text: post.cta_text || "", cta_url: post.cta_url || "",
-          recipe_time: post.recipe_time || "", recipe_servings: post.recipe_servings || "",
-          recipe_calories: post.recipe_calories || "", recipe_proteins: post.recipe_proteins || "",
-          recipe_fats: post.recipe_fats || "", recipe_carbs: post.recipe_carbs || "",
-          recipe_ingredients: post.recipe_ingredients || "", recipe_steps: post.recipe_steps || "",
-          slug: post.slug || "", seo_title: post.seo_title || "", seo_description: post.seo_description || "",
-          status: "published",
-        }),
-      });
-      if (!res.ok) {
-        alert("Не удалось опубликовать. Попробуйте ещё раз.");
-        return;
-      }
-      setPosts(prev => prev.map(p => p.id === post.id ? { ...p, status: "published" } : p));
-    } catch {
-      alert("Не удалось подключиться к серверу. Проверьте интернет и попробуйте ещё раз.");
-    } finally {
-      setPublishing(null);
-    }
-  };
-
-  const deletePost = async (id: number) => {
-    if (!confirm("Удалить этот пост?")) return;
-    setDeleting(id);
-    await fetch(BLOG_API, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json", "X-Authorization": localStorage.getItem(TOKEN_KEY) || "" },
-      body: JSON.stringify({ id }),
-    });
-    setPosts(prev => prev.filter(p => p.id !== id));
-    setDeleting(null);
   };
 
   return (
