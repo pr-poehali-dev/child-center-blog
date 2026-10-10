@@ -18,6 +18,13 @@ export default function PostsList({
   posts, loading, activeTab, setActiveTab, deleting, onEdit, onDelete, onPublish, publishing,
 }: PostsListProps) {
   const [copied, setCopied] = useState<number | null>(null);
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
+
+  const visiblePosts = posts.filter(p => {
+    if (statusFilter === "draft") return p.status === "draft";
+    if (statusFilter === "published") return p.status !== "draft";
+    return true;
+  });
 
   const copyLink = (postId: number, isDraft: boolean) => {
     const url = isDraft
@@ -52,20 +59,50 @@ export default function PostsList({
         ))}
       </div>
 
+      {/* STATUS FILTER */}
+      <div className="flex gap-2 mb-5">
+        {([
+          { key: "all", label: "Все" },
+          { key: "published", label: "Опубликованные" },
+          { key: "draft", label: "Черновики" },
+        ] as const).map(f => (
+          <button
+            key={f.key}
+            onClick={() => setStatusFilter(f.key)}
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+              statusFilter === f.key
+                ? "bg-gray-800 text-white"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+            }`}
+          >
+            {f.label}
+            {f.key === "draft" && posts.some(p => p.status === "draft") && (
+              <span className="ml-1.5 bg-orange-400 text-white rounded-full px-1.5 py-0.5 text-[10px]">
+                {posts.filter(p => p.status === "draft").length}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+
       {/* LIST */}
       {loading ? (
         <div className="text-center py-16 text-gray-300">
           <Icon name="Loader2" size={32} className="animate-spin mx-auto" />
         </div>
-      ) : posts.length === 0 ? (
+      ) : visiblePosts.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-3xl border border-orange-100">
           <div className="text-4xl mb-3">📭</div>
-          <div className="font-black text-gray-500 mb-1">Постов пока нет</div>
-          <div className="text-gray-400 text-sm">Нажмите «Добавить пост» чтобы создать первый</div>
+          <div className="font-black text-gray-500 mb-1">
+            {posts.length === 0 ? "Постов пока нет" : "В этом фильтре постов нет"}
+          </div>
+          <div className="text-gray-400 text-sm">
+            {posts.length === 0 ? "Нажмите «Добавить пост» чтобы создать первый" : "Выберите другой фильтр"}
+          </div>
         </div>
       ) : (
         <div className="space-y-3">
-          {posts.map(post => (
+          {visiblePosts.map(post => (
             <div key={post.id} className="bg-white rounded-2xl border border-orange-100 p-5 hover:shadow-sm transition-all">
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
