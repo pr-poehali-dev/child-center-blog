@@ -166,6 +166,16 @@ export default function HomeContactsSection({ onFormClick }: HomeContactsSection
         <div className="font-caveat text-orange-300 text-xl font-bold mb-1">Рыбка Долли</div>
         <div className="text-sm opacity-60">© 2026 Детский центр «Рыбка Долли». Все права защищены.</div>
         <VisitCounter />
+        <div className="mt-3">
+          <a
+            href="https://ribkadollilend.ru/sveden"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-orange-300 hover:text-orange-200 transition-colors underline underline-offset-2"
+          >
+            Документация по образовательному процессу находится здесь
+          </a>
+        </div>
         <div className="mt-3 flex items-center justify-center gap-3">
           <a href="/privacy" className="text-xs text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2">
             Политика конфиденциальности
